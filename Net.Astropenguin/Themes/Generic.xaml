@@ -5,10 +5,12 @@
 
     <Style TargetType="local:VerticalStack" >
         <Setter Property="Text" Value="" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="10" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:VerticalStack">
-                    <StackPanel x:Name="Stage" Orientation="Horizontal" Padding="5" />
+                    <StackPanel x:Name="Stage" Orientation="Horizontal" Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

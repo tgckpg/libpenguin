@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Net.Astropenguin.Logging;
 
 namespace Net.Astropenguin.UI
 {
     [TemplatePart( Name = StageName, Type = typeof( StackPanel ))]
     public class VerticalStack : Control
     {
+        public static readonly string ID = typeof( VerticalStack ).Name;
+
         public const string StageName = "Stage";
 
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register( "Text", typeof( string ), typeof( VerticalStack ), new PropertyMetadata( "", TextChanged ) );
@@ -82,6 +85,7 @@ namespace Net.Astropenguin.UI
 
         private void ClearStage()
         {
+            if ( Stage == null ) return;
             while ( 0 < Stage.Children.Count() )
                 Stage.Children.RemoveAt( 0 );
         }
@@ -105,6 +109,11 @@ namespace Net.Astropenguin.UI
 
         private TextBlock TrimText( TextBlock t )
         {
+            if( double.IsInfinity( GivenSizeAvailable.Height ) )
+            {
+                return null;
+            }
+
             BlockHeightOf( t );
 
             int EstTrimmingLength = ( int ) Math.Floor( t.Text.Length * GivenSizeAvailable.Height / t.ActualHeight );
@@ -144,7 +153,8 @@ namespace Net.Astropenguin.UI
                 TextLineBounds = TextLineBounds.TrimToBaseline
             };
 
-            t.Width = t.FontSize;
+            t.FontSize = FontSize;
+            t.Width = FontSize;
             t.Text = Text;
             return t;
         }
