@@ -17,15 +17,37 @@ namespace Net.Astropenguin.UI
 
         public const string StageName = "Stage";
 
-        public static readonly DependencyProperty TextProperty = DependencyProperty.Register( "Text", typeof( string ), typeof( VerticalStack ), new PropertyMetadata( "", TextChanged ) );
+        public static readonly DependencyProperty TextProperty = DependencyProperty.Register( "Text", typeof( string ), typeof( VerticalStack ), new PropertyMetadata( "", VisualPropertyChanged ) );
         public string Text {
             get { return GetValue( TextProperty ) as string; }
             set { SetValue( TextProperty, value ); }
         }
 
+        new public static readonly DependencyProperty FontSizeProperty = DependencyProperty.Register( "FontSize", typeof( double ), typeof( VerticalStack ), new PropertyMetadata( 16.0, VisualPropertyChanged ) );
+        new public double FontSize {
+            get
+            {
+                double? v = GetValue( FontSizeProperty ) as double?;
+                if ( v == null ) return 16;
+                return ( double ) v;
+            }
+            set { SetValue( FontSizeProperty, value ); }
+        }
+
+        public static readonly DependencyProperty LineHeightProperty = DependencyProperty.Register( "LineHeight", typeof( double ), typeof( VerticalStack ), new PropertyMetadata( 16.0, VisualPropertyChanged ) );
+        public double LineHeight {
+            get
+            {
+                double? v = GetValue( LineHeightProperty ) as double?;
+                if ( v == null ) return 16;
+                return ( double ) v;
+            }
+            set { SetValue( LineHeightProperty, value ); }
+        }
+
         protected Size GivenSizeAvailable { get; private set; }
 
-        private static void TextChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
+        private static void VisualPropertyChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
         {
             ( d as VerticalStack ).UpdateDisplay();
         }
@@ -97,12 +119,15 @@ namespace Net.Astropenguin.UI
             TextBlock Tx;
             while ( ( Tx = TrimText( t ) ) != null )
             {
+                // Two special char to ensure the center alignment
+                Tx.Text += "\u3000\u2007";
                 Stage.Children.Add( Tx );
             }
 
             // Does the MasterTextBlock still have some text?
             if ( 0 < t.Text.Length )
             {
+                t.Text += "\u3000\u2007";
                 Stage.Children.Add( t );
             }
         }
@@ -153,8 +178,16 @@ namespace Net.Astropenguin.UI
                 TextLineBounds = TextLineBounds.TrimToBaseline
             };
 
+            double lh = -.5 * FontSize + LineHeight;
             t.FontSize = FontSize;
-            t.Width = FontSize;
+
+            // Squeeze all half-width character to second row
+            t.CharacterSpacing = 1000;
+            t.Width = 2*FontSize;
+
+            // Restore the original width using minus fontsize prop
+            t.Margin = new Thickness( lh , 0, lh, 0 );
+
             t.Text = Text;
             return t;
         }
