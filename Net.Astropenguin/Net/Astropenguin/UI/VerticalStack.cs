@@ -14,6 +14,7 @@ namespace Net.Astropenguin.UI
     public class VerticalStack : Control
     {
         public static readonly string ID = typeof( VerticalStack ).Name;
+        private static readonly Size SIZE_NULL = new Size( 0, 0 );
 
         public const string StageName = "Stage";
 
@@ -58,6 +59,13 @@ namespace Net.Astropenguin.UI
             :base()
         {
             DefaultStyleKey = typeof( VerticalStack );
+
+            Unloaded += DisposeStage;
+        }
+
+        private void DisposeStage( object sender, RoutedEventArgs e )
+        {
+            ClearStage();
         }
 
         protected override void OnApplyTemplate()
@@ -72,11 +80,10 @@ namespace Net.Astropenguin.UI
         {
             // If the Size Changes, we need to update the text
             // TODO: Use a more efficient approach
-            /* if( !GivenSizeAvailable.Equals( availableSize ) )
+            if( GivenSizeAvailable.Equals( SIZE_NULL ) && !GivenSizeAvailable.Equals( availableSize ) )
             {
                 UpdateDisplay( availableSize );
             }
-            */
 
             // Get the available size from parent
             GivenSizeAvailable = new Size( availableSize.Width, availableSize.Height );
@@ -99,10 +106,14 @@ namespace Net.Astropenguin.UI
             {
                 // If height is equal, that means the width is changed
                 // So we either need to do nothing, or remove children from Stage
-
+                // if ( Width < FontSize ) ClearStage();
             }
             // If the height is changed, we need to redo the drawings
-            else UpdateDisplay();
+            else
+            {
+                GivenSizeAvailable = availableSize;
+                UpdateDisplay();
+            }
         }
 
         private void ClearStage()
