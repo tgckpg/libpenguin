@@ -60,12 +60,13 @@ namespace Net.Astropenguin.UI
         {
             DefaultStyleKey = typeof( VerticalStack );
 
-            Unloaded += DisposeStage;
+            // Perhaps a bad idea for cached pages?
+            // Unloaded += DisposeStage;
         }
 
         private void DisposeStage( object sender, RoutedEventArgs e )
         {
-            ClearStage();
+            // ClearStage();
         }
 
         protected override void OnApplyTemplate()
@@ -154,7 +155,7 @@ namespace Net.Astropenguin.UI
 
             int EstTrimmingLength = ( int ) Math.Floor( t.Text.Length * GivenSizeAvailable.Height / t.ActualHeight );
 
-            if ( t.Text.Length < EstTrimmingLength || t.Text == "" ) return null;
+            if ( EstTrimmingLength == 0 || t.Text.Length < EstTrimmingLength || t.Text == "" ) return null;
 
             TextBlock TrimmedText = NewTextBlock(
                 t.Text.Substring( 0, EstTrimmingLength )

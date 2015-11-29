@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 using Net.Astropenguin.Logging;
 using Windows.UI.Core;
@@ -11,6 +12,9 @@ namespace Net.Astropenguin.Helpers
 	{
         public static readonly string ID = typeof( Worker ).Name;
 		static BackgroundWorker bw;
+
+        private static CoreWindow CoreUIInstance = null;
+        private static Stack<Action> SuspendedList = new Stack<Action>();
 
 		static Action[] ActionList;
 		const int l = 256;
@@ -31,7 +35,6 @@ namespace Net.Astropenguin.Helpers
 					ActionList[ i ] = null;
 					// Each cycle rest for 200ms
 					await Task.Delay( TimeSpan.FromMilliseconds( 200 ) );
-
 				}
 				Logger.Log( ID, "Work Cycle Complete", LogType.INFO );
 			};
@@ -83,19 +86,43 @@ namespace Net.Astropenguin.Helpers
 
 		public static async void UIInvoke( Action p )
 		{
-			CoreWindow cw = null;
-			try
-			{
-				cw = Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow;
-			}
-			catch( Exception ex )
-			{
-				Logger.Log( ID, ex.Message, LogType.ERROR );
-			}
+            if( CoreUIInstance == null )
+            {
+                Logger.Log( ID, "MainView's CoreWindow is Null, trying to get one", LogType.INFO );
 
-			if ( cw != null )
-				await cw.Dispatcher.RunAsync( CoreDispatcherPriority.Normal, new DispatchedHandler( p ) );
-			else throw new Exception( "Unable to get UI Thread" );
+                try
+                {
+                    CoreUIInstance = Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow;
+                }
+                catch( Exception ex )
+                {
+                    Logger.Log( ID, ex.Message, LogType.ERROR );
+                }
+
+                if ( CoreUIInstance == null )
+                {
+                    Logger.Log( ID, "Cannot get a CoreWindow. Suspending this action", LogType.INFO );
+                    SuspendedList.Push( p );
+                    Logger.Log( ID, string.Format( "Now we have {0} suspended actions", SuspendedList.Count ), LogType.INFO );
+                    return;
+                }
+
+                Logger.Log( ID, "Hurray, got the CoreWindow. Let's resume in operations.", LogType.INFO );
+            }
+
+            if( 0 < SuspendedList.Count )
+            {
+                Logger.Log( ID, "Dispatching Suspended actions", LogType.INFO );
+
+                foreach( Action s in SuspendedList )
+                {
+                    await CoreUIInstance.Dispatcher.RunAsync( CoreDispatcherPriority.Normal, new DispatchedHandler( s ) );
+                }
+
+                SuspendedList.Clear();
+            }
+
+            await CoreUIInstance.Dispatcher.RunAsync( CoreDispatcherPriority.Normal, new DispatchedHandler( p ) );
 		}
 	}
 }

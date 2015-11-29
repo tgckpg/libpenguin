@@ -48,6 +48,8 @@ namespace Net.Astropenguin.Helpers
         private void GiveWeights()
         {
             float Total = w.Sum( ( w ) => { return w.Factor; } );
+            if ( Total == 0.0 ) Total = 1;
+
             int f = l < Scale ? Scale : l;
             switch ( Mode )
             {

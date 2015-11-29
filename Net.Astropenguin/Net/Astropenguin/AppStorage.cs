@@ -243,8 +243,9 @@ namespace Net.Astropenguin
 					isfs.Write( bytes, 0, bytes.Count() );
 				}
 			}
-			catch ( IsolatedStorageException )
+			catch ( IsolatedStorageException ex )
 			{
+                Logger.Log( ID, ex.Message, LogType.ERROR );
 				return false;
 			}
 			return true;
