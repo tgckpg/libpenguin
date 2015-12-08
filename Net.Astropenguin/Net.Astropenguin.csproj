@@ -118,10 +118,14 @@
     <Compile Include="Net\Astropenguin\Helpers\Diverter.cs" />
     <Compile Include="Net\Astropenguin\Helpers\Weight.cs" />
     <Compile Include="Net\Astropenguin\Helpers\Worker.cs" />
+    <Compile Include="Net\Astropenguin\Linq\List.cs" />
+    <Compile Include="Net\Astropenguin\Linq\ObservableCollection.cs" />
     <Compile Include="Net\Astropenguin\Logging\Handler\FileSystemLog.cs" />
     <Compile Include="Net\Astropenguin\Logging\LogArgs.cs" />
     <Compile Include="Net\Astropenguin\Logging\Logger.cs" />
     <Compile Include="Net\Astropenguin\Logging\NetLog.cs" />
+    <Compile Include="Net\Astropenguin\UI\VerticalLogaManager.cs" />
+    <Compile Include="Net\Astropenguin\UI\VerticalLogaTable.cs" />
     <Compile Include="Net\Astropenguin\UI\VerticalStack.cs" />
     <Compile Include="Net\Astropenguin\UnitTest\NetTrigger.cs" />
     <Compile Include="Net\Astropenguin\UnitTest\TestCompleteArgs.cs" />

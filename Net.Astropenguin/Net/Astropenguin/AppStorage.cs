@@ -159,7 +159,26 @@ namespace Net.Astropenguin
 			return isfsr;
 		}
 
-		public string GetString( string fileName )
+        public async Task<IStorageFile> CreateImageFromLibrary( string saveLocation )
+        {
+            return await KnownFolders.SavedPictures.CreateFileAsync( saveLocation, CreationCollisionOption.ReplaceExisting );
+        }
+
+        public async Task<IStorageFile> CreateFileFromISOStorage( string saveLocation )
+        {
+            string[] Folders = saveLocation.Split( '/' );
+
+            int l = Folders.Length - 1;
+            IStorageFolder DirStack = await ApplicationData.Current.LocalFolder.GetFolderAsync( Folders[ 0 ] );
+            for ( int i = 1; i < l; i++ )
+            {
+                DirStack = await DirStack.GetFolderAsync( Folders[ i ] );
+            }
+
+            return await DirStack.CreateFileAsync( Folders[ l ] );
+        }
+
+        public string GetString( string fileName )
 		{
 			string p = null;
 			if ( FileExists( fileName ) )
@@ -171,6 +190,11 @@ namespace Net.Astropenguin
 			}
 			return p;
 		}
+
+        public DateTimeOffset FileTime( string filename )
+        {
+            return UserStorage.GetLastAccessTime( filename );
+        }
 
 		public bool FileExists( string fileName )
 		{
@@ -251,7 +275,6 @@ namespace Net.Astropenguin
 			return true;
 		}
 
-		/*
 		public bool WriteStream( string fileName, Stream s )
 		{
 			try
@@ -279,6 +302,5 @@ namespace Net.Astropenguin
 			}
 			return true;
 		}
-		*/
 	}
 }

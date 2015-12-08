@@ -55,7 +55,6 @@ namespace Net.Astropenguin.Logging
             this.id = id;
 		}
 
-
 		public LogArgs( string str, LogType p, Signal s )
 		{
 			Message = str;

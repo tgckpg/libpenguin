@@ -122,7 +122,15 @@ namespace Net.Astropenguin.Helpers
                 SuspendedList.Clear();
             }
 
-            await CoreUIInstance.Dispatcher.RunAsync( CoreDispatcherPriority.Normal, new DispatchedHandler( p ) );
+            try
+            {
+                await CoreUIInstance.Dispatcher.RunAsync( CoreDispatcherPriority.Normal, new DispatchedHandler( p ) );
+            }
+            catch( Exception e )
+            {
+                Logger.Log( ID, "Action Dispatched an Error", LogType.SYSTEM );
+                Logger.Log( ID, e.Message, LogType.ERROR );
+            }
 		}
 	}
 }

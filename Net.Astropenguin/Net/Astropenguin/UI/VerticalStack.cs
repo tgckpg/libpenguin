@@ -24,24 +24,20 @@ namespace Net.Astropenguin.UI
             set { SetValue( TextProperty, value ); }
         }
 
-        new public static readonly DependencyProperty FontSizeProperty = DependencyProperty.Register( "FontSize", typeof( double ), typeof( VerticalStack ), new PropertyMetadata( 16.0, VisualPropertyChanged ) );
+        new public static readonly DependencyProperty FontSizeProperty = DependencyProperty.Register( "FontSize", typeof( double ), typeof( VerticalStack ), new PropertyMetadata( 0.0, VisualPropertyChanged ) );
         new public double FontSize {
             get
             {
-                double? v = GetValue( FontSizeProperty ) as double?;
-                if ( v == null ) return 16;
-                return ( double ) v;
+                return ( double ) GetValue( FontSizeProperty );
             }
             set { SetValue( FontSizeProperty, value ); }
         }
 
-        public static readonly DependencyProperty LineHeightProperty = DependencyProperty.Register( "LineHeight", typeof( double ), typeof( VerticalStack ), new PropertyMetadata( 16.0, VisualPropertyChanged ) );
+        public static readonly DependencyProperty LineHeightProperty = DependencyProperty.Register( "LineHeight", typeof( double ), typeof( VerticalStack ), new PropertyMetadata( 16.0, LineHeightChanged ) );
         public double LineHeight {
             get
             {
-                double? v = GetValue( LineHeightProperty ) as double?;
-                if ( v == null ) return 16;
-                return ( double ) v;
+                return ( double ) GetValue( LineHeightProperty );
             }
             set { SetValue( LineHeightProperty, value ); }
         }
@@ -51,6 +47,11 @@ namespace Net.Astropenguin.UI
         private static void VisualPropertyChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
         {
             ( d as VerticalStack ).UpdateDisplay();
+        }
+
+        private static void LineHeightChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
+        {
+            ( d as VerticalStack ).RedrawLineHeight();
         }
 
         private StackPanel Stage;
@@ -79,6 +80,13 @@ namespace Net.Astropenguin.UI
 
         protected override Size MeasureOverride( Size availableSize )
         {
+            /* INTENSIVE_LOG
+            Logger.Log(
+                ID
+                , string.Format( "MeasureOverride {{ W: {0}, H: {1} }}", availableSize.Width, availableSize.Height )
+                , LogType.DEBUG
+            );
+            //*/
             // If the Size Changes, we need to update the text
             // TODO: Use a more efficient approach
             if( GivenSizeAvailable.Equals( SIZE_NULL ) && !GivenSizeAvailable.Equals( availableSize ) )
@@ -94,9 +102,13 @@ namespace Net.Astropenguin.UI
 
         private void UpdateDisplay()
         {
+            /* INTENSIVE_LOG
+            Logger.Log( ID, "UpdateDisplay", LogType.DEBUG );
+            //*/
+
             ClearStage();
             // I can't draw nothing, so... remove everything?
-            if ( GivenSizeAvailable.Height == 0 || Text == "" ) return;
+            if ( GivenSizeAvailable.Height == 0 || Text == "" || FontSize == 0 ) return;
 
             DrawTextBlocks( Text );
         }
@@ -120,8 +132,22 @@ namespace Net.Astropenguin.UI
         private void ClearStage()
         {
             if ( Stage == null ) return;
-            while ( 0 < Stage.Children.Count() )
-                Stage.Children.RemoveAt( 0 );
+            Stage.Children.Clear();
+
+            /* INTENSIVE_LOG
+            Logger.Log( ID, "Stage Cleared " + Stage.Children.Count, LogType.DEBUG );
+            //*/
+        }
+
+        private void RedrawLineHeight()
+        {
+            if ( Stage == null || Stage.Children.Count == 0 ) return;
+
+            foreach( TextBlock Tx in Stage.Children )
+            {
+                double lh = -.5 * FontSize + LineHeight;
+                Tx.Margin = new Thickness( lh, 0, lh, 0 );
+            }
         }
 
         private void DrawTextBlocks( string Text )
@@ -136,9 +162,27 @@ namespace Net.Astropenguin.UI
                 Stage.Children.Add( Tx );
             }
 
+            /* INTENSIVE_LOG
+            if( Tx != null )
+            {
+                Logger.Log(
+                    ID
+                    , string.Format( "LastText is: {0}", Tx.Text )
+                    , LogType.DEBUG
+                );
+            }
+            //*/
+
             // Does the MasterTextBlock still have some text?
             if ( 0 < t.Text.Length )
             {
+                /* INTENSIVE_LOG
+                Logger.Log(
+                    ID
+                    , string.Format( "TextBlock still have texts: {0}", t.Text )
+                    , LogType.DEBUG
+                );
+                //*/
                 t.Text += "\u3000\u2007";
                 Stage.Children.Add( t );
             }
@@ -151,32 +195,53 @@ namespace Net.Astropenguin.UI
                 return null;
             }
 
-            BlockHeightOf( t );
+            TextBlock TrimmedText = null;
 
-            int EstTrimmingLength = ( int ) Math.Floor( t.Text.Length * GivenSizeAvailable.Height / t.ActualHeight );
+            int EstTrimmingLength = 0;
 
-            if ( EstTrimmingLength == 0 || t.Text.Length < EstTrimmingLength || t.Text == "" ) return null;
-
-            TextBlock TrimmedText = NewTextBlock(
-                t.Text.Substring( 0, EstTrimmingLength )
-            );
-
-            // Add text one by one
-            int i = 0;
-            while ( BlockHeightOf( TrimmedText ) < GivenSizeAvailable.Height
-                && ( EstTrimmingLength + i ) < t.Text.Length
-            )
+            VerticalLogaTable Table = VerticalLogaManager.GetLoga( FontSize );
+            if( 5 < Table.CertaintyLevel )
             {
-                TrimmedText.Text += t.Text[ EstTrimmingLength + ( i ++ ) ];
+                EstTrimmingLength = Table.GetTrimLenForHeight( GivenSizeAvailable.Height );
+
+                if ( EstTrimmingLength == 0 || t.Text.Length < EstTrimmingLength || t.Text == "" ) return null;
+
+                TrimmedText = NewTextBlock(
+                    t.Text.Substring( 0, EstTrimmingLength )
+                );
+            }
+            else
+            {
+                BlockHeightOf( t );
+                EstTrimmingLength = ( int ) Math.Floor( t.Text.Length * GivenSizeAvailable.Height / t.ActualHeight );
+
+                if ( EstTrimmingLength == 0 || t.Text.Length < EstTrimmingLength || t.Text == "" ) return null;
+
+                TrimmedText = NewTextBlock(
+                    t.Text.Substring( 0, EstTrimmingLength )
+                );
+
+                // Add text one by one
+                int i = 0;
+                while ( BlockHeightOf( TrimmedText ) < GivenSizeAvailable.Height
+                    && ( EstTrimmingLength + i ) < t.Text.Length
+                )
+                {
+                    TrimmedText.Text += t.Text[ EstTrimmingLength + ( i ++ ) ];
+                }
+
+                // Then remove them one by one to get the best estimation
+                while ( GivenSizeAvailable.Height < BlockHeightOf( TrimmedText ) )
+                {
+                    TrimmedText.Text = TrimmedText.Text.Substring( 0, EstTrimmingLength + ( -- i ) );
+                }
+
+                EstTrimmingLength += i;
+
+                Table.PushTrimSample( EstTrimmingLength, GivenSizeAvailable.Height );
             }
 
-            // Then remove them one by one to get the best estimation
-            while ( GivenSizeAvailable.Height < BlockHeightOf( TrimmedText ) )
-            {
-                TrimmedText.Text = TrimmedText.Text.Substring( 0, EstTrimmingLength + ( -- i ) );
-            }
-
-            t.Text = t.Text.Substring( EstTrimmingLength + i );
+            t.Text = t.Text.Substring( EstTrimmingLength );
 
             return TrimmedText;
         }
@@ -191,6 +256,7 @@ namespace Net.Astropenguin.UI
             };
 
             double lh = -.5 * FontSize + LineHeight;
+
             t.FontSize = FontSize;
 
             // Squeeze all half-width character to second row
@@ -198,7 +264,7 @@ namespace Net.Astropenguin.UI
             t.Width = 2*FontSize;
 
             // Restore the original width using minus fontsize prop
-            t.Margin = new Thickness( lh , 0, lh, 0 );
+            t.Margin = new Thickness( lh, 0, lh, 0 );
 
             t.Text = Text;
             return t;
@@ -208,6 +274,14 @@ namespace Net.Astropenguin.UI
         {
             t.Measure( new Size( double.PositiveInfinity, double.PositiveInfinity ) );
             t.Arrange( new Rect( new Point(), t.DesiredSize ) );
+
+            /* INTENSIVE_LOG
+            if( t.FontSize == 16 )
+            {
+                Logger.Log( ID, string.Format( "FontSize 16 detected {0}, Should be {1}. Text {2}", t.FontSize, FontSize, t.Text ), LogType.DEBUG );
+            }
+            //*/
+
             return t.ActualHeight;
         }
     }

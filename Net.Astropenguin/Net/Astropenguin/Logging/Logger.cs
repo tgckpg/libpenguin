@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -10,6 +11,8 @@ namespace Net.Astropenguin.Logging
 		public delegate void LogEvent( LogArgs LogArgs );
 
 		private static event LogEvent WLogHandler;
+
+        public static List<LogType> LogFilter = new List<LogType>();
 
 		public static event LogEvent OnLog
 		{
@@ -41,7 +44,7 @@ namespace Net.Astropenguin.Logging
 		public static void Log( string id, string str, LogType p )
 		{
 			VSLog( str, p );
-			if ( WLogHandler != null )
+			if ( WLogHandler != null && LogFilter.Contains( p ) )
 			{
 				Task.Factory.StartNew( () => WLogHandler( new LogArgs( id, str, p, Signal.LOG ) ) );
 			}
