@@ -38,9 +38,15 @@ namespace Net.Astropenguin.Helpers
 				}
 				Logger.Log( ID, "Work Cycle Complete", LogType.INFO );
 			};
+            bw.RunWorkerCompleted += Bw_RunWorkerCompleted;
 		}
 
-		public static int GetNextWorkIndex()
+        private static void Bw_RunWorkerCompleted( object sender, RunWorkerCompletedEventArgs e )
+        {
+            Logger.Log( ID, string.Format( "Completed ({0}): {1}, {2}", e.Cancelled ? "Canceled" : "Done", e.Error, e.Result ), LogType.DEBUG );
+        }
+
+        public static int GetNextWorkIndex()
 		{
 			for ( i = 0; i < l; i++ )
 			{

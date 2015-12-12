@@ -33,7 +33,7 @@ namespace Net.Astropenguin.UI
             set { SetValue( FontSizeProperty, value ); }
         }
 
-        public static readonly DependencyProperty LineHeightProperty = DependencyProperty.Register( "LineHeight", typeof( double ), typeof( VerticalStack ), new PropertyMetadata( 16.0, LineHeightChanged ) );
+        public static readonly DependencyProperty LineHeightProperty = DependencyProperty.Register( "LineHeight", typeof( double ), typeof( VerticalStack ), new PropertyMetadata( -1.0, LineHeightChanged ) );
         public double LineHeight {
             get
             {
@@ -108,7 +108,8 @@ namespace Net.Astropenguin.UI
 
             ClearStage();
             // I can't draw nothing, so... remove everything?
-            if ( GivenSizeAvailable.Height == 0 || Text == "" || FontSize == 0 ) return;
+            if ( GivenSizeAvailable.Height == 0
+                || string.IsNullOrEmpty( Text ) || FontSize == 0 || LineHeight < 0 ) return;
 
             DrawTextBlocks( Text );
         }
@@ -141,7 +142,13 @@ namespace Net.Astropenguin.UI
 
         private void RedrawLineHeight()
         {
-            if ( Stage == null || Stage.Children.Count == 0 ) return;
+            if ( Stage == null ) return;
+
+            if ( Stage.Children.Count == 0 && !string.IsNullOrEmpty( Text ) )
+            {
+                UpdateDisplay();
+                return;
+            }
 
             foreach( TextBlock Tx in Stage.Children )
             {
