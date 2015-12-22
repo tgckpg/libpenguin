@@ -7,26 +7,20 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net.Astropenguin", "Net.Ast
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
 		Debug|ARM = Debug|ARM
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
-		Release|Any CPU = Release|Any CPU
 		Release|ARM = Release|ARM
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5A6B4589-8C63-40D5-946F-759A9282A176}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5A6B4589-8C63-40D5-946F-759A9282A176}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A6B4589-8C63-40D5-946F-759A9282A176}.Debug|ARM.ActiveCfg = Debug|ARM
 		{5A6B4589-8C63-40D5-946F-759A9282A176}.Debug|ARM.Build.0 = Debug|ARM
 		{5A6B4589-8C63-40D5-946F-759A9282A176}.Debug|x64.ActiveCfg = Debug|x64
 		{5A6B4589-8C63-40D5-946F-759A9282A176}.Debug|x64.Build.0 = Debug|x64
 		{5A6B4589-8C63-40D5-946F-759A9282A176}.Debug|x86.ActiveCfg = Debug|x86
 		{5A6B4589-8C63-40D5-946F-759A9282A176}.Debug|x86.Build.0 = Debug|x86
-		{5A6B4589-8C63-40D5-946F-759A9282A176}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5A6B4589-8C63-40D5-946F-759A9282A176}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5A6B4589-8C63-40D5-946F-759A9282A176}.Release|ARM.ActiveCfg = Release|ARM
 		{5A6B4589-8C63-40D5-946F-759A9282A176}.Release|ARM.Build.0 = Release|ARM
 		{5A6B4589-8C63-40D5-946F-759A9282A176}.Release|x64.ActiveCfg = Release|x64
