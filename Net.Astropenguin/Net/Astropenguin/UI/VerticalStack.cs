@@ -7,6 +7,7 @@ using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Net.Astropenguin.Logging;
+using System.Runtime.CompilerServices;
 
 namespace Net.Astropenguin.UI
 {
@@ -15,8 +16,11 @@ namespace Net.Astropenguin.UI
     {
         public static readonly string ID = typeof( VerticalStack ).Name;
         private static readonly Size SIZE_NULL = new Size( 0, 0 );
+        private const int LOGA_BECAME_CERTAIN = 10;
 
         public const string StageName = "Stage";
+
+        internal static bool LOCKED = true;
 
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register( "Text", typeof( string ), typeof( VerticalStack ), new PropertyMetadata( "", VisualPropertyChanged ) );
         public string Text {
@@ -61,6 +65,7 @@ namespace Net.Astropenguin.UI
         {
             DefaultStyleKey = typeof( VerticalStack );
 
+            if ( LOCKED ) throw new Exception( "UnAuthorized Access" );
             // Perhaps a bad idea for cached pages?
             // Unloaded += DisposeStage;
         }
@@ -207,7 +212,7 @@ namespace Net.Astropenguin.UI
             int EstTrimmingLength = 0;
 
             VerticalLogaTable Table = VerticalLogaManager.GetLoga( FontSize );
-            if( 5 < Table.CertaintyLevel )
+            if( LOGA_BECAME_CERTAIN < Table.CertaintyLevel )
             {
                 EstTrimmingLength = Table.GetTrimLenForHeight( GivenSizeAvailable.Height );
 

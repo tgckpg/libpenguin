@@ -106,7 +106,7 @@ namespace Net.Astropenguin
             try
             {
                 // Test the library valid for search
-                string fileName = "wenku8/file/token";
+                string fileName = "net/astropenguin/token";
                 IReadOnlyList<StorageFile> list = await AppLibrary.GetFilesAsync();
                 foreach ( StorageFile p in list ) if ( p.Name == fileName ) return true;
             }
@@ -116,11 +116,6 @@ namespace Net.Astropenguin
                 return false;
             }
             return true;
-        }
-
-        public long GetQuota()
-        {
-            return 0;
         }
 
         public void CountSizeRecursive( string folder, ref long size )
@@ -193,7 +188,7 @@ namespace Net.Astropenguin
 
         public DateTimeOffset FileTime( string filename )
         {
-            return UserStorage.GetLastAccessTime( filename );
+            return UserStorage.GetLastWriteTime( filename );
         }
 
         public bool FileExists( string fileName )
@@ -236,7 +231,7 @@ namespace Net.Astropenguin
             }
             catch ( Exception ex )
             {
-                Logger.Log( ID, "AppStorage.WriteString@" + fileName + ": " + ex.Message, LogType.ERROR );
+                Logger.Log( ID, "WriteString@" + fileName + ": " + ex.Message, LogType.ERROR );
                 Logger.Log( ID, ex.StackTrace, LogType.INFO );
             }
             return false;
@@ -269,7 +264,11 @@ namespace Net.Astropenguin
             }
             catch ( IsolatedStorageException ex )
             {
-                Logger.Log( ID, ex.Message, LogType.ERROR );
+                Logger.Log(
+                    ID
+                    , string.Format( "WriteByte@{0}: {1}", fileName, ex.Message )
+                    , LogType.ERROR
+                );
                 return false;
             }
             return true;
