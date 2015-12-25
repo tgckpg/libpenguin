@@ -106,6 +106,8 @@
     <Compile Include="Net\Astropenguin\Logging\LogArgs.cs" />
     <Compile Include="Net\Astropenguin\Logging\Logger.cs" />
     <Compile Include="Net\Astropenguin\Logging\NetLog.cs" />
+    <Compile Include="Net\Astropenguin\Messaging\Message.cs" />
+    <Compile Include="Net\Astropenguin\Messaging\MessageBus.cs" />
     <Compile Include="Net\Astropenguin\UI\VerticalLogaManager.cs" />
     <Compile Include="Net\Astropenguin\UI\VerticalLogaTable.cs" />
     <Compile Include="Net\Astropenguin\UI\VerticalStack.cs" />

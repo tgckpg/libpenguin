@@ -10,6 +10,7 @@ using Windows.Storage;
 
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Helpers;
+using Windows.Storage.Pickers;
 
 namespace Net.Astropenguin
 {
@@ -18,7 +19,7 @@ namespace Net.Astropenguin
         public static readonly string ID = typeof( AppStorage ).Name;
 
         private IsolatedStorageFile UserStorage;
-        public StorageFolder AppLibrary;
+        public StorageFolder PicLibrary;
 
         public AppStorage()
         {
@@ -59,7 +60,7 @@ namespace Net.Astropenguin
             string PotentialError = "";
             try
             {
-                IReadOnlyList<StorageFile> list = await AppLibrary.GetFilesAsync();
+                IReadOnlyList<StorageFile> list = await PicLibrary.GetFilesAsync();
                 foreach ( StorageFile p in list )
                 {
                     if ( !p.ContentType.Contains( "image" ) ) continue;
@@ -81,12 +82,33 @@ namespace Net.Astropenguin
             return new AsyncTryOut<Stream>();
         }
 
+        public async Task<IReadOnlyList<StorageFile>> PickFolderForFiles()
+        {
+            try
+            {
+                FolderPicker fpick = new FolderPicker();
+                fpick.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+                fpick.FileTypeFilter.Add( ".txt" );
+
+                StorageFolder folder = await fpick.PickSingleFolderAsync();
+                if ( folder == null ) return null;
+
+                return await folder.GetFilesAsync();
+            }
+            catch( Exception ex )
+            {
+                Logger.Log( ID, ex.Message, LogType.ERROR );
+            }
+
+            return null;
+        }
+
         public async Task<bool> SearchLibrary( string fileName )
         {
             try
             {
                 // Search the library
-                IReadOnlyList<StorageFile> list = await AppLibrary.GetFilesAsync();
+                IReadOnlyList<StorageFile> list = await PicLibrary.GetFilesAsync();
                 foreach ( StorageFile p in list )
                 {
                     if ( !p.ContentType.Contains( "image" ) ) continue;
@@ -107,7 +129,7 @@ namespace Net.Astropenguin
             {
                 // Test the library valid for search
                 string fileName = "net/astropenguin/token";
-                IReadOnlyList<StorageFile> list = await AppLibrary.GetFilesAsync();
+                IReadOnlyList<StorageFile> list = await PicLibrary.GetFilesAsync();
                 foreach ( StorageFile p in list ) if ( p.Name == fileName ) return true;
             }
             catch ( Exception ex )
@@ -156,7 +178,7 @@ namespace Net.Astropenguin
 
         public async Task<IStorageFile> CreateImageFromLibrary( string saveLocation )
         {
-            return await AppLibrary.CreateFileAsync( saveLocation, CreationCollisionOption.ReplaceExisting );
+            return await PicLibrary.CreateFileAsync( saveLocation, CreationCollisionOption.ReplaceExisting );
         }
 
         public async Task<IStorageFile> CreateFileFromISOStorage( string saveLocation )
@@ -311,11 +333,11 @@ namespace Net.Astropenguin
                 IStorageItem Item = await S.TryGetItemAsync( Name );
                 if ( Item == null )
                 {
-                    AppLibrary = await S.CreateFolderAsync( Name );
+                    PicLibrary = await S.CreateFolderAsync( Name );
                 }
                 else if ( Item.IsOfType( StorageItemTypes.Folder ) )
                 {
-                    AppLibrary = ( StorageFolder ) Item;
+                    PicLibrary = ( StorageFolder ) Item;
                 }
                 else
                 {
