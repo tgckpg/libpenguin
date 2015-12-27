@@ -29,16 +29,16 @@ namespace Net.Astropenguin.Messaging
         {
             Helpers.Worker.UIInvoke( () =>
             {
-                Send( Mesg );
+                if ( DoDelivery != null ) DoDelivery( Mesg );
             } );
         }
 
         public static void Send( Message Mesg )
         {
-            if ( DoDelivery != null )
+            Task.Run( () =>
             {
-                DoDelivery( Mesg );
-            }
+                if ( DoDelivery != null ) DoDelivery( Mesg );
+            } );
         }
     }
 }
