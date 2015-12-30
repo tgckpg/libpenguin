@@ -169,6 +169,11 @@ namespace Net.Astropenguin
             return UserStorage.DirectoryExists( Name );
         }
 
+        public string[] ListDirs( string List )
+        {
+            return UserStorage.GetDirectoryNames( List );
+        }
+
         public Stream GetStream( string fileName )
         {
             // Open the file
