@@ -95,11 +95,12 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Net\Astropenguin\AppStorage.cs" />
+    <Compile Include="Net\Astropenguin\IO\AppStorage.cs" />
     <Compile Include="Net\Astropenguin\Helpers\AsyncTryOut.cs" />
     <Compile Include="Net\Astropenguin\Helpers\Diverter.cs" />
     <Compile Include="Net\Astropenguin\Helpers\Weight.cs" />
     <Compile Include="Net\Astropenguin\Helpers\Worker.cs" />
+    <Compile Include="Net\Astropenguin\IO\XRegistry.cs" />
     <Compile Include="Net\Astropenguin\Linq\List.cs" />
     <Compile Include="Net\Astropenguin\Linq\ObservableCollection.cs" />
     <Compile Include="Net\Astropenguin\Loaders\EventArgs.cs" />

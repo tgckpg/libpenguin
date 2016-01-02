@@ -12,7 +12,7 @@ using Net.Astropenguin.Logging;
 using Net.Astropenguin.Helpers;
 using Windows.Storage.Pickers;
 
-namespace Net.Astropenguin
+namespace Net.Astropenguin.IO
 {
     public class AppStorage
     {

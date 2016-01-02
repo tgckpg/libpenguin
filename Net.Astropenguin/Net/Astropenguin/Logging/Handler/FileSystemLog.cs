@@ -2,6 +2,8 @@
 using System.Text;
 using System.IO.IsolatedStorage;
 
+using Net.Astropenguin.IO;
+
 namespace Net.Astropenguin.Logging.Handler
 {
     public class FileSystemLog
