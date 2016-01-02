@@ -1,0 +1,936 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:Net.Astropenguin.UI"
+    xmlns:i="using:Net.Astropenguin.UI.Icons"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Style TargetType="i:IconNavigateArrow">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconNavigateArrow">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Rectangle Width="64" Height="9" Fill="{TemplateBinding Foreground}" Canvas.Top="46" Canvas.Left="14" />
+                        <Rectangle Fill="{TemplateBinding Foreground}" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" Height="8.965" Width="51.297" Canvas.Left="10.577" Canvas.Top="-7.958" >
+                            <Rectangle.RenderTransform>
+                                <CompositeTransform Rotation="135" TranslateX="28.284000396728516" TranslateY="68.285003662109375"/>
+                            </Rectangle.RenderTransform>
+                        </Rectangle>
+                        <Rectangle Fill="{TemplateBinding Foreground}" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" Height="49.026" Width="10.19" Canvas.Left="-9.494" Canvas.Top="38.61" >
+                            <Rectangle.RenderTransform>
+                                <CompositeTransform Rotation="135" TranslateX="68.285003662109375" TranslateY="-28.284000396728516"/>
+                            </Rectangle.RenderTransform>
+                        </Rectangle>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:IconPlusSign">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconPlusSign">
+                    <Canvas x:Name="Stage" Width="80" Height="80">
+                        <Rectangle Width="40" Height="8" Canvas.Top="36" Fill="{TemplateBinding Foreground}" Canvas.Left="20" />
+                        <Rectangle Width="8" Height="40" Canvas.Left="36" Fill="{TemplateBinding Foreground}" Canvas.Top="20" />
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:IconBookmark">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconBookmark">
+                    <Canvas x:Name="Stage" Width="80" Height="80">
+                        <Polygon Canvas.Top="20" Canvas.Left="30" Points="
+                                 0,0 10,12 20,0
+                                 20,28 10,40
+                                 0,28 0,0
+                             " Fill="{TemplateBinding Foreground}" />
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:IconTOC">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconTOC">
+                    <Canvas x:Name="Stage" Height="80" Width="80">
+                        <Ellipse Canvas.Left="14" Canvas.Top="24" Width="8" Height="8" Fill="{TemplateBinding Foreground}" />
+                        <Ellipse Canvas.Left="14" Canvas.Top="36" Width="8" Height="8" Fill="{TemplateBinding Foreground}" />
+                        <Ellipse Canvas.Left="14" Canvas.Top="48" Width="8" Height="8" Fill="{TemplateBinding Foreground}" />
+                        <Rectangle Canvas.Left="26" Canvas.Top="25" Height="6" Width="40" Fill="{TemplateBinding Foreground}" />
+                        <Rectangle Canvas.Left="26" Canvas.Top="37" Height="6" Width="40" Fill="{TemplateBinding Foreground}" />
+                        <Rectangle Canvas.Left="26" Canvas.Top="49" Height="6" Width="40" Fill="{TemplateBinding Foreground}" />
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:IconLogin">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconLogin">
+                    <Canvas x:Name="Stage" Height="80" Width="80">
+                        <Canvas Height="50" Width="40" Canvas.Left="18" Canvas.Top="15">
+                            <Rectangle Height="6" Width="40" Fill="{TemplateBinding Foreground}" />
+                            <Rectangle Height="50" Width="6" Fill="{TemplateBinding Foreground}" />
+                            <Rectangle Canvas.Left="34" Height="25" Width="6" Fill="{TemplateBinding Foreground}" />
+                            <Rectangle Canvas.Top="44"  Height="6" Width="12" Fill="{TemplateBinding Foreground}" />
+                        </Canvas>
+                        <Canvas Height="30" Canvas.Left="42.166" Canvas.Top="40.167" Width="30" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto">
+                            <Canvas.RenderTransform>
+                                <CompositeTransform Rotation="-45"/>
+                            </Canvas.RenderTransform>
+                            <Rectangle Height="5" Width="20" Fill="{TemplateBinding Foreground}" />
+                            <Rectangle Height="20" Width="5" Fill="{TemplateBinding Foreground}" />
+                            <Rectangle Height="6" Width="28" Fill="{TemplateBinding Foreground}" Canvas.Left="-1" Canvas.Top="10" RenderTransformOrigin="0.5,0.5" >
+                                <Rectangle.RenderTransform>
+                                    <CompositeTransform Rotation="45"/>
+                                </Rectangle.RenderTransform>
+                            </Rectangle>
+                        </Canvas>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:IconLogout">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconLogout">
+                    <Canvas x:Name="Stage" Height="80" Width="80">
+                        <Canvas Height="50" Width="40" Canvas.Left="18" Canvas.Top="15">
+                            <Rectangle Height="6" Width="40" Fill="{TemplateBinding Foreground}" />
+                            <Rectangle Height="50" Width="6" Fill="{TemplateBinding Foreground}" />
+                            <Rectangle Canvas.Left="34" Height="25" Width="6" Fill="{TemplateBinding Foreground}" />
+                            <Rectangle Canvas.Top="44"  Height="6" Width="12" Fill="{TemplateBinding Foreground}" />
+                        </Canvas>
+                        <Canvas Height="30" Canvas.Left="32.666" Canvas.Top="40.167" Width="30" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto">
+                            <Canvas.RenderTransform>
+                                <CompositeTransform Rotation="135"/>
+                            </Canvas.RenderTransform>
+                            <Rectangle Height="5" Width="20" Fill="{TemplateBinding Foreground}" />
+                            <Rectangle Height="20" Width="5" Fill="{TemplateBinding Foreground}" />
+                            <Rectangle Height="6" Width="28" Fill="{TemplateBinding Foreground}" Canvas.Left="-1" Canvas.Top="10" RenderTransformOrigin="0.5,0.5" >
+                                <Rectangle.RenderTransform>
+                                    <CompositeTransform Rotation="45"/>
+                                </Rectangle.RenderTransform>
+                            </Rectangle>
+                        </Canvas>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:IconReload">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconReload">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Path Stroke="{TemplateBinding Foreground}" StrokeThickness="4" StrokeDashArray="1,1,1,1,4,1,11">
+                            <Path.Data>
+                                <PathGeometry>
+                                    <PathFigure StartPoint="50, 20">
+                                        <ArcSegment IsLargeArc="True"
+                                        Size="30,30"
+                                        Point="50,80"
+                                        SweepDirection="Clockwise"/>
+                                    </PathFigure>
+                                </PathGeometry>
+                            </Path.Data>
+                            <Path.RenderTransform>
+                                <CompositeTransform Rotation="90" CenterX="50" CenterY="50" />
+                            </Path.RenderTransform>
+                        </Path>
+                        <Path Stroke="{TemplateBinding Foreground}" StrokeThickness="4">
+                            <Path.Data>
+                                <PathGeometry>
+                                    <PathFigure StartPoint="50, 20">
+                                        <ArcSegment IsLargeArc="False"
+                                        Size="30,30"
+                                        Point="80,50"
+                                        SweepDirection="Clockwise"/>
+                                    </PathFigure>
+                                    <PathFigure StartPoint="84,41">
+                                        <LineSegment Point="80,50" />
+                                        <LineSegment Point="73,42" />
+                                    </PathFigure>
+                                </PathGeometry>
+                            </Path.Data>
+                            <Path.RenderTransform>
+                                <CompositeTransform Rotation="220" CenterX="50" CenterY="50" />
+                            </Path.RenderTransform>
+                        </Path>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:IconSettings">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconSettings">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Ellipse Width="45" Height="45"
+                                 Canvas.Top="27.5" Canvas.Left="27.5"
+                                 Stroke="{TemplateBinding Foreground}" StrokeThickness="5" />
+                        <Path StrokeThickness="1" Fill="{TemplateBinding Foreground}">
+                            <Path.Data>
+                                <PathGeometry>
+                                    <PathFigure StartPoint="20.5,44" IsClosed="True" IsFilled="True">
+                                        <LineSegment Point="20.5,54" />
+                                        <LineSegment Point="30.0,55" />
+                                        <LineSegment Point="30.0,43" />
+                                        <LineSegment Point="20.5,44" />
+                                    </PathFigure>
+                                    <PathGeometry.Transform>
+                                        <CompositeTransform Rotation="0" CenterX="50" CenterY="50" />
+                                    </PathGeometry.Transform>
+                                </PathGeometry>
+                            </Path.Data>
+                        </Path>
+                        <Path StrokeThickness="1" Fill="{TemplateBinding Foreground}">
+                            <Path.Data>
+                                <PathGeometry>
+                                    <PathFigure StartPoint="20.5,44" IsClosed="True" IsFilled="True">
+                                        <LineSegment Point="20.5,54" />
+                                        <LineSegment Point="30.0,55" />
+                                        <LineSegment Point="30.0,43" />
+                                        <LineSegment Point="20.5,44" />
+                                    </PathFigure>
+                                    <PathGeometry.Transform>
+                                        <CompositeTransform Rotation="51.429" CenterX="50" CenterY="50" />
+                                    </PathGeometry.Transform>
+                                </PathGeometry>
+                            </Path.Data>
+                        </Path>
+                        <Path StrokeThickness="1" Fill="{TemplateBinding Foreground}">
+                            <Path.Data>
+                                <PathGeometry>
+                                    <PathFigure StartPoint="20.5,44" IsClosed="True" IsFilled="True">
+                                        <LineSegment Point="20.5,54" />
+                                        <LineSegment Point="30.0,55" />
+                                        <LineSegment Point="30.0,43" />
+                                        <LineSegment Point="20.5,44" />
+                                    </PathFigure>
+                                    <PathGeometry.Transform>
+                                        <CompositeTransform Rotation="102.857" CenterX="50" CenterY="50" />
+                                    </PathGeometry.Transform>
+                                </PathGeometry>
+                            </Path.Data>
+                        </Path>
+                        <Path StrokeThickness="1" Fill="{TemplateBinding Foreground}">
+                            <Path.Data>
+                                <PathGeometry>
+                                    <PathFigure StartPoint="20.5,44" IsClosed="True" IsFilled="True">
+                                        <LineSegment Point="20.5,54" />
+                                        <LineSegment Point="30.0,55" />
+                                        <LineSegment Point="30.0,43" />
+                                        <LineSegment Point="20.5,44" />
+                                    </PathFigure>
+                                    <PathGeometry.Transform>
+                                        <CompositeTransform Rotation="154.286" CenterX="50" CenterY="50" />
+                                    </PathGeometry.Transform>
+                                </PathGeometry>
+                            </Path.Data>
+                        </Path>
+                        <Path StrokeThickness="1" Fill="{TemplateBinding Foreground}">
+                            <Path.Data>
+                                <PathGeometry>
+                                    <PathFigure StartPoint="20.5,44" IsClosed="True" IsFilled="True">
+                                        <LineSegment Point="20.5,54" />
+                                        <LineSegment Point="30.0,55" />
+                                        <LineSegment Point="30.0,43" />
+                                        <LineSegment Point="20.5,44" />
+                                    </PathFigure>
+                                    <PathGeometry.Transform>
+                                        <CompositeTransform Rotation="205.714" CenterX="50" CenterY="50" />
+                                    </PathGeometry.Transform>
+                                </PathGeometry>
+                            </Path.Data>
+                        </Path>
+                        <Path StrokeThickness="1" Fill="{TemplateBinding Foreground}">
+                            <Path.Data>
+                                <PathGeometry>
+                                    <PathFigure StartPoint="20.5,44" IsClosed="True" IsFilled="True">
+                                        <LineSegment Point="20.5,54" />
+                                        <LineSegment Point="30.0,55" />
+                                        <LineSegment Point="30.0,43" />
+                                        <LineSegment Point="20.5,44" />
+                                    </PathFigure>
+                                    <PathGeometry.Transform>
+                                        <CompositeTransform Rotation="257.143" CenterX="50" CenterY="50" />
+                                    </PathGeometry.Transform>
+                                </PathGeometry>
+                            </Path.Data>
+                        </Path>
+                        <Path StrokeThickness="1" Fill="{TemplateBinding Foreground}">
+                            <Path.Data>
+                                <PathGeometry>
+                                    <PathFigure StartPoint="20.5,44" IsClosed="True" IsFilled="True">
+                                        <LineSegment Point="20.5,54" />
+                                        <LineSegment Point="30.0,55" />
+                                        <LineSegment Point="30.0,43" />
+                                        <LineSegment Point="20.5,44" />
+                                    </PathFigure>
+                                    <PathGeometry.Transform>
+                                        <CompositeTransform Rotation="308.571" CenterX="50" CenterY="50" />
+                                    </PathGeometry.Transform>
+                                </PathGeometry>
+                            </Path.Data>
+                        </Path>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:IconFastForword">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconFastForword">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Rectangle Height="10" Width="40" Fill="{TemplateBinding Foreground}" Canvas.Left="13.166" Canvas.Top="24" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" >
+                            <Rectangle.RenderTransform>
+                                <CompositeTransform Rotation="135" TranslateX="31.713" TranslateY="33.108"/>
+                            </Rectangle.RenderTransform>
+                        </Rectangle>
+                        <Rectangle Height="40" Width="10" Fill="{TemplateBinding Foreground}" Canvas.Left="13.166" Canvas.Top="24" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" >
+                            <Rectangle.RenderTransform>
+                                <CompositeTransform Rotation="135" TranslateX="46.713" TranslateY="-3.108"/>
+                            </Rectangle.RenderTransform>
+                        </Rectangle>
+                        <Rectangle Height="10" Width="40" Fill="{TemplateBinding Foreground}" Canvas.Left="31.166" Canvas.Top="39" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" >
+                            <Rectangle.RenderTransform>
+                                <CompositeTransform Rotation="135" TranslateX="-10.5" TranslateY="18.108"/>
+                            </Rectangle.RenderTransform>
+                        </Rectangle>
+                        <Rectangle Height="40" Width="10" Fill="{TemplateBinding Foreground}" Canvas.Left="31.166" Canvas.Top="39" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" >
+                            <Rectangle.RenderTransform>
+                                <CompositeTransform Rotation="135" TranslateX="4.5" TranslateY="-18.108"/>
+                            </Rectangle.RenderTransform>
+                        </Rectangle>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:IconFav">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconFav">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Path Data="M 31.013,25.6302 L 35.3976,25.6302 35.3976,72.7387 31.013,72.7387 Z" Fill="{TemplateBinding Foreground}" />
+                        <Path Data="M 31.013,69.9852 L 68.9871,69.9852 68.9871,74.3698 31.013,74.3698 Z" Fill="{TemplateBinding Foreground}" />
+                        <Path Data="F 1 M 56.1706,15.8194 L 44.0019,56.1669 72.8961,64.8813 85.0648,24.5338 56.1706,15.8194 Z M 62.7006,34.9821 C 64.0418,35.3911 64.8189,38.4566 64.8189,38.4566 64.8189,38.4566 66.7994,36.2592 68.5632,36.8033 71.3498,37.6629 70.7803,41.996 67.5378,43.2873 63.7016,44.8151 62.4801,46.4886 62.4801,46.4886 62.4801,46.4886 62.2912,44.3414 60.0689,40.9755 57.9557,37.7749 60.1537,34.2053 62.7007,34.9821 Z" Fill="{TemplateBinding Foreground}" />
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:IconFaved">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconFaved">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Path Data="M 31.013,25.6302 L 35.3976,25.6302 35.3976,72.7387 31.013,72.7387 Z" Fill="{TemplateBinding Foreground}"/>
+                        <Path Data="M 31.013,69.9852 L 68.9871,69.9852 68.9871,74.3698 31.013,74.3698 Z" Fill="{TemplateBinding Foreground}"/>
+                        <Path Data="F 1 M 36.564,26.6026 L 36.564,68.7452 66.7437,68.7452 66.7437,26.6026 36.564,26.6026 Z M 48.3492,43.0635 C 49.7513,43.0678 51.3804,45.7783 51.3804,45.7783 51.3804,45.7783 52.6421,43.1026 54.4879,43.1143 57.404,43.1327 58.11,47.4457 55.3785,49.6182 52.1468,52.1886 51.4605,54.1436 51.4605,54.1436 51.4605,54.1436 50.6597,52.1424 47.5601,49.5616 44.6127,47.1075 45.6864,43.0552 48.3492,43.0635 Z" Fill="{TemplateBinding Foreground}"/>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:KurukuruA">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:KurukuruA">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Path Data="F 1 M 122.02,122.998 L 121.985,121.998 123.767,122.75 124.087,124.448 123.509,126.154 122.444,127.424 120.942,128.152 119.396,128.371 117.884,128.148 116.461,127.564 114.053,125.598 112.504,122.982 111.966,120.546 112.052,118.167 112.685,115.911 113.787,113.84 115.281,112.007 117.095,110.465 119.16,109.267 121.408,108.47 124.75,108.045 127.97,108.394 130.99,109.427 133.735,111.055 136.134,113.188 138.117,115.741 139.613,118.63 140.55,121.771 140.887,126.015 140.288,130.081 138.857,133.873 136.701,137.298 133.923,140.269 130.625,142.697 126.908,144.491 122.872,145.562 117.726,145.822 112.813,144.977 108.246,143.151 104.136,140.465 100.59,137.039 97.7173,132.994 95.6248,128.446 94.4228,123.515 94.2355,117.467 95.3222,111.704 97.5437,106.361 100.76,101.565 104.834,97.4437 109.629,94.1242 115.008,91.7343 120.835,90.4031 124.343,90.1536 127.786,90.285 134.398,91.6126 140.52,94.2288 146.002,97.9764 150.7,102.699 154.466,108.243 157.153,114.455 158.612,121.178 157.619,121.292 156.201,114.762 153.59,108.726 149.929,103.336 145.362,98.7447 140.037,95.1049 134.1,92.5671 127.694,91.2807 124.359,91.1534 120.96,91.3952 115.325,92.6827 110.119,94.9957 105.477,98.2096 101.534,102.198 98.4241,106.835 96.2798,111.992 95.2323,117.546 95.413,123.375 96.5687,128.116 98.5826,132.493 101.349,136.388 104.76,139.684 108.709,142.265 113.087,144.016 117.788,144.824 122.711,144.575 126.559,143.554 130.109,141.84 133.259,139.521 135.91,136.687 137.963,133.425 139.32,129.827 139.888,125.979 139.568,121.962 138.686,119.006 137.275,116.28 135.403,113.871 133.144,111.861 130.569,110.334 127.75,109.37 124.757,109.045 121.65,109.441 119.581,110.174 117.672,111.281 115.994,112.707 114.618,114.395 113.612,116.287 113.04,118.325 112.963,120.458 113.445,122.645 114.811,124.946 116.938,126.685 118.155,127.186 119.406,127.371 120.652,127.195 121.877,126.6 122.632,125.674 123.096,124.316 122.948,123.324 122.02,122.998"
+                              Fill="{TemplateBinding Foreground}">
+                            <Path.RenderTransform>
+                                <CompositeTransform TranslateX="-72" TranslateY="-72" />
+                            </Path.RenderTransform>
+                        </Path>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:KurukuruB">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:KurukuruB">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                            <Path Data="F 1 M 122.02,122.998 L 121.985,121.998 123.126,122.532 123.305,123.616 122.98,124.618 122.397,125.383 120.484,126.086 118.613,125.639 117.071,124.461 116.05,122.877 115.64,121.297 115.649,119.743 116.711,116.901 118.809,114.664 121.563,113.302 123.808,112.956 125.98,113.143 128.022,113.8 129.884,114.864 132.878,117.961 133.918,119.88 134.589,121.969 134.881,124.903 134.515,127.722 133.564,130.357 132.105,132.743 130.211,134.821 127.955,136.529 125.407,137.807 122.637,138.592 118.991,138.835 115.503,138.286 112.254,137.031 109.325,135.161 106.789,132.762 104.722,129.92 103.201,126.721 102.303,123.247 102.107,118.871 102.844,114.695 104.411,110.816 106.705,107.328 109.623,104.322 113.067,101.888 116.937,100.119 121.133,99.1069 126.256,98.9593 131.135,99.8877 135.658,101.775 139.717,104.502 143.204,107.953 146.012,112.013 148.033,116.568 149.159,121.503 149.258,127.386 148.135,132.982 145.921,138.163 142.752,142.803 138.757,146.78 134.068,149.969 128.814,152.246 123.126,153.486 116.47,153.536 110.145,152.214 104.296,149.668 99.0644,146.048 94.5905,141.501 91.0145,136.172 88.4777,130.207 87.1224,123.754 87.0131,117.556 87.9846,111.456 89.9831,105.61 92.9558,100.175 93.7885,100.729 90.8984,106.013 88.955,111.698 88.0106,117.627 88.1166,123.647 89.4312,129.906 91.8932,135.695 95.3653,140.869 99.7087,145.283 104.784,148.795 110.451,151.262 116.571,152.541 123.011,152.493 128.506,151.295 133.585,149.093 138.12,146.009 141.983,142.163 145.045,137.681 147.18,132.684 148.262,127.294 148.167,121.628 147.085,116.885 145.14,112.503 142.437,108.596 139.083,105.275 135.183,102.654 130.845,100.845 126.174,99.956 121.271,100.097 117.265,101.064 113.566,102.755 110.273,105.082 107.484,107.955 105.296,111.282 103.805,114.972 103.105,118.937 103.291,123.092 104.141,126.378 105.582,129.409 107.54,132.102 109.941,134.373 112.708,136.14 115.764,137.321 119.038,137.837 122.459,137.608 125.044,136.875 127.426,135.68 129.537,134.082 131.306,132.142 132.664,129.922 133.544,127.484 133.882,124.886 133.611,122.181 132.999,120.274 132.046,118.516 129.305,115.679 127.616,114.714 125.779,114.123 123.839,113.956 121.832,114.265 119.406,115.467 117.554,117.439 116.64,119.874 116.632,121.176 116.977,122.503 117.806,123.783 119.063,124.746 120.454,125.086 121.782,124.595 122.088,124.165 122.315,123.476 122.281,123.066 122.02,122.998"
+                              Fill="{TemplateBinding Foreground}">
+                            <Path.RenderTransform>
+                                <CompositeTransform TranslateX="-72" TranslateY="-72" />
+                            </Path.RenderTransform>
+                        </Path>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:KurukuruC">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:KurukuruC">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                            <Path Data="F 1 M 122.022,122.998 L 121.984,121.998 122.502,122.481 122.022,122.998 121.503,122.515 121.503,122.515 122.003,122.498 122.022,122.998 122.502,122.481 122.504,122.527 122.457,122.756 121.504,122.561 121.552,122.332 121.552,122.332 122.004,122.544 121.504,122.561 122.457,122.756 122.456,122.758 122.455,122.76 121.959,123.042 121.553,122.328 122.049,122.046 122.049,122.046 122.004,122.544 121.553,122.328 121.959,123.042 121.592,123.009 121.287,122.868 121.681,122.013 121.986,122.154 121.986,122.154 121.636,122.511 121.681,122.013 121.287,122.868 121.636,122.511 121.287,122.869 121.048,121.667 121.676,120.85 122.794,120.487 123.865,120.723 125.376,122.165 125.815,124.18 125.265,126.07 124.04,127.623 122.397,128.681 120.685,129.159 118.989,129.187 115.85,128.115 113.307,125.921 111.644,123.012 111.034,120.284 111.105,117.61 111.776,115.062 112.964,112.704 114.587,110.594 116.568,108.788 118.832,107.343 121.305,106.319 125.412,105.566 129.408,105.801 133.197,106.908 136.686,108.771 139.789,111.277 142.421,114.313 144.495,117.772 145.922,121.546 146.555,124.511 146.824,127.446 146.346,133.162 144.647,138.559 141.884,143.508 138.215,147.885 133.791,151.568 128.766,154.433 123.29,156.355 116.583,157.339 109.814,157.035 109.951,156.045 116.534,156.341 123.049,155.384 128.35,153.524 133.221,150.747 137.509,147.176 141.062,142.938 143.73,138.16 145.366,132.966 145.824,127.478 145.566,124.66 144.958,121.812 143.595,118.209 141.611,114.9 139.094,111.995 136.132,109.604 132.816,107.832 129.234,106.785 125.471,106.565 121.602,107.274 119.295,108.23 117.176,109.582 115.322,111.272 113.809,113.239 112.71,115.42 112.094,117.755 112.029,120.189 112.586,122.676 114.079,125.286 116.358,127.254 119.096,128.193 120.543,128.169 122.008,127.76 123.369,126.882 124.384,125.598 124.817,124.126 124.489,122.627 123.445,121.631 122.816,121.487 122.243,121.674 121.989,122.006 121.986,122.153 121.986,122.154 121.986,122.154 121.636,122.511 121.681,122.013 122.049,122.046 122.004,122.544 121.553,122.328 122.004,122.544 121.552,122.332 122.004,122.544 121.504,122.561 121.503,122.515 122.003,122.498 122.022,122.998"
+                              Fill="{TemplateBinding Foreground}">
+                            <Path.RenderTransform>
+                                <CompositeTransform TranslateX="-72" TranslateY="-72" />
+                            </Path.RenderTransform>
+                        </Path>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:IconCross">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconCross">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Rectangle Width="10" Height="80"
+                                   Fill="{TemplateBinding Foreground}"
+                                   RenderTransformOrigin="0.5,0.5"
+                                   Canvas.Left="45.333" Canvas.Top="11.334">
+                            <Rectangle.RenderTransform>
+                                <CompositeTransform Rotation="45"/>
+                            </Rectangle.RenderTransform>
+                        </Rectangle>
+                        <Rectangle Width="10" Height="80"
+                                   Fill="{TemplateBinding Foreground}"
+                                   RenderTransformOrigin="0.5,0.5"
+                                   Canvas.Left="45.333" Canvas.Top="11.334" >
+                            <Rectangle.RenderTransform>
+                                <CompositeTransform Rotation="-45"/>
+                            </Rectangle.RenderTransform>
+                        </Rectangle>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:IconTick">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconTick">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Rectangle Width="10" Height="71.514"
+                                   RenderTransformOrigin="0.5,0.5"
+                                   Fill="{TemplateBinding Foreground}"
+                                   Canvas.Left="53.222" Canvas.Top="18.577">
+                            <Rectangle.RenderTransform>
+                                <CompositeTransform Rotation="45"/>
+                            </Rectangle.RenderTransform>
+                        </Rectangle>
+                        <Rectangle Width="10" Height="34.431"
+                                   RenderTransformOrigin="0.5,0.5"
+                                   Fill="{TemplateBinding Foreground}"
+                                   Canvas.Left="23" Canvas.Top="50.23">
+                            <Rectangle.RenderTransform>
+                                <CompositeTransform Rotation="-45"/>
+                            </Rectangle.RenderTransform>
+                        </Rectangle>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:IconOneDrive">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconOneDrive">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Path Canvas.Top="-268.043" Canvas.Left="520.5" Data="F 1 M -481.41,337.163 C -485.367,336.174 -487.571,333.029 -487.578,328.363 -487.58,326.871 -487.472,326.156 -487.1,325.196 -486.187,322.844 -483.77,321.069 -480.59,320.416 -479.007,320.091 -478.52,319.742 -478.52,318.935 -478.52,318.681 -478.331,317.926 -478.101,317.257 -477.055,314.217 -475.119,311.684 -473.05,310.647 -470.884,309.562 -469.791,309.317 -467.172,309.332 -463.451,309.352 -461.595,310.158 -459,312.885 L -457.572,314.384 -456.293,313.941 C -450.103,311.799 -443.932,315.446 -443.434,321.54 L -443.298,323.207 -442.079,323.644 C -438.598,324.891 -436.962,327.51 -437.259,331.36 -437.453,333.878 -438.63,335.888 -440.495,336.886 L -441.371,337.355 -460.855,337.393 C -475.828,337.422 -480.587,337.368 -481.41,337.163 Z"
+                              Fill="{TemplateBinding Foreground}" />
+                        <Path Canvas.Top="-268.043" Canvas.Left="520.5" Data="F 1 M -496.016,334.471 C -498.326,333.922 -500.773,331.882 -501.921,329.549 -502.572,328.225 -502.607,328.031 -502.607,325.689 -502.607,323.462 -502.551,323.105 -502.033,321.999 -500.94,319.668 -498.847,317.984 -496.22,317.323 -495.666,317.183 -495.145,316.96 -495.063,316.828 -494.981,316.695 -494.889,315.972 -494.86,315.221 -494.677,310.557 -491.617,306.448 -487.344,305.128 -485.036,304.415 -482.136,304.591 -479.625,305.595 -478.829,305.914 -478.918,305.982 -477.234,303.774 -476.239,302.469 -474.227,300.845 -472.58,300.018 -470.802,299.125 -468.954,298.714 -466.743,298.719 -460.564,298.734 -455.239,302.599 -453.27,308.497 -452.641,310.381 -452.673,310.909 -453.415,310.925 -453.739,310.932 -454.666,311.11 -455.477,311.321 L -456.95,311.705 -458.294,310.361 C -462.084,306.571 -468.27,305.751 -473.528,308.343 -475.629,309.379 -477.317,310.865 -478.592,312.802 -479.501,314.183 -480.66,316.76 -480.66,317.4 -480.66,317.853 -481.028,318.08 -482.597,318.595 -487.456,320.188 -490.291,323.868 -490.289,328.577 -490.289,330.29 -489.847,332.387 -489.235,333.588 -489.004,334.041 -488.875,334.472 -488.948,334.545 -489.136,334.733 -495.18,334.67 -496.016,334.471 Z"
+                              Fill="{TemplateBinding Foreground}" />
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:IconExpand">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconExpand">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Rectangle Fill="{TemplateBinding Foreground}"
+                                   Width="20" Height="20"
+                                   Canvas.Left="40" Canvas.Top="40" />
+                        <Path Fill="{TemplateBinding Foreground}">
+                            <Path.Data>
+                                <PathGeometry>
+                                    <PathFigure StartPoint="15,35" IsFilled="True">
+                                        <LineSegment Point="35,15" />
+                                        <LineSegment Point="15,15" />
+                                    </PathFigure>
+                                    <PathFigure StartPoint="85,35" IsFilled="True">
+                                        <LineSegment Point="85,15" />
+                                        <LineSegment Point="65,15" />
+                                    </PathFigure>
+                                    <PathFigure StartPoint="85,85" IsFilled="True">
+                                        <LineSegment Point="85,65" />
+                                        <LineSegment Point="65,85" />
+                                    </PathFigure>
+                                    <PathFigure StartPoint="15,85" IsFilled="True">
+                                        <LineSegment Point="15,65" />
+                                        <LineSegment Point="35,85" />
+                                    </PathFigure>
+                                </PathGeometry>
+                            </Path.Data>
+                        </Path>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:IconRetract">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconRetract">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Rectangle Fill="{TemplateBinding Foreground}"
+                                   Width="20" Height="20"
+                                   Canvas.Left="40" Canvas.Top="40" />
+                        <Path Fill="{TemplateBinding Foreground}">
+                            <Path.Data>
+                                <PathGeometry>
+                                    <PathFigure StartPoint="15,35" IsFilled="True">
+                                        <LineSegment Point="35,15" />
+                                        <LineSegment Point="35,35" />
+                                    </PathFigure>
+                                    <PathFigure StartPoint="85,35" IsFilled="True">
+                                        <LineSegment Point="65,35" />
+                                        <LineSegment Point="65,15" />
+                                    </PathFigure>
+                                    <PathFigure StartPoint="65,65" IsFilled="True">
+                                        <LineSegment Point="85,65" />
+                                        <LineSegment Point="65,85" />
+                                    </PathFigure>
+                                    <PathFigure StartPoint="35,65" IsFilled="True">
+                                        <LineSegment Point="15,65" />
+                                        <LineSegment Point="35,85" />
+                                    </PathFigure>
+                                </PathGeometry>
+                            </Path.Data>
+                        </Path>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:IconStar">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconStar">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Path Canvas.Top="-213" Canvas.Left="-2" Data="F 1 M 253.084,963.005 L 184.319,939.686 126.125,983.113 127.053,910.508 67.7683,868.582 137.107,847.028 158.661,777.689 200.587,836.974 273.193,836.046 229.765,894.24 Z"
+                              Fill="{TemplateBinding Foreground}">
+                            <Path.RenderTransform>
+                                <CompositeTransform ScaleX="0.3" ScaleY="0.3" />
+                            </Path.RenderTransform>
+                        </Path>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:IconComment">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconComment">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Rectangle Width="60" Height="40" Fill="{TemplateBinding Foreground}"
+                                   Canvas.Left="25" Canvas.Top="30"/>
+                        <Polygon HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                                 Points="14,50 25,40 25,60" Fill="{TemplateBinding Foreground}" />
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:IconUseInertia">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconUseInertia">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Ellipse Canvas.Left="20" Canvas.Top="25"
+                                 Width="50" Height="50"
+                                 Stroke="{TemplateBinding Foreground}" StrokeThickness="20" />
+                        <Rectangle Canvas.Left="70" Canvas.Top="25"
+                                   Width="10" Height="60"
+                                   Fill="{TemplateBinding Foreground}" />
+                        <Path Stroke="{TemplateBinding Foreground}" StrokeThickness="2" StrokeDashArray="1,1,1,1,4,1,11">
+                            <Path.Data>
+                                <PathGeometry>
+                                    <PathFigure StartPoint="50, 20">
+                                        <ArcSegment IsLargeArc="True"
+                                                    Size="30,30"
+                                                    Point="50,80"
+                                                    SweepDirection="Clockwise"/>
+                                    </PathFigure>
+                                </PathGeometry>
+                            </Path.Data>
+                            <Path.RenderTransform>
+                                <CompositeTransform TranslateX="-5" Rotation="150" CenterX="50" CenterY="50" />
+                            </Path.RenderTransform>
+                        </Path>
+                        <Path Stroke="{TemplateBinding Foreground}" StrokeThickness="2">
+                            <Path.Data>
+                                <PathGeometry>
+                                    <PathFigure StartPoint="80,46">
+                                        <LineSegment Point="75,51" />
+                                        <LineSegment Point="74.9,48" />
+                                    </PathFigure>
+                                </PathGeometry>
+                            </Path.Data>
+                            <Path.RenderTransform>
+                                <CompositeTransform TranslateX="-10" Rotation="180" CenterX="50" CenterY="50" />
+                            </Path.RenderTransform>
+                        </Path>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:IconNoInertia">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconNoInertia">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Ellipse Canvas.Left="15" Canvas.Top="25"
+                                 Width="50" Height="50"
+                                 Stroke="White" StrokeThickness="20" />
+                        <Rectangle Canvas.Left="70" Canvas.Top="10"
+                                   Width="10" Height="60"
+                                   Fill="White" />
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:IconInfo">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconInfo">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Path Canvas.Top="50" Canvas.Left="38"
+                              Data="F1 M 0,0 C 0,0 33.92,-17.92 27.84,-4.96 21.6,8 -7.52,63.04 15.36,56.8
+                                    38.4,50.4 45.76,37.12 45.76,37.12 45.76,37.12 14.88,55.84 22.88,34.08 30.88,12.48 51.04,-12 38.56,-19.2
+                                    26.08,-26.56 0,0 0,0 z"
+                              Fill="{TemplateBinding Foreground}">
+                            <Path.RenderTransform>
+                                <CompositeTransform ScaleX="0.5" ScaleY="0.5" />
+                            </Path.RenderTransform>
+                        </Path>
+                        <Path Canvas.Top="28" Canvas.Left="58"
+                              Data="F1 M 0,0 C 0,4.96 -4,8.96 -8.96,8.96 -13.92,8.96 -17.92,4.96 -17.92,0
+                                    -17.92,-4.96 -13.92,-9.12 -8.96,-9.12 -4,-9.12 0,-4.96 0,0 z"
+                              Fill="{TemplateBinding Foreground}">
+                            <Path.RenderTransform>
+                                <CompositeTransform ScaleX="0.5" ScaleY="0.5" />
+                            </Path.RenderTransform>
+                        </Path>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:IconPlay">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconPlay">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Polygon Points="35,25 35,75, 70,50" Fill="{TemplateBinding Foreground}" />
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:IconPause">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconPause">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Rectangle Width="15" Height="50"
+                                   Canvas.Top="25" Canvas.Left="30"
+                                   Fill="White" />
+                        <Rectangle Width="15" Height="50"
+                                   Canvas.Top="25" Canvas.Left="55"
+                                   Fill="White" />
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:IconBookShelf">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconBookShelf">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Canvas>
+                            <Canvas.RenderTransform>
+                                <CompositeTransform ScaleX="2" ScaleY="2" CenterX="50" CenterY="50" />
+                            </Canvas.RenderTransform>
+                            <Path Data="F1 M 0,0 L 0,28 22.72,28 22.72,26.56 2.72,26.56 2.72,16 22.72,16
+                                        22.72,13.28 5.28,13.28 5.28,0 0,0 z"
+                                  Fill="{TemplateBinding Foreground}" >
+                                <Path.RenderTransform>
+                                    <CompositeTransform TranslateX="39" TranslateY="38" />
+                                </Path.RenderTransform>
+                            </Path>
+                            <Path Data="M 478.56,458.56 L 481.44,458.56 481.44,470.72 478.56,470.72 z
+                                    M 483.84,461.28 L 486.72,461.28 486.72,470.72 483.84,470.72 z
+                                    M 487.84,459.84 L 492,459.84 492,470.72 487.84,470.72 z
+                                    M 477.28,477.28 L 480,477.28 480,484 477.28,484 z
+                                    M 485.28,477.28 L 486.72,477.28 486.72,484 485.28,484 z"
+                                  Fill="{TemplateBinding Foreground}">
+                                <Path.RenderTransform>
+                                    <CompositeTransform TranslateX="-433" TranslateY="-420" />
+                                </Path.RenderTransform>
+                            </Path>
+                            <Path Data="F1 M 484.48,476.48 L 481.28,481.92 482.56,482.72 485.92,477.28 484.48,476.48 z" 
+                                  Fill="{TemplateBinding Foreground}">
+                                <Path.RenderTransform>
+                                    <CompositeTransform TranslateX="-434" TranslateY="-418.7" />
+                                </Path.RenderTransform>
+                            </Path>
+                            <Path Data="F1 M 487.84,478.56 L 490.72,478.56 490.72,484 487.84,484 z"
+                                  Fill="{TemplateBinding Foreground}">
+                                <Path.RenderTransform>
+                                    <CompositeTransform TranslateX="-430" TranslateY="-420" />
+                                </Path.RenderTransform>
+                            </Path>
+                        </Canvas>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:IconSave">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconSave">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Canvas>
+                            <Canvas.RenderTransform>
+                                <CompositeTransform CenterX="50" CenterY="50" ScaleX="2" ScaleY="2" />
+                            </Canvas.RenderTransform>
+                            <Path Data="F1 M 451.84,439.84 L 516,439.84 516,504 451.84,504 z"  Fill="#ff00ffff" />
+                            <Path Data="F1 M 0,0 L -5.28,0 -5.28,-8.96 -5.6,-9.28 -18.88,-9.28 -20,-7.68 -20,0
+                                         -21.44,0 -24,-2.56 -24,-25.28 0,-25.28 0,0 z
+                                        M -21.28,-24 L -21.28,-14.24 -19.52,-13.28 -4,-13.28 -4,-14.08 -4,-24 -21.28,-24 z
+                                        M -2.88,-23.68 L -2.88,-20.96 -0.32,-20.96 -0.32,-23.68 -2.88,-23.68 z"
+                                  Fill="{TemplateBinding Foreground}">
+                                <Path.RenderTransform>
+                                    <CompositeTransform TranslateX="63" TranslateY="62" />
+                                </Path.RenderTransform>
+                            </Path>
+                            <Path Data="F1 M 0,0 L -12,0 -12,-6.88 -10.72,-8 -0.8,-8 0,-7.04 0,0 z
+                                        M -10.56,-6.56 L -10.56,-1.28 -8,-1.28 -8,-6.56 -10.56,-6.56 z"
+                                  Fill="{TemplateBinding Foreground}">
+                                <Path.RenderTransform>
+                                    <CompositeTransform TranslateX="57" TranslateY="62" />
+                                </Path.RenderTransform>
+                            </Path>
+                        </Canvas>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:IconImage">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconImage">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Canvas>
+                            <Canvas.RenderTransform>
+                                <CompositeTransform CenterX="50" CenterY="50" ScaleX="2" ScaleY="2" />
+                            </Canvas.RenderTransform>
+                            <Path Data="F1 M 0,0 L 0,-1.44 -28,-1.44 -28,-18.72 -1.44,-18.72 -1.44,0 0,0
+                                        0,-1.44 0,0 1.28,0 1.28,-21.44 -30.72,-21.44 -30.72,1.28 1.28,1.28
+                                        1.28,0 0,0 z"
+                                  Fill="{TemplateBinding Foreground}">
+                                <Path.RenderTransform>
+                                    <CompositeTransform TranslateX="65" TranslateY="62" />
+                                </Path.RenderTransform>
+                            </Path>
+                            <Path Data="F1 M 0,0 L -6.72,-8.8 -12.16,-3.84 -24,0 -24,-15.36 0,-15.36 0,0 z
+                                        M -17.76,-12.32 C -19.68,-12.32 -21.12,-10.72 -21.12,-8.96 -21.12,-7.2 -19.68,-5.6 -17.76,-5.6
+                                        -15.84,-5.6 -14.24,-7.2 -14.24,-8.96 -14.24,-10.72 -15.84,-12.32 -17.76,-12.32 z"
+                                  Fill="{TemplateBinding Foreground}">
+                                <Path.RenderTransform>
+                                    <CompositeTransform TranslateX="62.3" TranslateY="59.6" />
+                                </Path.RenderTransform>
+                            </Path>
+                        </Canvas>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:IconScan">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconScan">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Canvas>
+                            <Canvas.RenderTransform>
+                                <CompositeTransform ScaleX="0.75" ScaleY="0.75" />
+                            </Canvas.RenderTransform>
+                            <Path Data="F1 M 18.72,20 L 22.88,24.8 -4.8,66.56 -15.36,60.8 18.72,20 z" />
+                            <Path Data="F1 M 50.24,47.52 L 51.68,55.04 37.6,61.44 30.4,52 50.24,47.52 z" c:Clip.ToBounds="True" Fill="#ff2c2e30" />
+                            <Path Data="F1 M 43.36,54.24 L 19.52,15.84 10.4,23.36 38.24,57.12 43.36,54.24 z"  Fill="#ff2c2e30" />
+                            <Path Data="F1 M 109.92,75.36 L 103.84,79.04 116.64,92.32 123.36,82.56 109.92,75.36 z" c:Clip.ToBounds="True" Fill="#ff2c2e30" />
+                            <Path Data="F1 M 111.2,86.72 L 116.64,92.32 131.52,61.92 125.12,48.64 111.2,86.72 z" c:Clip.ToBounds="True" Fill="#ff2c2e30" />
+                            <Path Data="F1 M 76,17.92 L 69.76,-16 57.92,-13.6 66.08,19.36 76,17.92 z" Fill="#ff2c2e30" />
+                            <Path Data="F1 M 113.92,32 L 119.04,39.04 133.92,28.96 127.52,22.08 113.92,32 z" Fill="#ff2c2e30" />
+                            <Path Data="F1 M 126.08,25.76 L 130.24,30.56 150.4,8 143.36,2.24 126.08,25.76 z" Fill="#ff2c2e30" />
+                            <Path Data="F1 M 69.28,-11.04 L 61.28,6.24 48.64,4 62.88,-16 69.28,-11.04 z" Fill="#ff2c2e30" />
+                            <Path Data="F1 M 125.92,54.4 L 121.44,61.92 133.28,113.28 149.92,113.28 125.92,54.4 z" Fill="#ff2c2e30" />
+                            <Path Data="F1 M 0,0 C 13.6,13.28 13.76,34.88 0.64,48.48 -12.64,62.08 -34.24,62.24 -47.84,49.12
+                                        -61.44,35.84 -61.6,14.24 -48.48,0.64 -35.2,-12.96 -13.6,-13.12 0,0 z"
+                                  Fill="#ffafafb0">
+                                <Path.RenderTransform>
+                                    <CompositeTransform  TranslateX="111.68" TranslateY="21.28" />
+                                </Path.RenderTransform>
+                            </Path>
+                            <Path Data="F1 M 0,0 C 9.44,9.12 12,21.6 5.92,27.84 -0.16,34.08 -12.64,31.84 -22.08,22.72
+                                        -31.36,13.6 -34.08,1.12 -28,-5.12 -21.92,-11.36 -9.28,-9.12 0,0 z" Fill="#ff004782">
+                                <Path.RenderTransform>
+                                    <CompositeTransform TranslateX="85.92" TranslateY="47.68" />
+                                </Path.RenderTransform>
+                            </Path>
+                            <Path Data="F1 M 0,0 C 4,3.84 5.12,8.96 2.56,11.68 0,14.24 -5.28,13.28 -9.28,9.44
+                                        -13.12,5.6 -14.24,0.48 -11.68,-2.24 -9.12,-4.8 -3.84,-3.84 0,0 z" Fill="#ff0086ff">
+                                <Path.RenderTransform>
+                                    <CompositeTransform TranslateX="81.44" TranslateY="52.32" />
+                                </Path.RenderTransform>
+                            </Path>
+                            <Path Data="F1 M 0,0 C 1.6,1.6 2.08,3.68 1.12,4.8 0,5.92 -2.24,5.44 -3.84,3.84
+                                        -5.44,2.4 -5.92,0.16 -4.8,-0.96 -3.84,-2.08 -1.6,-1.6 0,0 z"
+                                  Fill="#ffffffff">
+                                <Path.RenderTransform>
+                                    <CompositeTransform TranslateX="81.44" TranslateY="52.32" />
+                                </Path.RenderTransform>
+                            </Path>
+                            <Path Data="F1 M 0,0 L -39.04,0 -39.04,-40.96 18.4,-71.52 C 18.4,-71.36 18.56,-71.2 18.56,-71.04
+                                        20.16,-68.32 22.24,-65.44 24.8,-62.88 24.8,-62.88 24.8,-62.88 24.8,-62.88 24.8,-62.88 24.8,-62.88 24.8,-62.88
+                                        24.8,-62.88 24.8,-62.88 24.8,-62.88 24.8,-62.88 24.8,-62.88 24.8,-62.88 24.8,-62.88 24.8,-62.88 24.8,-62.88
+                                        L 24.8,-62.88 C 27.36,-60.48 29.92,-58.56 32.64,-57.12 L 0,0 z" Fill="#ffbaf2ff">
+                                <Path.RenderTransform>
+                                    <CompositeTransform TranslateX="39.04" TranslateY="133.28" />
+                                </Path.RenderTransform>
+                            </Path>
+                            <Path Data="F1 M 0,0 L 0,0 C 0,0 0,0 0,0 z
+                                        M 0,0 C 0,0 0,0 0,0 0,0 0,0 0,0 z
+                                        M 0,0 C 0,0 0,0 0,0 0,0 0,0 0,0 z
+                                        M -6.24,-8.16 C -6.24,-8.32 -6.4,-8.48 -6.4,-8.64 L -6.4,-8.8 C -6.4,-8.48 -6.24,-8.32 -6.24,-8.16 z"
+                                  Fill="#ff80b8c5">
+                                <Path.RenderTransform>
+                                    <CompositeTransform TranslateX="63.84" TranslateY="70.4" />
+                                </Path.RenderTransform>
+                            </Path>
+                            <Path Data="F1 M 0,0 C -2.72,-1.44 -5.28,-3.36 -7.84,-5.76 -7.84,-5.76 -7.84,-5.76 -7.84,-5.76
+                                        -7.84,-5.76 -7.84,-5.76 -7.84,-5.76 -7.84,-5.76 -7.84,-5.76 -7.84,-5.76 -7.84,-5.76 -7.84,-5.76 -7.84,-5.76
+                                        -7.84,-5.76 -7.84,-5.76 -7.84,-5.76 -7.84,-5.76 -7.84,-5.76 -7.84,-5.76 -10.4,-8.32 -12.48,-11.2 -14.08,-13.92
+                                        -14.08,-14.08 -14.24,-14.24 -14.24,-14.56 L -3.04,-20.48 C -2.56,-18.4 -1.44,-16.16 0.48,-14.4
+                                        2.24,-12.64 4.32,-11.52 6.24,-11.04 L 0,0 z" Fill="#ff006ca4">
+                                <Path.RenderTransform>
+                                    <CompositeTransform TranslateX="71.68" TranslateY="76.16" />
+                                </Path.RenderTransform>
+                            </Path>
+                            <Path Data="F1 M 0,0 C -1.92,-0.48 -4,-1.6 -5.76,-3.36 -7.68,-5.12 -8.8,-7.36 -9.28,-9.44
+                                        L -1.28,-13.76 C -2.4,-12.64 -1.92,-10.4 -0.32,-8.96 0.8,-7.84 1.92,-7.36 3.04,-7.36
+                                        3.68,-7.36 4.16,-7.52 4.64,-8 4.96,-8.32 5.12,-8.96 5.12,-9.6 5.12,-8.96 4.96,-8.32 4.64,-8
+                                        L 0,0 z"
+                                  Fill="#ff009aff">
+                                <Path.RenderTransform>
+                                    <CompositeTransform TranslateX="77.92" TranslateY="65.12" />
+                                </Path.RenderTransform>
+                            </Path>
+                            <Path Data="F1 M 0,0 C -1.12,0 -2.24,-0.48 -3.36,-1.6 -4.96,-3.04 -5.44,-5.28 -4.32,-6.4
+                                        L -4.32,-6.4 C -4,-6.72 -3.36,-7.04 -2.72,-7.04 -1.76,-7.04 -0.48,-6.4 0.48,-5.44
+                                        1.6,-4.48 2.08,-3.2 2.08,-2.24 2.08,-1.6 1.92,-0.96 1.6,-0.64 1.12,-0.16 0.64,0 0,0 z" Fill="#ffbaf2ff">
+                                <Path.RenderTransform>
+                                    <CompositeTransform TranslateX="80.96" TranslateY="57.76" />
+                                </Path.RenderTransform>
+                            </Path>
+                        </Canvas>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

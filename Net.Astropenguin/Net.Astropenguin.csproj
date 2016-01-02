@@ -95,6 +95,10 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Net\Astropenguin\DataModel\ActiveData.cs" />
+    <Compile Include="Net\Astropenguin\DataModel\GenericData.cs" />
+    <Compile Include="Net\Astropenguin\Helpers\Converters\EnumNameConvorter.cs" />
+    <Compile Include="Net\Astropenguin\Helpers\Popups.cs" />
     <Compile Include="Net\Astropenguin\IO\AppStorage.cs" />
     <Compile Include="Net\Astropenguin\Helpers\AsyncTryOut.cs" />
     <Compile Include="Net\Astropenguin\Helpers\Diverter.cs" />
@@ -112,6 +116,10 @@
     <Compile Include="Net\Astropenguin\Messaging\Message.cs" />
     <Compile Include="Net\Astropenguin\Messaging\MessageBus.cs" />
     <Compile Include="Net\Astropenguin\IO\LineReader.cs" />
+    <Compile Include="Net\Astropenguin\UI\Clip.cs" />
+    <Compile Include="Net\Astropenguin\UI\Icons\DirectionalIcon.cs" />
+    <Compile Include="Net\Astropenguin\UI\Icons\IconBase.cs" />
+    <Compile Include="Net\Astropenguin\UI\Icons\Icons.cs" />
     <Compile Include="Net\Astropenguin\UI\VerticalLogaManager.cs" />
     <Compile Include="Net\Astropenguin\UI\VerticalLogaTable.cs" />
     <Compile Include="Net\Astropenguin\UI\VerticalStack.cs" />
@@ -126,6 +134,11 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Icons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

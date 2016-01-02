@@ -18,6 +18,12 @@ namespace Net.Astropenguin.IO
     {
         public static readonly string ID = typeof( AppStorage ).Name;
 
+        public static async Task<StorageFile> MkTemp()
+        {
+            return await ApplicationData.Current.TemporaryFolder.CreateFileAsync( "tmp", CreationCollisionOption.GenerateUniqueName );
+        }
+
+
         private IsolatedStorageFile UserStorage;
         public StorageFolder PicLibrary;
 
