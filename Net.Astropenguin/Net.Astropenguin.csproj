@@ -102,6 +102,8 @@
     <Compile Include="Net\Astropenguin\Helpers\Worker.cs" />
     <Compile Include="Net\Astropenguin\Linq\List.cs" />
     <Compile Include="Net\Astropenguin\Linq\ObservableCollection.cs" />
+    <Compile Include="Net\Astropenguin\Loaders\EventArgs.cs" />
+    <Compile Include="Net\Astropenguin\Loaders\HttpRequest.cs" />
     <Compile Include="Net\Astropenguin\Logging\Handler\FileSystemLog.cs" />
     <Compile Include="Net\Astropenguin\Logging\LogArgs.cs" />
     <Compile Include="Net\Astropenguin\Logging\Logger.cs" />
