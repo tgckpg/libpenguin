@@ -20,6 +20,7 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Net.Astropenguin/Themes/Icons.xaml" />
+        <ResourceDictionary Source="/Net.Astropenguin/Themes/StateControl.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>

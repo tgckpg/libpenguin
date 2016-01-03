@@ -134,7 +134,7 @@ namespace Net.Astropenguin.Loaders
 			}
 			catch ( Exception )
 			{
-				// MessageBox.Show( ex.ToString() );
+				// MessageBus.Send( typeof( this ), ex.ToString() );
 			}
 		}
 

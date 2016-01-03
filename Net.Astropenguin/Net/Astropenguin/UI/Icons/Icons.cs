@@ -29,6 +29,7 @@
     public class IconPause : IconBase { public IconPause() { DefaultStyleKey = typeof( IconPause ); } }
     public class IconSave : IconBase { public IconSave() { DefaultStyleKey = typeof( IconSave ); } }
     public class IconScan : IconBase { public IconScan() { DefaultStyleKey = typeof( IconScan ); } }
+    public class IconSearch : IconBase { public IconSearch() { DefaultStyleKey = typeof( IconSearch ); } }
 
     public class IconBookShelf : IconBase { public IconBookShelf() { DefaultStyleKey = typeof( IconBookShelf ); } }
 

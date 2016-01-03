@@ -933,4 +933,35 @@
         </Setter>
     </Style>
 
+    <Style TargetType="i:IconSearch">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconSearch">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Canvas>
+                            <Canvas.RenderTransform>
+                                <CompositeTransform CenterX="11" CenterY="11" ScaleX="2" ScaleY="2" />
+                            </Canvas.RenderTransform>
+                            <Path Data="F1 M 0,0 L -1.28,0 C -1.28,1.92 -2.08,3.84 -3.52,5.12 -4.8,6.56 -6.72,7.36 -8.64,7.36
+                                         -10.72,7.36 -12.64,6.56 -13.92,5.12 -15.36,3.84 -16.16,1.92 -16.16,0 -16.16,-2.08 -15.36,-4 -13.92,-5.28
+                                         -12.64,-6.72 -10.72,-7.52 -8.64,-7.52 -6.72,-7.52 -4.8,-6.72 -3.52,-5.28 -2.08,-4 -1.28,-2.08 -1.28,0
+                                        L 0,0 1.44,0 C 1.44,-5.6 -3.04,-10.08 -8.64,-10.24 -14.24,-10.08 -18.72,-5.6 -18.72,0
+                                         -18.72,5.44 -14.24,10.08 -8.64,10.08 -3.04,10.08 1.44,5.44 1.44,0 L 0,0 z"
+                                  Fill="#ffffffff">
+                                <Path.RenderTransform>
+                                    <CompositeTransform TranslateX="36" TranslateY="28.16"  />
+                                </Path.RenderTransform>
+                            </Path>
+                            <Path Data="F1 M 33.44,35.36 L 43.52,44.8 45.44,42.88 35.36,33.44 z"
+                                  Fill="#ffffffff" />
+                            <Path Data="F1 M 36.32,38.88 L 43.2,45.28 45.92,42.4 39.04,36 z"
+                                  Fill="#ffffffff" />
+                        </Canvas>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

@@ -97,18 +97,24 @@
   <ItemGroup>
     <Compile Include="Net\Astropenguin\DataModel\ActiveData.cs" />
     <Compile Include="Net\Astropenguin\DataModel\GenericData.cs" />
+    <Compile Include="Net\Astropenguin\DataModel\Observables.cs" />
     <Compile Include="Net\Astropenguin\Helpers\Converters\EnumNameConvorter.cs" />
     <Compile Include="Net\Astropenguin\Helpers\Popups.cs" />
+    <Compile Include="Net\Astropenguin\Helpers\VisualTree.cs" />
     <Compile Include="Net\Astropenguin\IO\AppStorage.cs" />
     <Compile Include="Net\Astropenguin\Helpers\AsyncTryOut.cs" />
     <Compile Include="Net\Astropenguin\Helpers\Diverter.cs" />
     <Compile Include="Net\Astropenguin\Helpers\Weight.cs" />
     <Compile Include="Net\Astropenguin\Helpers\Worker.cs" />
+    <Compile Include="Net\Astropenguin\IO\StorageExt.cs" />
     <Compile Include="Net\Astropenguin\IO\XRegistry.cs" />
     <Compile Include="Net\Astropenguin\Linq\List.cs" />
     <Compile Include="Net\Astropenguin\Linq\ObservableCollection.cs" />
     <Compile Include="Net\Astropenguin\Loaders\EventArgs.cs" />
     <Compile Include="Net\Astropenguin\Loaders\HttpRequest.cs" />
+    <Compile Include="Net\Astropenguin\Loaders\ILoader.cs" />
+    <Compile Include="Net\Astropenguin\Loaders\StorageFileStreamer.cs" />
+    <Compile Include="Net\Astropenguin\Loaders\StringResources.cs" />
     <Compile Include="Net\Astropenguin\Logging\Handler\FileSystemLog.cs" />
     <Compile Include="Net\Astropenguin\Logging\LogArgs.cs" />
     <Compile Include="Net\Astropenguin\Logging\Logger.cs" />
@@ -117,9 +123,12 @@
     <Compile Include="Net\Astropenguin\Messaging\MessageBus.cs" />
     <Compile Include="Net\Astropenguin\IO\LineReader.cs" />
     <Compile Include="Net\Astropenguin\UI\Clip.cs" />
+    <Compile Include="Net\Astropenguin\UI\Converters\BoolStateConverter.cs" />
+    <Compile Include="Net\Astropenguin\UI\Converters\DataStateConverter.cs" />
     <Compile Include="Net\Astropenguin\UI\Icons\DirectionalIcon.cs" />
     <Compile Include="Net\Astropenguin\UI\Icons\IconBase.cs" />
     <Compile Include="Net\Astropenguin\UI\Icons\Icons.cs" />
+    <Compile Include="Net\Astropenguin\UI\StateControl.cs" />
     <Compile Include="Net\Astropenguin\UI\VerticalLogaManager.cs" />
     <Compile Include="Net\Astropenguin\UI\VerticalLogaTable.cs" />
     <Compile Include="Net\Astropenguin\UI\VerticalStack.cs" />
@@ -139,6 +148,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Themes\StateControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
