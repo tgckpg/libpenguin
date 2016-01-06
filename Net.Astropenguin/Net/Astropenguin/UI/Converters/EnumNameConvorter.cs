@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Data;
 
-namespace Net.Astropenguin.Helpers.Converters
+namespace Net.Astropenguin.UI.Converters
 {
     public class EnumNameConvorter : IValueConverter
     {

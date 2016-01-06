@@ -99,8 +99,9 @@
     <Compile Include="Net\Astropenguin\Controls\NavigationHandler.cs" />
     <Compile Include="Net\Astropenguin\DataModel\ActiveData.cs" />
     <Compile Include="Net\Astropenguin\DataModel\GenericData.cs" />
+    <Compile Include="Net\Astropenguin\DataModel\INamable.cs" />
     <Compile Include="Net\Astropenguin\DataModel\Observables.cs" />
-    <Compile Include="Net\Astropenguin\Helpers\Converters\EnumNameConvorter.cs" />
+    <Compile Include="Net\Astropenguin\UI\Converters\EnumNameConvorter.cs" />
     <Compile Include="Net\Astropenguin\Helpers\Popups.cs" />
     <Compile Include="Net\Astropenguin\Helpers\VisualTree.cs" />
     <Compile Include="Net\Astropenguin\IO\AppStorage.cs" />
@@ -110,8 +111,7 @@
     <Compile Include="Net\Astropenguin\Helpers\Worker.cs" />
     <Compile Include="Net\Astropenguin\IO\StorageExt.cs" />
     <Compile Include="Net\Astropenguin\IO\XRegistry.cs" />
-    <Compile Include="Net\Astropenguin\Linq\List.cs" />
-    <Compile Include="Net\Astropenguin\Linq\ObservableCollection.cs" />
+    <Compile Include="Net\Astropenguin\Linq.cs" />
     <Compile Include="Net\Astropenguin\Loaders\EventArgs.cs" />
     <Compile Include="Net\Astropenguin\Loaders\HttpRequest.cs" />
     <Compile Include="Net\Astropenguin\Loaders\ILoader.cs" />
