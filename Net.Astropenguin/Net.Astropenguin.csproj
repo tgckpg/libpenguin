@@ -95,6 +95,8 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Net\Astropenguin\Controls\KeyboardControl.cs" />
+    <Compile Include="Net\Astropenguin\Controls\NavigationHandler.cs" />
     <Compile Include="Net\Astropenguin\DataModel\ActiveData.cs" />
     <Compile Include="Net\Astropenguin\DataModel\GenericData.cs" />
     <Compile Include="Net\Astropenguin\DataModel\Observables.cs" />

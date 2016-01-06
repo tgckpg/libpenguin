@@ -8,7 +8,7 @@ namespace Net.Astropenguin.UI.Icons
     {
         Normal
         , Rotate90, Rotate180, Rotate270
-        , MirrorHorizontal, MirrorVertical, MirrorBoth
+        , MirrorVertical, MirrorHorizontal, MirrorBoth
     }
 
     public abstract class DirectionalIcon : IconBase
@@ -37,11 +37,10 @@ namespace Net.Astropenguin.UI.Icons
         {
             switch( Direction )
             {
-                case Direction.MirrorHorizontal:
+                case Direction.MirrorVertical:
                     StageTransform.ScaleX *= -1;
                     break;
-                case Direction.Rotate180:
-                case Direction.MirrorVertical:
+                case Direction.MirrorHorizontal:
                     StageTransform.ScaleY *= -1;
                     break;
                 case Direction.MirrorBoth:
@@ -50,6 +49,9 @@ namespace Net.Astropenguin.UI.Icons
                     break;
                 case Direction.Rotate90:
                     StageTransform.Rotation = 90;
+                    break;
+                case Direction.Rotate180:
+                    StageTransform.Rotation = 180;
                     break;
                 case Direction.Rotate270:
                     StageTransform.Rotation = 270;
