@@ -23,6 +23,23 @@ namespace Net.Astropenguin.IO
             return await ApplicationData.Current.TemporaryFolder.CreateFileAsync( "tmp", CreationCollisionOption.GenerateUniqueName );
         }
 
+        public static async Task ClearTemp()
+        {
+            try
+            {
+                IEnumerable<IStorageFile> ISFs = await ApplicationData.Current.TemporaryFolder.GetFilesAsync();
+
+                foreach ( IStorageFile ISF in ISFs )
+                {
+                    await ISF.DeleteAsync();
+                }
+            }
+            catch( Exception ex )
+            {
+                Logger.Log( ID, ex.Message, LogType.ERROR );
+
+            }
+        }
 
         private IsolatedStorageFile UserStorage;
         public StorageFolder PicLibrary;

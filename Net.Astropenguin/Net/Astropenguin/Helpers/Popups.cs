@@ -17,14 +17,18 @@ namespace Net.Astropenguin.Helpers
         public async static Task<bool> ShowDialog( ContentDialog dlg )
         {
             // Close the previous one out
-            if ( DialogCommand != null )
-            {
-                DialogCommand.Cancel();
-                DialogCommand = null;
-            }
+            CloseDialog();
 
             DialogCommand = dlg.ShowAsync();
-            await DialogCommand;
+            try
+            {
+                await DialogCommand;
+            }
+            catch ( OperationCanceledException )
+            {
+
+            }
+
             return true;
         }
 
@@ -48,6 +52,15 @@ namespace Net.Astropenguin.Helpers
             }
 
             return true;
+        }
+
+        public static void CloseDialog()
+        {
+            if ( DialogCommand != null )
+            {
+                DialogCommand.Cancel();
+                DialogCommand = null;
+            }
         }
     }
 }

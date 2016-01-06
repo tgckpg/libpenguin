@@ -964,4 +964,19 @@
         </Setter>
     </Style>
 
+    <Style TargetType="i:IconSteps">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconSteps">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Rectangle Canvas.Top="30" Canvas.Left="48" Width="40" Height="40" Fill="{TemplateBinding Foreground}" />
+                        <Rectangle Canvas.Top="40" Canvas.Left="15" Width="20" Height="20" Fill="{TemplateBinding Foreground}" />
+                        <Rectangle Canvas.Top="47.5" Canvas.Left="30" Width="20" Height="5" Fill="{TemplateBinding Foreground}" />
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>
