@@ -19,6 +19,7 @@ namespace Net.Astropenguin.Helpers
             // Close the previous one out
             CloseDialog();
 
+            dlg.Closed += Dlg_Closed;
             DialogCommand = dlg.ShowAsync();
             try
             {
@@ -30,6 +31,15 @@ namespace Net.Astropenguin.Helpers
             }
 
             return true;
+        }
+
+        private static void Dlg_Closed( ContentDialog sender, ContentDialogClosedEventArgs args )
+        {
+            sender.Closed -= Dlg_Closed;
+            if( sender is IDisposable )
+            {
+                ( sender as IDisposable ).Dispose();
+            }
         }
 
         public async static Task<bool> ShowDialog( MessageDialog dlg )

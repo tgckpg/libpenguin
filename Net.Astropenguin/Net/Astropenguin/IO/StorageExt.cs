@@ -22,15 +22,21 @@ namespace Net.Astropenguin.IO
             return Reader.ReadToEnd();
         }
 
-        public async static Task<bool> WriteString( this IStorageFile ISF, string Content )
+        public async static Task<bool> WriteString( this IStorageFile ISF, string Content, bool Append = false )
         {
             try
             {
                 // Write, and over write
                 using ( Stream StreamData = await ISF.OpenStreamForWriteAsync() )
                 {
+                    if( Append )
+                    {
+                        StreamData.Seek( 0, SeekOrigin.End );
+                    }
+
                     byte[] b = Encoding.UTF8.GetBytes( Content );
                     await StreamData.WriteAsync( b, 0, b.Length );
+                    await StreamData.FlushAsync();
                 }
                 return true;
             }

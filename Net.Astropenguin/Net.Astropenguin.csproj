@@ -101,6 +101,9 @@
     <Compile Include="Net\Astropenguin\DataModel\GenericData.cs" />
     <Compile Include="Net\Astropenguin\DataModel\INamable.cs" />
     <Compile Include="Net\Astropenguin\DataModel\Observables.cs" />
+    <Compile Include="Net\Astropenguin\Helpers\StringExt.cs" />
+    <Compile Include="Net\Astropenguin\IO\XKey.cs" />
+    <Compile Include="Net\Astropenguin\IO\XParameter.cs" />
     <Compile Include="Net\Astropenguin\UI\Converters\EnumNameConvorter.cs" />
     <Compile Include="Net\Astropenguin\Helpers\Popups.cs" />
     <Compile Include="Net\Astropenguin\Helpers\VisualTree.cs" />
@@ -138,6 +141,7 @@
     <Compile Include="Net\Astropenguin\UnitTest\TestCompleteArgs.cs" />
     <Compile Include="Net\Astropenguin\UnitTest\TestExecutor.cs" />
     <Compile Include="Net\Astropenguin\UnitTest\TestResult.cs" />
+    <Compile Include="Net\Astropenguin\IO\XRegistryExt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Properties\Net.Astropenguin.rd.xml" />
   </ItemGroup>

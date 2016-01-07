@@ -35,6 +35,8 @@
     public class IconSerial : IconBase { public IconSerial() { DefaultStyleKey = typeof( IconSerial ); } }
     public class IconParallel : IconBase { public IconParallel() { DefaultStyleKey = typeof( IconParallel ); } }
 
+    public class IconTestTube : IconBase { public IconTestTube() { DefaultStyleKey = typeof( IconTestTube ); } }
+
     public class IconBookShelf : IconBase { public IconBookShelf() { DefaultStyleKey = typeof( IconBookShelf ); } }
 
     public class KurukuruA : IconBase { public KurukuruA() { DefaultStyleKey = typeof( KurukuruA ); } }

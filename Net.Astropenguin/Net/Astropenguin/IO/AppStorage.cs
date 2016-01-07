@@ -23,6 +23,46 @@ namespace Net.Astropenguin.IO
             return await ApplicationData.Current.TemporaryFolder.CreateFileAsync( "tmp", CreationCollisionOption.GenerateUniqueName );
         }
 
+        public static async Task<IStorageFile> OpenFileAsync( string Types )
+        {
+            try
+            {
+                FileOpenPicker fpick = new FileOpenPicker();
+                fpick.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+                fpick.FileTypeFilter.Add( Types );
+
+                StorageFile file = await fpick.PickSingleFileAsync();
+
+                return file;
+            }
+            catch( Exception ex )
+            {
+                Logger.Log( ID, ex.Message, LogType.ERROR );
+            }
+
+            return null;
+        }
+
+        public static async Task<IStorageFile> SaveFileAsync( string Name, IList<string> Types )
+        {
+            try
+            {
+                FileSavePicker fpick = new FileSavePicker();
+                fpick.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+                fpick.FileTypeChoices.Add( Name, Types );
+
+                StorageFile file = await fpick.PickSaveFileAsync();
+
+                return file;
+            }
+            catch( Exception ex )
+            {
+                Logger.Log( ID, ex.Message, LogType.ERROR );
+            }
+
+            return null;
+        }
+
         public static async Task ClearTemp()
         {
             try

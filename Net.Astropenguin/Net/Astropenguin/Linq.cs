@@ -9,7 +9,7 @@ namespace Net.Astropenguin.Linq
 {
     public static class LinqExtensions
     {
-        public static IEnumerable<TTarget> Construct<TSource, TTarget>( this IEnumerable<TSource> Source, Func<TSource, TTarget> Translator )
+        public static IEnumerable<TTarget> Remap<TSource, TTarget>( this IEnumerable<TSource> Source, Func<TSource, TTarget> Translator )
         {
             int i = 0; int l = Source.Count();
 
