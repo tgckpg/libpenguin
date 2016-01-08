@@ -14,6 +14,11 @@ namespace Net.Astropenguin.Helpers
             , { "a", "\a" }, { "b", "\b" }
         };
 
+        /// <summary>
+        /// Unescape backslashed representations.
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns></returns>
         public static string Unescape( this string v )
         {
             Regex R = new Regex( "\\\\(.)" );

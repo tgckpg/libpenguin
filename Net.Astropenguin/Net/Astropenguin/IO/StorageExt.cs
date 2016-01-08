@@ -26,17 +26,29 @@ namespace Net.Astropenguin.IO
         {
             try
             {
-                // Write, and over write
-                using ( Stream StreamData = await ISF.OpenStreamForWriteAsync() )
+                if ( Append )
                 {
-                    if( Append )
+                    // Write and Append
+                    using ( Stream StreamData = await ISF.OpenStreamForWriteAsync() )
                     {
                         StreamData.Seek( 0, SeekOrigin.End );
-                    }
+                        byte[] b = Encoding.UTF8.GetBytes( Content );
 
-                    byte[] b = Encoding.UTF8.GetBytes( Content );
-                    await StreamData.WriteAsync( b, 0, b.Length );
-                    await StreamData.FlushAsync();
+                        await StreamData.WriteAsync( b, 0, b.Length );
+                        await StreamData.FlushAsync();
+                    }
+                }
+                else
+                {
+                    // Write truncate
+                    using ( Stream StreamData = await ISF.OpenStreamForWriteAsync() )
+                    {
+                        byte[] b = Encoding.UTF8.GetBytes( Content );
+                        StreamData.SetLength( b.Length );
+
+                        await StreamData.WriteAsync( b, 0, b.Length );
+                        await StreamData.FlushAsync();
+                    }
                 }
                 return true;
             }
