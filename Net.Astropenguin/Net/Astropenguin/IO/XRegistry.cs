@@ -16,7 +16,7 @@ namespace Net.Astropenguin.IO
         public const string WIDENTIFIER = "WS_ID";
         public const string WTAG = "WTAG";
 
-        public string Location { get; private set; }
+        public string Location { get; set; }
 
         public XRegistry( string Xml, string Location )
             : base(

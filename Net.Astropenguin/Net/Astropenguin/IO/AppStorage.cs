@@ -77,11 +77,10 @@ namespace Net.Astropenguin.IO
             catch( Exception ex )
             {
                 Logger.Log( ID, ex.Message, LogType.ERROR );
-
             }
         }
 
-        private IsolatedStorageFile UserStorage;
+        protected IsolatedStorageFile UserStorage;
         public StorageFolder PicLibrary;
 
         public AppStorage()
@@ -299,7 +298,7 @@ namespace Net.Astropenguin.IO
             return size;
         }
 
-        public bool WriteString( string fileName, string Content )
+        virtual public bool WriteString( string fileName, string Content )
         {
             try
             {
@@ -343,7 +342,7 @@ namespace Net.Astropenguin.IO
             return DirExist( dir );
         }
 
-        public bool WriteBytes( string fileName, Byte[] bytes )
+        virtual public bool WriteBytes( string fileName, Byte[] bytes )
         {
             try
             {
@@ -364,7 +363,7 @@ namespace Net.Astropenguin.IO
             return true;
         }
 
-        public bool WriteStream( string fileName, Stream s )
+        virtual public bool WriteStream( string fileName, Stream s )
         {
             try
             {
