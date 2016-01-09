@@ -18,9 +18,9 @@ namespace Net.Astropenguin.IO
 
         public string Location { get; set; }
 
-        public XRegistry( string Xml, string Location )
+        public XRegistry( string Xml, string Location, bool ReadFromLocation = true )
             : base(
-                 AStorage.FileExists( Location )
+                 ( ReadFromLocation && AStorage.FileExists( Location ) )
                      ? FromDocument( Xml, Location )
                      : Parse( Xml )
              )

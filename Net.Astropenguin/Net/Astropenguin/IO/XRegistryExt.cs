@@ -105,6 +105,14 @@ namespace Net.Astropenguin.IO
             }
         }
 
+        public static void SetParameter( this XElement Root, IEnumerable<XParameter> Params )
+        {
+            foreach( XParameter Param in Params )
+            {
+                Root.SetParameter( Param );
+            }
+        }
+
         public static void RemoveParameter( this XElement Root, string WIdentifier )
         {
             XElement tag = Root.FindParameter( WIdentifier );
@@ -232,5 +240,34 @@ namespace Net.Astropenguin.IO
             }
         }
         #endregion
+
+        public static IEnumerable<XParameter> ToXParam( this IEnumerable<string> StrSet, string KeyName = "Value", string Prefix = "" )
+        {
+            List<XParameter> XParams = new List<XParameter>();
+
+            int i = 0;
+            foreach ( string str in StrSet )
+            {
+                XParameter Param = new XParameter( Prefix + ( i++ ) );
+                Param.SetValue( new XKey( KeyName, str ) );
+                XParams.Add( Param );
+            }
+
+            return XParams;
+        }
+
+        public static XParameter FindFirstMatch( this XDocument Doc, string Key, string Value )
+        {
+            XElement Elem = Doc.Descendants().FirstOrDefault( x =>
+            {
+                XAttribute Attr = x.Attribute( Key );
+                if ( Attr == null || Attr.Value != Value ) return false;
+
+                return true;
+            } );
+
+            if ( Elem == null ) return null;
+            return new XParameter( Elem );
+        }
     }
 }

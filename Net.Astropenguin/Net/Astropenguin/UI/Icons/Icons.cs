@@ -30,6 +30,7 @@
     public class IconSave : IconBase { public IconSave() { DefaultStyleKey = typeof( IconSave ); } }
     public class IconScan : IconBase { public IconScan() { DefaultStyleKey = typeof( IconScan ); } }
     public class IconSearch : IconBase { public IconSearch() { DefaultStyleKey = typeof( IconSearch ); } }
+    public class IconSpider : IconBase { public IconSpider() { DefaultStyleKey = typeof( IconSpider ); } }
     public class IconSteps : IconBase { public IconSteps() { DefaultStyleKey = typeof( IconSteps ); } }
 
     public class IconSerial : IconBase { public IconSerial() { DefaultStyleKey = typeof( IconSerial ); } }

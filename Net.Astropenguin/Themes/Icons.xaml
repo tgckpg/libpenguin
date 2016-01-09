@@ -1040,4 +1040,49 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="i:IconSpider">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconSpider">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Canvas>
+                            <Canvas.RenderTransform>
+                                <CompositeTransform ScaleX="0.75" ScaleY="0.75" />
+                            </Canvas.RenderTransform>
+                            <Path Data="F1 M 68,00.00 L 68.48,00.00 68.48,78.56 68,78.56 z"  Fill="White" />
+                            <Path Data="F1 M 56,54.08 L 80.48,54.08 80.48,78.56 56,78.56 z"  Fill="#ff2d2a2a" />
+                            <Path Data="F1 M 61.12,80.96 L 75.2,80.96 75.2,94.88 61.12,94.88 z"  Fill="#ff32322f" />
+                            <Path Data="F1 M 84,68.8 L 102.56,68.8 102.56,72.48 84,72.48 z"  Fill="#ff48484d" />
+                            <Path Data="M 99.04,53.76 L 102.56,53.76 102.56,72.48 99.04,72.48 z
+                                        M 84.16,57.44 L 91.84,57.44 91.84,60.8 84.16,60.8 z"  Fill="#ff48484d" />
+                            <Path Data="F1 M 88.8,37.76 L 91.84,37.76 91.84,60.8 88.8,60.8 z"  Fill="#ff48484d" />
+                            <Path Data="F1 M 73.12,25.12 L 74.88,23.04 91.84,37.6 90.08,39.84 73.12,25.12 z" Fill="#ff48484d" />
+                            <Path Data="F1 M 77.76,85.12 L 87.36,85.12 87.36,88.32 77.76,88.32 z"  Fill="#ff48484d" />
+                            <Path Data="F1 M 84.32,85.12 L 87.36,85.12 87.36,103.68 84.32,103.68 z"  Fill="#ff48484d" />
+                            <Path Data="F1 M 85.44,101.44 L 87.2,103.68 78.56,110.24 76.8,108 85.44,101.44 z" Fill="#ff48484d" />
+                            <Path Data="F1 M 74.24,40.96 L 77.28,40.96 77.28,50.08 74.24,50.08 z"  Fill="#ff48484d" />
+                            <Path Data="F1 M 70.88,37.28 L 73.28,35.52 77.28,40.96 74.88,42.72 70.88,37.28 z" Fill="#ff48484d" />
+                            <Path Data="F1 M 34.08,72.32 L 52.32,72.32 52.32,68.96 34.08,68.96 34.08,72.32 z" Fill="#ff48484d" />
+                            <Path Data="F1 M 37.28,53.92 L 34.08,53.92 34.08,72.32 37.28,72.32 37.28,53.92 z" Fill="#ff48484d" />
+                            <Path Data="F1 M 44.64,57.44 L 52.32,57.44 52.32,60.8 44.64,60.8 z"  Fill="#ff48484d" />
+                            <Path Data="F1 M 44.64,37.76 L 47.68,37.76 47.68,60.8 44.64,60.8 z"  Fill="#ff48484d" />
+                            <Path Data="F1 M 63.36,25.12 L 61.6,23.04 44.64,37.6 46.4,39.84 63.36,25.12 z" Fill="#ff48484d" />
+                            <Path Data="F1 M 49.12,85.12 L 58.72,85.12 58.72,88.32 49.12,88.32 z"  Fill="#ff48484d" />
+                            <Path Data="F1 M 49.12,85.12 L 52.16,85.12 52.16,103.68 49.12,103.68 z"  Fill="#ff48484d" />
+                            <Path Data="F1 M 51.2,101.12 L 49.28,103.68 57.92,110.24 60,107.68 51.2,101.12 z" Fill="#ff48484d" />
+                            <Path Data="F1 M 59.2,40.96 L 62.24,40.96 62.24,50.08 59.2,50.08 z"  Fill="#ff48484d" />
+                            <Path Data="F1 M 65.6,37.28 L 63.2,35.52 59.2,40.96 61.6,42.72 65.6,37.28 z" Fill="#ff48484d" />
+                            <Path Data="F1 M 59.84,58.08 L 76.48,58.08 76.48,74.72 59.84,74.72 z"  Fill="#ff6167af" />
+                            <Path Data="F1 M 62.08,60.64 L 69.12,60.64 69.12,67.84 62.08,67.84 z"  Fill="#ffffffff" />
+                            <Path Data="F1 M 62.56,92.8 L 72.8,92.8 72.8,94.88 62.56,94.88 z"  Fill="#ff6fccdd" />
+                            <Path Data="F1 M 67.68,93.44 L 70.56,93.44 70.56,94.88 67.68,94.88 z"  Fill="#ffffffff" />
+                                            <Path Data="F1 M 66.72,133.28 L 67.68,94.72 70.72,94.72 100.32,233.28 66.72,233.28 z" Fill="#550073FF" />
+                        </Canvas>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>
