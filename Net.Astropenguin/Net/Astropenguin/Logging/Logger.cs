@@ -44,8 +44,10 @@ namespace Net.Astropenguin.Logging
 		public static void Log( string id, string str, LogType p )
 		{
 			VSLog( str, p );
-			if ( WLogHandler != null && LogFilter.Contains( p ) )
+			if ( WLogHandler != null )
 			{
+                if ( 0 < LogFilter.Count && !LogFilter.Contains( p ) ) return;
+
 				Task.Factory.StartNew( () => WLogHandler( new LogArgs( id, str, p, Signal.LOG ) ) );
 			}
 		}

@@ -11,7 +11,7 @@ namespace Net.Astropenguin.DataModel
     using Logging;
     using Helpers;
 
-    class Observables<IN, OUT> : ObservableCollection<OUT>, ISupportIncrementalLoading
+    public class Observables<IN, OUT> : ObservableCollection<OUT>, ISupportIncrementalLoading
     {
         public static readonly string ID = typeof( Observables<IN, OUT> ).Name;
 
