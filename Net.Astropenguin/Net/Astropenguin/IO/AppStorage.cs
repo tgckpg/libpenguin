@@ -23,6 +23,26 @@ namespace Net.Astropenguin.IO
             return await ApplicationData.Current.TemporaryFolder.CreateFileAsync( "tmp", CreationCollisionOption.GenerateUniqueName );
         }
 
+        public static async Task<IStorageFolder> OpenDirAsync()
+        {
+            try
+            {
+                FolderPicker fpick = new FolderPicker();
+                fpick.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+                fpick.FileTypeFilter.Add( "*" );
+
+                StorageFolder folder = await fpick.PickSingleFolderAsync();
+
+                return folder;
+            }
+            catch( Exception ex )
+            {
+                Logger.Log( ID, ex.Message, LogType.ERROR );
+            }
+
+            return null;
+        }
+
         public static async Task<IStorageFile> OpenFileAsync( string Types )
         {
             try
@@ -148,11 +168,7 @@ namespace Net.Astropenguin.IO
         {
             try
             {
-                FolderPicker fpick = new FolderPicker();
-                fpick.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
-                fpick.FileTypeFilter.Add( ".txt" );
-
-                StorageFolder folder = await fpick.PickSingleFolderAsync();
+                IStorageFolder folder = await OpenDirAsync();
                 if ( folder == null ) return null;
 
                 return await folder.GetFilesAsync();
