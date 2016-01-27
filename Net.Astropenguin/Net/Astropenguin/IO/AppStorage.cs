@@ -5,12 +5,12 @@ using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.Storage.FileProperties;
 
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Helpers;
-using Windows.Storage.Pickers;
 
 namespace Net.Astropenguin.IO
 {
@@ -218,7 +218,7 @@ namespace Net.Astropenguin.IO
             return true;
         }
 
-        public void CountSizeRecursive( string folder, ref long size )
+        public void CountSizeRecursive( string folder, ref ulong size )
         {
             foreach ( string DirName in UserStorage.GetDirectoryNames( folder ) )
             {
@@ -227,12 +227,30 @@ namespace Net.Astropenguin.IO
             CountSize( folder, ref size );
         }
 
-        public void CountSize( string folder, ref long size )
+        public async Task<ulong> CountSizeRecursive( IStorageFolder folder )
+        {
+            BasicProperties prop = await folder.GetBasicPropertiesAsync();
+            ulong size = prop.Size;
+
+            IEnumerable<IStorageFolder> dirs = await folder.GetFoldersAsync();
+            foreach ( IStorageFolder dir in dirs ) size += await CountSizeRecursive( dir );
+
+            IEnumerable<IStorageFile> files = await folder.GetFilesAsync();
+            foreach ( IStorageFile file in files )
+            {
+                prop = await file.GetBasicPropertiesAsync();
+                size += prop.Size;
+            }
+
+            return size;
+        }
+
+        public void CountSize( string folder, ref ulong size )
         {
             foreach ( string fileName in UserStorage.GetFileNames( folder ) )
             {
                 IsolatedStorageFileStream file = UserStorage.OpenFile( folder + fileName, FileMode.Open, FileAccess.Read );
-                size += file.Length;
+                size += ( ulong ) file.Length;
                 file.Dispose();
             }
         }
@@ -276,6 +294,21 @@ namespace Net.Astropenguin.IO
             }
 
             return await DirStack.CreateFileAsync( Folders[ l ] );
+        }
+
+        public async Task<IStorageFolder> CreateDirFromISOStorage( string Location )
+        {
+            string[] Folders = Location.Split( '/' );
+
+            IStorageFolder DirStack = await ApplicationData.Current.LocalFolder.CreateFolderAsync( Folders[ 0 ], CreationCollisionOption.OpenIfExists );
+
+            int l = Folders.Length;
+            for ( int i = 1; i< l; i++ )
+            {
+                DirStack = await DirStack.CreateFolderAsync( Folders[ i ], CreationCollisionOption.OpenIfExists );
+            }
+
+            return DirStack;
         }
 
         public string GetString( string fileName )
