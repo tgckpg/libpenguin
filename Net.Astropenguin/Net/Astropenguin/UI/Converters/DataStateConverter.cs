@@ -9,8 +9,9 @@ namespace Net.Astropenguin.UI.Converters
 
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            bool DataExists = value != null;
-            return DataExists ? ControlState.Reovia : ControlState.Foreatii;
+            bool b = value != null;
+            if ( parameter != null ) b = !b;
+            return b ? ControlState.Reovia : ControlState.Foreatii;
         }
 
         public object ConvertBack( object value, Type targetType, object parameter, string language )
