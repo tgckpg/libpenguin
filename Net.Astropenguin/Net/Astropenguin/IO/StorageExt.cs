@@ -15,6 +15,30 @@ namespace Net.Astropenguin.IO
     {
         public static readonly string ID = typeof( StorageExt ).Name;
 
+        public static async Task<IStorageFolder> GetFolderAsync( this IStorageFolder Folder, string Location, bool Save )
+        {
+            try
+            {
+                string[] Folders = Location.Split( '/' );
+
+                int l = Folders.Length;
+                IStorageFolder DirStack = await ApplicationData.Current.LocalFolder.GetFolderAsync( Folders[ 0 ] );
+                for ( int i = 1; i < l; i++ )
+                {
+                    DirStack = await DirStack.GetFolderAsync( Folders[ i ] );
+                }
+
+                return DirStack;
+            }
+            catch( Exception ex )
+            {
+                if ( !Save ) throw ex;
+            }
+
+            return null;
+        }
+
+
         public async static Task<string> ReadString( this IStorageFile ISF )
         {
             IInputStream ips = await ISF.OpenSequentialReadAsync();
