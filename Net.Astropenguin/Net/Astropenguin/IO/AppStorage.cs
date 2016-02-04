@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.Storage.AccessCache;
 using Windows.Storage.Pickers;
 using Windows.Storage.FileProperties;
 
@@ -18,18 +19,24 @@ namespace Net.Astropenguin.IO
     {
         public static readonly string ID = typeof( AppStorage ).Name;
 
+        public static StorageItemAccessList FutureAccessList
+        {
+            get { return StorageApplicationPermissions.FutureAccessList; }
+        }
+
         public static async Task<StorageFile> MkTemp()
         {
             return await ApplicationData.Current.TemporaryFolder.CreateFileAsync( "tmp", CreationCollisionOption.GenerateUniqueName );
         }
 
-        public static async Task<IStorageFolder> OpenDirAsync()
+        public static async Task<IStorageFolder> OpenDirAsync( Action<FolderPicker> PickerHandler = null )
         {
             try
             {
                 FolderPicker fpick = new FolderPicker();
                 fpick.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
                 fpick.FileTypeFilter.Add( "*" );
+                if ( PickerHandler != null ) PickerHandler( fpick );
 
                 StorageFolder folder = await fpick.PickSingleFolderAsync();
 
@@ -298,7 +305,7 @@ namespace Net.Astropenguin.IO
 
         public async Task<IStorageFolder> CreateDirFromISOStorage( string Location )
         {
-            string[] Folders = Location.Split( '/' );
+            string[] Folders = Location.Split( new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries );
 
             IStorageFolder DirStack = await ApplicationData.Current.LocalFolder.CreateFolderAsync( Folders[ 0 ], CreationCollisionOption.OpenIfExists );
 

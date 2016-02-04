@@ -34,6 +34,11 @@ namespace Net.Astropenguin.Loaders
 		public HttpStatusCode StatusCode;
 		public bool EN_UITHREAD = true;
 
+        public WebHeaderCollection RequestHeaders
+        {
+            get { return WCRequest.Headers; }
+        }
+
         public int Timeout
         {
             get { return WCRequest.ContinueTimeout; }

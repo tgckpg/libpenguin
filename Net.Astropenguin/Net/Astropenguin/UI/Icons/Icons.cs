@@ -32,6 +32,11 @@
     public class IconSearch : IconBase { public IconSearch() { DefaultStyleKey = typeof( IconSearch ); } }
     public class IconSpider : IconBase { public IconSpider() { DefaultStyleKey = typeof( IconSpider ); } }
     public class IconSteps : IconBase { public IconSteps() { DefaultStyleKey = typeof( IconSteps ); } }
+    public class IconMSEdge : IconBase { public IconMSEdge() { DefaultStyleKey = typeof( IconMSEdge ); } }
+    public class IconCanvasBrush : IconBase { public IconCanvasBrush() { DefaultStyleKey = typeof( IconCanvasBrush ); } }
+    public class IconAtomic : IconBase { public IconAtomic() { DefaultStyleKey = typeof( IconAtomic ); } }
+    public class IconEEye : IconBase { public IconEEye() { DefaultStyleKey = typeof( IconEEye ); } }
+    public class IconScript : IconBase { public IconScript() { DefaultStyleKey = typeof( IconScript ); } }
 
     public class IconSerial : IconBase { public IconSerial() { DefaultStyleKey = typeof( IconSerial ); } }
     public class IconParallel : IconBase { public IconParallel() { DefaultStyleKey = typeof( IconParallel ); } }
