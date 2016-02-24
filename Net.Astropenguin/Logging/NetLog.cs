@@ -21,13 +21,6 @@ namespace Net.Astropenguin.Logging
 		public static bool Ended { get; private set; }
 
 		private static Socket soc;
-		// Signaling object used to notify when an asynchronous operation is completed
-		static ManualResetEvent _clientDone = new ManualResetEvent( false );
-		// Define a timeout in milliseconds for each asynchronous call. If a response is not received within this
-		// timeout period, the call is aborted.
-		const int TIMEOUT_MILLISECONDS = 5000;
-		// The maximum size of the data buffer to use with the asynchronous socket methods
-		const int MAX_BUFFER_SIZE = 2048;
 
 		static Exception CrashedEx;
         static IPAddress IP;
@@ -99,31 +92,17 @@ namespace Net.Astropenguin.Logging
 		/// <returns>The result of the Send request</returns>
 		protected static void Send( EndPoint Ep, LogArgs LArgs )
 		{
-			// We are re-using the _socket object that was initialized in the Connect method
 			if ( soc != null )
 			{
-				// Create SocketAsyncEventArgs context object
 				SocketAsyncEventArgs socketEventArg = new SocketAsyncEventArgs();
-				// Set properties on context object
 				socketEventArg.RemoteEndPoint = Ep;
-				// Inline event handler for the Completed event.
-				// Note: This event handler was implemented inline in order to make this method self-contained.
-				socketEventArg.Completed += new EventHandler<SocketAsyncEventArgs>( delegate( object s, SocketAsyncEventArgs e )
-				{
-					// Unblock the UI thread
-					_clientDone.Set();
+				socketEventArg.Completed += ( object s, SocketAsyncEventArgs e ) => {
 					if ( LArgs.sig == Signal.EXIT ) End();
-				} );
-				// Add the data to be sent into the buffer
+				};
+
 				byte[] payload = Encoding.UTF8.GetBytes( LArgs.LogStamp );
 				socketEventArg.SetBuffer( payload, 0, payload.Length );
-				// Sets the state of the event to nonsignaled, causing threads to block
-				_clientDone.Reset();
-				// Make an asynchronous Send request over the socket
 				soc.SendToAsync( socketEventArg );
-				// Block the UI thread for a maximum of TIMEOUT_MILLISECONDS milliseconds.
-				// If no response comes back within this time then proceed
-				_clientDone.WaitOne( TIMEOUT_MILLISECONDS );
 			}
 		}
 	}
