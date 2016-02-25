@@ -66,7 +66,12 @@ namespace Net.Astropenguin.DataModel
 
                   // Maybe set twice via connector and returned result
                   // But this is safe
-                  ConnectedLoader.Connector = x => NextItems.TrySetResult( x );
+                  ConnectedLoader.Connector = x =>
+                  {
+                      if ( x == null ) return;
+                      NextItems.TrySetResult( x );
+                  };
+
                   ConnectedLoader.Connector( await ConnectedLoader.NextPage( count ) );
 
                   IList<IN> Items = await NextItems.Task;
