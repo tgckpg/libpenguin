@@ -39,22 +39,14 @@ namespace Net.Astropenguin.Loaders
             get { return WCRequest.Headers; }
         }
 
-        public int Timeout
-        {
-            get { return WCRequest.ContinueTimeout; }
-            set { WCRequest.ContinueTimeout = value; }
-        }
+        public int Timeout { get; set; }
 
 		protected HttpWebRequest WCRequest;
 		protected byte[] PostData;
 
 		public Uri ReqUri;
 
-		public string ContentType
-		{
-			set { WCRequest.ContentType = value; }
-			get { return WCRequest.ContentType; }
-		}
+		public string ContentType { get; set; }
 
 		public long ContentLength
 		{
@@ -81,6 +73,15 @@ namespace Net.Astropenguin.Loaders
 			WCRequest.Headers[ HttpRequestHeader.UserAgent ] = "libpenguin - HTTPRequest";
 		}
 
+        virtual protected void SetProps()
+        {
+			WCRequest.ContentType = ContentType;
+            if ( Timeout != 0 )
+            {
+                WCRequest.ContinueTimeout = Timeout;
+            }
+        }
+
 		public void OpenWriteAsync( string DataString )
 		{
 			// Prepare streaming bytes
@@ -89,14 +90,18 @@ namespace Net.Astropenguin.Loaders
 			OpenWriteAsync();
 		}
 
+        // Primary Request Method
 		public void OpenWriteAsync()
 		{
+            SetProps();
 			WCRequest.Headers[ HttpRequestHeader.ContentLength ] = PostData.Length.ToString();
 			WCRequest.BeginGetRequestStream( new AsyncCallback( GetRequestStreamCallback ), WCRequest );
 		}
 
+        // Primary Request Method
         public void OpenAsync()
         {
+            SetProps();
             WCRequest.BeginGetResponse( new AsyncCallback( GetResponseCallback ), WCRequest );
         }
 
@@ -108,10 +113,8 @@ namespace Net.Astropenguin.Loaders
 
 		public void OpenAsyncThread( string DataString, bool EnableUIThread )
 		{
-			// Continuous call and preserve contentType
-			string CType = ContentType;
 			CreateRequest();
-			WCRequest.ContentType = CType;
+
 			EN_UITHREAD = EnableUIThread;
 			OpenWriteAsync( DataString );
 		}
