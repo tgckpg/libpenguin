@@ -1,11 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net.Astropenguin", "Net.Astropenguin\Net.Astropenguin.csproj", "{5A6B4589-8C63-40D5-946F-759A9282A176}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Astropenguin", "Global\Astropenguin.shproj", "{8CFB0989-A929-4147-A50C-29F4ABC4CEA6}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Global\Global.projitems*{5a6b4589-8c63-40d5-946f-759a9282a176}*SharedItemsImports = 4
+		Global\Global.projitems*{8cfb0989-a929-4147-a50c-29f4abc4cea6}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
 		Debug|x64 = Debug|x64

@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>8cfb0989-a929-4147-a50c-29f4abc4cea6</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Global</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)DataModel\GenericData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataModel\INamable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\AsyncTryOut.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\Diverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\StringExt.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\Weight.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IO\LineReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Linq.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\LogArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Logger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\NetLog.cs" />
+  </ItemGroup>
+</Project>
