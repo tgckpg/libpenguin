@@ -98,36 +98,26 @@
     <Compile Include="Controls\KeyboardControl.cs" />
     <Compile Include="Controls\NavigationHandler.cs" />
     <Compile Include="DataModel\ActiveData.cs" />
-    <Compile Include="DataModel\GenericData.cs" />
-    <Compile Include="DataModel\INamable.cs" />
     <Compile Include="DataModel\ObservableHashSet.cs" />
     <Compile Include="DataModel\Observables.cs" />
-    <Compile Include="Helpers\StringExt.cs" />
-    <Compile Include="IO\XKey.cs" />
-    <Compile Include="IO\XParameter.cs" />
-    <Compile Include="UI\Converters\EnumNameConvorter.cs" />
     <Compile Include="Helpers\Popups.cs" />
     <Compile Include="Helpers\VisualTree.cs" />
-    <Compile Include="IO\AppStorage.cs" />
-    <Compile Include="Helpers\AsyncTryOut.cs" />
-    <Compile Include="Helpers\Diverter.cs" />
-    <Compile Include="Helpers\Weight.cs" />
     <Compile Include="Helpers\Worker.cs" />
-    <Compile Include="IO\StorageExt.cs" />
+    <Compile Include="IO\XKey.cs" />
+    <Compile Include="IO\XParameter.cs" />
     <Compile Include="IO\XRegistry.cs" />
-    <Compile Include="Linq.cs" />
+    <Compile Include="IO\XRegistryExt.cs" />
+    <Compile Include="Logging\Handler\FileSystemLog.cs" />
+    <Compile Include="Messaging\Message.cs" />
+    <Compile Include="Messaging\MessageBus.cs" />
+    <Compile Include="UI\Converters\EnumNameConvorter.cs" />
+    <Compile Include="IO\AppStorage.cs" />
+    <Compile Include="IO\StorageExt.cs" />
     <Compile Include="Loaders\EventArgs.cs" />
     <Compile Include="Loaders\HttpRequest.cs" />
     <Compile Include="Loaders\ILoader.cs" />
     <Compile Include="Loaders\StorageFileStreamer.cs" />
     <Compile Include="Loaders\StringResources.cs" />
-    <Compile Include="Logging\Handler\FileSystemLog.cs" />
-    <Compile Include="Logging\LogArgs.cs" />
-    <Compile Include="Logging\Logger.cs" />
-    <Compile Include="Logging\NetLog.cs" />
-    <Compile Include="Messaging\Message.cs" />
-    <Compile Include="Messaging\MessageBus.cs" />
-    <Compile Include="IO\LineReader.cs" />
     <Compile Include="UI\Clip.cs" />
     <Compile Include="UI\Converters\BoolStateConverter.cs" />
     <Compile Include="UI\Converters\DataStateConverter.cs" />
@@ -142,7 +132,6 @@
     <Compile Include="UnitTest\TestCompleteArgs.cs" />
     <Compile Include="UnitTest\TestExecutor.cs" />
     <Compile Include="UnitTest\TestResult.cs" />
-    <Compile Include="IO\XRegistryExt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Properties\Net.Astropenguin.rd.xml" />
   </ItemGroup>
@@ -161,6 +150,7 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+  <Import Project="..\Global\Global.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
