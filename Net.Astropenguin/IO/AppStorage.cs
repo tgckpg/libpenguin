@@ -24,9 +24,9 @@ namespace Net.Astropenguin.IO
             get { return StorageApplicationPermissions.FutureAccessList; }
         }
 
-        public static async Task<StorageFile> MkTemp()
+        public static async Task<StorageFile> MkTemp( string FileName = "tmp" )
         {
-            return await ApplicationData.Current.TemporaryFolder.CreateFileAsync( "tmp", CreationCollisionOption.GenerateUniqueName );
+            return await ApplicationData.Current.TemporaryFolder.CreateFileAsync( FileName, CreationCollisionOption.GenerateUniqueName );
         }
 
         public static async Task<IStorageFolder> OpenDirAsync( Action<FolderPicker> PickerHandler = null )

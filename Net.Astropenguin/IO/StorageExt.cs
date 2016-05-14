@@ -30,7 +30,7 @@ namespace Net.Astropenguin.IO
 
                 return DirStack;
             }
-            catch( Exception ex )
+            catch ( Exception ex )
             {
                 if ( !Save ) throw ex;
             }
@@ -48,6 +48,11 @@ namespace Net.Astropenguin.IO
 
         public async static Task<bool> WriteString( this IStorageFile ISF, string Content, bool Append = false )
         {
+            return await ISF.WriteBytes( Encoding.UTF8.GetBytes( Content ), Append );
+        }
+
+        public async static Task<bool> WriteBytes( this IStorageFile ISF, byte[] Bytes, bool Append = false )
+        {
             try
             {
                 if ( Append )
@@ -56,9 +61,8 @@ namespace Net.Astropenguin.IO
                     using ( Stream StreamData = await ISF.OpenStreamForWriteAsync() )
                     {
                         StreamData.Seek( 0, SeekOrigin.End );
-                        byte[] b = Encoding.UTF8.GetBytes( Content );
 
-                        await StreamData.WriteAsync( b, 0, b.Length );
+                        await StreamData.WriteAsync( Bytes, 0, Bytes.Length );
                         await StreamData.FlushAsync();
                     }
                 }
@@ -67,10 +71,9 @@ namespace Net.Astropenguin.IO
                     // Write truncate
                     using ( Stream StreamData = await ISF.OpenStreamForWriteAsync() )
                     {
-                        byte[] b = Encoding.UTF8.GetBytes( Content );
-                        StreamData.SetLength( b.Length );
+                        StreamData.SetLength( Bytes.Length );
 
-                        await StreamData.WriteAsync( b, 0, b.Length );
+                        await StreamData.WriteAsync( Bytes, 0, Bytes.Length );
                         await StreamData.FlushAsync();
                     }
                 }
@@ -78,7 +81,7 @@ namespace Net.Astropenguin.IO
             }
             catch ( Exception ex )
             {
-                Logger.Log( ID, "WriteString@" + ISF.Name + ": " + ex.Message, LogType.ERROR );
+                Logger.Log( ID, "WriteBytes@" + ISF.Name + ": " + ex.Message, LogType.ERROR );
                 Logger.Log( ID, ex.StackTrace, LogType.INFO );
             }
 
