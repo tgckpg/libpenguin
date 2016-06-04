@@ -22,9 +22,9 @@ namespace Net.Astropenguin.Linq
             return Translated;
         }
 
-        public static void Filter<TSource>( this List<TSource> source, Func<TSource, bool> keySelector )
+        public static void Filter<TSource>( this IList<TSource> source, Func<TSource, bool> keySelector )
         {
-            List<TSource> FilteredList = source.Where( keySelector ).ToList();
+            TSource[] FilteredList = source.Where( keySelector ).ToArray();
 
             source.Clear();
 
@@ -35,9 +35,9 @@ namespace Net.Astropenguin.Linq
             }
         }
 
-        public static void Sort<TSource, TKey>( this ObservableCollection<TSource> source, Func<TSource, TKey> keySelector )
+        public static void Sort<TSource, TKey>( this IList<TSource> source, Func<TSource, TKey> keySelector )
         {
-            List<TSource> sortedList = source.OrderBy( keySelector ).ToList();
+            TSource[] sortedList = source.OrderBy( keySelector ).ToArray();
             source.Clear();
             foreach ( TSource Item in sortedList )
             {
@@ -45,13 +45,36 @@ namespace Net.Astropenguin.Linq
             }
         }
 
-        public static void SortDesc<TSource, TKey>( this ObservableCollection<TSource> source, Func<TSource, TKey> keySelector )
+        public static void SortDesc<TSource, TKey>( this IList<TSource> source, Func<TSource, TKey> keySelector )
         {
-            List<TSource> sortedList = source.OrderByDescending( keySelector ).ToList();
+            TSource[] sortedList = source.OrderByDescending( keySelector ).ToArray();
             source.Clear();
             foreach ( TSource Item in sortedList )
             {
                 source.Add( Item );
+            }
+        }
+
+        /// <summary>
+        /// Draw each element using Yates-Shuffle
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="SourceList">The source list</param>
+        /// <param name="Draw">The draw action</param>
+        /// <param name="Rand">Function that picks a random choice for given range</param>
+        public static void DrawEach<T>( this IList<T> SourceList, Action<T, int, int> Draw, Func<int,int,int> Rand )
+        {
+            T[] SList = SourceList.ToArray();
+            int l = SourceList.Count();
+
+            for ( int i = 0; i < l; i++ )
+            {
+                int Choice = Rand( i, l );
+                T Item = SList[ Choice ];
+
+                SList[ Choice ] = SList[ i ];
+
+                Draw( Item, i, Choice );
             }
         }
     }
