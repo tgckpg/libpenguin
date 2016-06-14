@@ -16,8 +16,7 @@ namespace Net.Astropenguin.DataModel
                 // PropertyChanged may be null after event call
                 foreach ( string Name in Names )
                 {
-                    if ( PropertyChanged != null )
-                        PropertyChanged( this, new PropertyChangedEventArgs( Name ) );
+                    PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( Name ) );
                 }
             } );
         }
