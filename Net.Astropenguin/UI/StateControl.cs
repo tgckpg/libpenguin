@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml;
+﻿using Windows.Foundation;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Markup;
 
@@ -10,10 +11,12 @@ namespace Net.Astropenguin.UI
     [TemplateVisualState( Name = "Reovia", GroupName = "ControlStates" )]
     [TemplateVisualState( Name = "Seonium", GroupName = "ControlStates" )]
     [ContentProperty( Name = "ControlContext" )]
-    public class StateControl : Control 
+    public class StateControl : Control
     {
         public static readonly DependencyProperty ControlContextProperty = DependencyProperty.Register( "ControlContext", typeof( object ), typeof( StateControl ), new PropertyMetadata( null ) );
         public static readonly DependencyProperty StateProperty = DependencyProperty.Register( "State", typeof( ControlState ), typeof( StateControl ), new PropertyMetadata( ControlState.Foreatii, StateChanged ) );
+
+        public event TypedEventHandler<object, ControlState> OnStateChanged;
 
         private static void StateChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
         {
@@ -56,9 +59,35 @@ namespace Net.Astropenguin.UI
             DefaultStyleKey = typeof( StateControl );
         }
 
+        private void OnForeatii( object sender, object e )
+        {
+            OnStateChanged?.Invoke( this, ControlState.Foreatii );
+        }
+
+        private void OnReovia( object sender, object e )
+        {
+            OnStateChanged?.Invoke( this, ControlState.Reovia );
+        }
+
         protected override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
+            VisualStateGroup VSG = ( VisualStateGroup ) GetTemplateChild( "ControlStates" );
+
+            foreach( VisualTransition VST in VSG.Transitions )
+            {
+                switch( VST.GetValue( NameProperty ).ToString() )
+                {
+                    case "ReoviaToForeatii":
+                        VST.Storyboard.Completed += OnForeatii;
+                        break;
+                    case "ForeatiiToReovia":
+                        VST.Storyboard.Completed += OnReovia;
+                        break;
+                }
+
+            }
+
             UpdateVisualState( false );
         }
     }
