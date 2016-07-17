@@ -120,7 +120,6 @@
     <Compile Include="Loaders\StorageFileStreamer.cs" />
     <Compile Include="Loaders\StringResources.cs" />
     <Compile Include="UI\Clip.cs" />
-    <Compile Include="UI\Converters\BoolStateConverter.cs" />
     <Compile Include="UI\Converters\DataStateConverter.cs" />
     <Compile Include="UI\Icons\DirectionalIcon.cs" />
     <Compile Include="UI\Icons\IconBase.cs" />

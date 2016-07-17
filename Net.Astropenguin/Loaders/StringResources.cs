@@ -1,32 +1,37 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using Windows.ApplicationModel.Resources;
 
 namespace Net.Astropenguin.Loaders
 {
 	public class StringResources
 	{
-		protected ResourceLoader ResCont;
+		protected Dictionary<string,ResourceLoader> ResCont;
+
         public string Language { get; internal set; }
         public CultureInfo Culture = CultureInfo.CurrentUICulture;
 
-		public StringResources()
-		{
-			ResCont = ResourceLoader.GetForCurrentView( "AppResources" );
-		}
+        protected ResourceLoader DefaultRes;
 
-		public StringResources( string View )
-		{
-			ResCont = ResourceLoader.GetForCurrentView( View );
-		}
+        public StringResources( params string[] Views )
+        {
+            if ( Views.Length == 0 )
+            {
+                DefaultRes = ResourceLoader.GetForCurrentView( "AppResources" );
+                return;
+            }
 
-		public string Text( string Key )
-		{
-			return ResCont.GetString( Key + "/Text" );
-		}
+            ResCont = new Dictionary<string, ResourceLoader>();
+            foreach ( string View in Views )
+                ResCont.Add( View, ResourceLoader.GetForCurrentView( View ) );
 
-		public string Str( string Key )
-		{
-			return ResCont.GetString( Key );
-		}
+            DefaultRes = ResCont[ Views[ 0 ] ];
+        }
+
+        public string Text( string Key ) { return DefaultRes.GetString( Key + "/Text" ); }
+        public string Text( string Key, string View ) { return ResCont[ View ].GetString( Key + "/Text" ); }
+
+        public string Str( string Key ) { return DefaultRes.GetString( Key ); }
+        public string Str( string Key, string View ) { return ResCont[ View ].GetString( Key ); }
 	}
 }

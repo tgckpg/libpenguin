@@ -7,10 +7,13 @@ namespace Net.Astropenguin.UI.Converters
     {
         public static readonly string ID = typeof( DataStateConverter ).Name;
 
-        public object Convert(object value, Type targetType, object parameter, string language)
+        public object Convert( object value, Type targetType, object parameter, string language )
         {
-            bool b = value != null;
+            bool b = false;
+
+            if ( value != null ) b = ( bool ) value;
             if ( parameter != null ) b = !b;
+
             return b ? ControlState.Reovia : ControlState.Foreatii;
         }
 
