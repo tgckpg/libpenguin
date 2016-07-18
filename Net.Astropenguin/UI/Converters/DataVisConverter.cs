@@ -11,15 +11,18 @@ namespace Net.Astropenguin.UI.Converters
     {
         public static readonly string ID = typeof( DataStateConverter ).Name;
 
-        public object Convert(object value, Type targetType, object parameter, string language)
+        public object Convert( object value, Type targetType, object parameter, string language )
         {
+            bool b = false;
+
             IEnumerable<object> Enu = value as IEnumerable<object>;
-
-            bool b = value != null;
-
-            if( Enu != null && Enu.Count() == 0 )
+            if ( Enu != null && 0 < Enu.Count() )
             {
-                b = false;
+                b = true;
+            }
+            else
+            {
+                b = ( value as bool? ) == true;
             }
 
             if ( parameter != null ) b = !b;

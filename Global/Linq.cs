@@ -77,5 +77,23 @@ namespace Net.Astropenguin.Linq
                 Draw( Item, i, Choice );
             }
         }
+
+        public static T[] Flattern<T>( this IEnumerable<T> SourceList, Func<T,IEnumerable<T>> Children )
+        {
+            if ( SourceList.Count() == 0 ) return new T[ 0 ];
+
+            List<T> Flatterned = new List<T>();
+
+            foreach( T Item in SourceList )
+            {
+                Flatterned.Add( Item );
+                IEnumerable<T> ListChildren = Children( Item );
+
+                if( ListChildren != null )
+                    Flatterned.AddRange( ListChildren.Flattern( Children ) );
+            }
+
+            return Flatterned.ToArray();
+        }
     }
 }

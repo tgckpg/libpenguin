@@ -58,51 +58,51 @@ namespace Net.Astropenguin.DataModel
             Logger.Log( ID, string.Format( "Requesting to load {0} items, Current Page is {1}", count, ConnectedLoader.CurrentPage ) );
 
             return Task.Run( async () =>
-              {
-                  if ( LoadStart != null )
-                      Worker.UIInvoke( () => LoadStart( this, new EventArgs() ) );
+            {
+                if ( LoadStart != null )
+                    Worker.UIInvoke( () => LoadStart( this, new EventArgs() ) );
 
-                  TaskCompletionSource<IList<IN>> NextItems = new TaskCompletionSource<IList<IN>>();
+                TaskCompletionSource<IList<IN>> NextItems = new TaskCompletionSource<IList<IN>>();
 
-                  // Maybe set twice via connector and returned result
-                  // But this is safe
-                  ConnectedLoader.Connector = x =>
-                  {
-                      if ( x == null ) return;
-                      NextItems.TrySetResult( x );
-                  };
+                // Maybe set twice via connector and returned result
+                // But this is safe
+                ConnectedLoader.Connector = x =>
+                {
+                    if ( x == null ) return;
+                    NextItems.TrySetResult( x );
+                };
 
-                  ConnectedLoader.Connector( await ConnectedLoader.NextPage( count ) );
+                ConnectedLoader.Connector( await ConnectedLoader.NextPage( count ) );
 
-                  IList<IN> Items = await NextItems.Task;
+                IList<IN> Items = await NextItems.Task;
 
-                  IList<OUT> Converted = Convert == null
-                      ? ( IList<OUT> ) Items
-                      : Convert( Items )
-                  ;
+                IList<OUT> Converted = Convert == null
+                    ? ( IList<OUT> ) Items
+                    : Convert( Items )
+                ;
 
-                  TaskCompletionSource<uint> ItemsAdded = new TaskCompletionSource<uint>();
+                TaskCompletionSource<uint> ItemsAdded = new TaskCompletionSource<uint>();
 
-                  // It seemed that items must be added via UI Thread
-                  Worker.UIInvoke( () =>
-                  {
-                      uint i = 0;
-                      foreach ( OUT a in Converted )
-                      {
-                          Add( a ); i++;
-                      }
-                      ItemsAdded.SetResult( i );
-                  } );
+                // It seemed that items must be added via UI Thread
+                Worker.UIInvoke( () =>
+                {
+                    uint i = 0;
+                    foreach ( OUT a in Converted )
+                    {
+                        Add( a ); i++;
+                    }
+                    ItemsAdded.SetResult( i );
+                } );
 
-                  uint Count = await ItemsAdded.Task;
+                uint Count = await ItemsAdded.Task;
 
-                  Logger.Log( ID, string.Format( "Loaded {0} item(s)", Count ) );
+                Logger.Log( ID, string.Format( "Loaded {0} item(s)", Count ) );
 
-                  if ( LoadEnd != null )
-                      Worker.UIInvoke( () => LoadEnd( this, new EventArgs() ) );
+                if ( LoadEnd != null )
+                    Worker.UIInvoke( () => LoadEnd( this, new EventArgs() ) );
 
-                  return new LoadMoreItemsResult() { Count = Count };
-              } ).AsAsyncOperation();
+                return new LoadMoreItemsResult() { Count = Count };
+            } ).AsAsyncOperation();
         }
     }
 }
