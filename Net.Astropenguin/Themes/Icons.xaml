@@ -533,14 +533,20 @@
 
     <Style TargetType="i:IconComment">
         <Setter Property="Foreground" Value="White" />
+        <Setter Property="Background" Value="Black" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="i:IconComment">
                     <Canvas x:Name="Stage" Width="100" Height="100">
-                        <Rectangle Width="60" Height="40" Fill="{TemplateBinding Foreground}"
-                                   Canvas.Left="25" Canvas.Top="30"/>
-                        <Polygon HorizontalAlignment="Center" VerticalAlignment="Bottom"
-                                 Points="14,50 25,40 25,60" Fill="{TemplateBinding Foreground}" />
+                        <Canvas>
+                            <Canvas.RenderTransform>
+                                <ScaleTransform ScaleX="0.3" ScaleY="0.3" CenterX="-98.6" CenterY="-169.1"/>
+                            </Canvas.RenderTransform>
+                            <Path Data="F0 M 265.52,476.13 L 528.2,476.13 528.2,632.58 463.18,632.58 462.6,670.6 404.84,632.58 265.52,632.58 z"
+                                  Fill="{TemplateBinding Foreground}" />
+                            <Path Data="F1 M 265.52,476.13 L 528.2,476.13 528.2,632.58 463.18,632.58 462.6,670.6 404.84,632.58 265.52,632.58 z"
+                                  Stroke="{TemplateBinding Background}" StrokeStartLineCap="Round" StrokeEndLineCap="Round" />
+                        </Canvas>
                     </Canvas>
                 </ControlTemplate>
             </Setter.Value>
