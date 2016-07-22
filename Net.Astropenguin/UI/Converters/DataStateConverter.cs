@@ -1,25 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Windows.UI.Xaml.Data;
 
 namespace Net.Astropenguin.UI.Converters
 {
-    public class DataStateConverter : IValueConverter
+    public sealed class DataStateConverter :DataBoolConverter 
     {
-        public static readonly string ID = typeof( DataStateConverter ).Name;
-
-        public object Convert( object value, Type targetType, object parameter, string language )
+        override public object Convert( object value, Type targetType, object parameter, string language )
         {
-            bool b = false;
-
-            if ( value != null ) b = ( bool ) value;
-            if ( parameter != null ) b = !b;
-
-            return b ? ControlState.Reovia : ControlState.Foreatii;
-        }
-
-        public object ConvertBack( object value, Type targetType, object parameter, string language )
-        {
-            return false;
+            return DataBool( value, parameter != null ) ? ControlState.Reovia : ControlState.Foreatii;
         }
     }
 }
