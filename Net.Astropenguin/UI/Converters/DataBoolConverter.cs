@@ -23,10 +23,15 @@ namespace Net.Astropenguin.UI.Converters
             {
                 b = true;
             }
+            else if( value is bool )
+            {
+                b = ( bool ) value;
+            }
             else
             {
-                b = ( value as bool? ) == true;
+                b = ( value != null );
             }
+
 
             if ( Invert ) b = !b;
 
