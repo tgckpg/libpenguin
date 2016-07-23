@@ -27,14 +27,16 @@ namespace Net.Astropenguin.UI.Converters
             {
                 b = ( bool ) value;
             }
+            else if( value is string )
+            {
+                b = !string.IsNullOrEmpty( ( string ) value );
+            }
             else
             {
                 b = ( value != null );
             }
 
-
-            if ( Invert ) b = !b;
-
+            if ( Invert ) return !b;
             return b;
         }
 
