@@ -19,9 +19,9 @@ namespace Net.Astropenguin.UI.Converters
             bool b = false;
 
             IEnumerable<object> Enu = value as IEnumerable<object>;
-            if ( Enu != null && 0 < Enu.Count() )
+            if ( Enu != null )
             {
-                b = true;
+                b = 0 < Enu.Count();
             }
             else if( value is bool )
             {
