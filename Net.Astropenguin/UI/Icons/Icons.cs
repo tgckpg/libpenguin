@@ -5,6 +5,7 @@
     public class IconLogout : DirectionalIcon { public IconLogout() { DefaultStyleKey = typeof( IconLogout ); } }
     public class IconFastForword : DirectionalIcon { public IconFastForword() { DefaultStyleKey = typeof( IconFastForword ); } }
     public class IconTOC : DirectionalIcon { public IconTOC() { DefaultStyleKey = typeof( IconTOC ); } }
+    public class IconKey : DirectionalIcon { public IconKey() { DefaultStyleKey = typeof( IconKey ); } }
     public class IconPlusSign : IconBase { public IconPlusSign() { DefaultStyleKey = typeof( IconPlusSign ); } }
     public class IconBookmark : IconBase { public IconBookmark() { DefaultStyleKey = typeof( IconBookmark ); } }
     public class IconReload : IconBase { public IconReload() { DefaultStyleKey = typeof( IconReload ); } }
