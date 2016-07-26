@@ -8,7 +8,7 @@ namespace Net.Astropenguin.IO
     public static class XRegistryExt
     {
         #region Node Functions
-        public static XParameter GetFirstParameterWithKey( this XElement Root, string key )
+        public static XParameter FirstParameter( this XElement Root, string key )
         {
             XElement p = Root.FindFirstParameterWithKey( key );
             if ( p != null )
@@ -16,7 +16,7 @@ namespace Net.Astropenguin.IO
             else return null;
         }
 
-        public static XParameter GetParameter( this XElement Root, string WIdentifier )
+        public static XParameter Parameter( this XElement Root, string WIdentifier )
         {
             XElement p = Root.FindParameter( WIdentifier );
             if ( p != null )
@@ -40,10 +40,14 @@ namespace Net.Astropenguin.IO
             return new XParameter[ 0 ];
         }
 
-        public static XParameter[] GetParametersWithKey( this XElement Root, string key )
+        public static XParameter[] Parameters( this XElement Root, string key, string value = null )
         {
             IEnumerable<XElement> xe = Root.Elements( XRegistry.WTAG )
                 .Where( p => p.Attribute( key ) != null );
+
+            if ( value != null )
+                xe = xe.Where( p => p.Attribute( key ).Value == value );
+
             if ( xe == null ) return new XParameter[ 0 ];
 
             xe = xe.ToArray();
