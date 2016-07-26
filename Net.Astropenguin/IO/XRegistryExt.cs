@@ -94,10 +94,10 @@ namespace Net.Astropenguin.IO
 
         public static void SetParameter( this XElement Root, XParameter Param )
         {
-            XElement P = Root.FindParameter( Param.ID );
+            XElement P = Root.FindParameter( Param.Id );
             if ( P == null )
             {
-                Root.SetParameter( Param.ID, Param.Keys, Param.GetParameters() );
+                Root.SetParameter( Param.Id, Param.Keys, Param.GetParameters() );
             }
             else
             {

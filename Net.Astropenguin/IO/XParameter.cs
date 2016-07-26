@@ -6,7 +6,7 @@ namespace Net.Astropenguin.IO
 {
     public class XParameter : XElement
     {
-        public string ID
+        public string Id
         {
             get
             {
@@ -53,7 +53,7 @@ namespace Net.Astropenguin.IO
         public XParameter( string ID )
             : base( XRegistry.WTAG )
         {
-            this.ID = ID;
+            this.Id = ID;
         }
 
         public string GetValue( string key ) { return this.GetXValue( key ); }

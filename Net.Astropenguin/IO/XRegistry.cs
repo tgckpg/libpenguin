@@ -64,8 +64,8 @@ namespace Net.Astropenguin.IO
 
             foreach ( XParameter US in All )
             {
-                XParameter LHS = LHSs.Contains( US ) ? US : Parameter( US.ID );
-                XParameter RHS = RHSs.Contains( US ) ? US : MergeReg.Parameter( US.ID );
+                XParameter LHS = LHSs.Contains( US ) ? US : Parameter( US.Id );
+                XParameter RHS = RHSs.Contains( US ) ? US : MergeReg.Parameter( US.Id );
 
                 if ( LHS == null && !IsMaster )
                 {
@@ -73,7 +73,7 @@ namespace Net.Astropenguin.IO
                 }
                 else if ( RHS == null && !IsMaster )
                 {
-                    RemoveParameter( LHS.ID );
+                    RemoveParameter( LHS.Id );
                 }
                 else if ( !( LHS == null || RHS == null ) )
                 {
@@ -91,8 +91,8 @@ namespace Net.Astropenguin.IO
 
             foreach ( XParameter US in All )
             {
-                XParameter LHS = LHSs.Contains( US ) ? US : Parameter( US.ID );
-                XParameter RHS = RHSs.Contains( US ) ? US : MergeReg.Parameter( US.ID );
+                XParameter LHS = LHSs.Contains( US ) ? US : Parameter( US.Id );
+                XParameter RHS = RHSs.Contains( US ) ? US : MergeReg.Parameter( US.Id );
 
                 if ( LHS == null )
                 {
