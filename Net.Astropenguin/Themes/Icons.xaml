@@ -533,7 +533,7 @@
 
     <Style TargetType="i:IconComment">
         <Setter Property="Foreground" Value="White" />
-        <Setter Property="Background" Value="Black" />
+        <Setter Property="BorderBrush" Value="Black" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="i:IconComment">
@@ -542,10 +542,11 @@
                             <Canvas.RenderTransform>
                                 <ScaleTransform ScaleX="0.3" ScaleY="0.3" CenterX="-98.6" CenterY="-169.1"/>
                             </Canvas.RenderTransform>
-                            <Path Data="F0 M 265.52,476.13 L 528.2,476.13 528.2,632.58 463.18,632.58 462.6,670.6 404.84,632.58 265.52,632.58 z"
+                            <Path Data="F0 M 289.91,494.21 L 503.79,494.21 503.79,621.59 450.85,621.59 450.38,652.55 403.35,621.59 289.91,621.59 z"
                                   Fill="{TemplateBinding Foreground}" />
-                            <Path Data="F1 M 265.52,476.13 L 528.2,476.13 528.2,632.58 463.18,632.58 462.6,670.6 404.84,632.58 265.52,632.58 z"
-                                  Stroke="{TemplateBinding Background}" StrokeStartLineCap="Round" StrokeEndLineCap="Round" />
+                            <Path Data="F1 M 289.91,494.21 L 503.79,494.21 503.79,621.59 450.85,621.59 450.38,652.55 403.35,621.59 289.91,621.59 z" 
+                                  Stroke="{TemplateBinding BorderBrush}" StrokeThickness="1"
+                                  StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" />
                         </Canvas>
                     </Canvas>
                 </ControlTemplate>
