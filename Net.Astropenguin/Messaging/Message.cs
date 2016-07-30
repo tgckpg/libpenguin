@@ -9,14 +9,14 @@ namespace Net.Astropenguin.Messaging
         public object Payload { get; private set; }
         public Func<object> Dispatcher { get; private set; }
 
-		public DateTime timestamp { get; private set; }
+		public DateTime Timestamp { get; private set; }
 
 		public Message( Type id, string Content, object Payload = null )
 		{
             this.TargetType = id;
             this.Content = Content;
             this.Payload = Payload;
-			timestamp = DateTime.Now;		   
+			Timestamp = DateTime.Now;		   
 		}
 
 		public Message( Type id, string Content, Func<object> Payload )
@@ -24,7 +24,7 @@ namespace Net.Astropenguin.Messaging
             this.TargetType = id;
             this.Content = Content;
             this.Dispatcher = Payload;
-			timestamp = DateTime.Now;
+			Timestamp = DateTime.Now;
 		}
     }
 }

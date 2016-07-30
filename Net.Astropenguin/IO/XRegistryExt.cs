@@ -73,7 +73,7 @@ namespace Net.Astropenguin.IO
                 Root.Add( new XElement(
                     XRegistry.WTAG
                     , new XAttribute[] {
-                        new XAttribute( XRegistry.WIDENTIFIER, WIdentifier ) }
+                        new XAttribute( XRegistry.XID, WIdentifier ) }
                         .Concat( keys ), Params )
                 );
             }
@@ -88,7 +88,7 @@ namespace Net.Astropenguin.IO
             }
             else
             {
-                Root.Add( new XElement( XRegistry.WTAG, new XAttribute[] { new XAttribute( XRegistry.WIDENTIFIER, WIdentifier ), key } ) );
+                Root.Add( new XElement( XRegistry.WTAG, new XAttribute[] { new XAttribute( XRegistry.XID, WIdentifier ), key } ) );
             }
         }
 
@@ -128,7 +128,7 @@ namespace Net.Astropenguin.IO
             IEnumerable<XElement> xe = Root.Elements( XRegistry.WTAG );
             foreach ( XElement k in xe )
             {
-                if ( k.Attribute( XRegistry.WIDENTIFIER ).Value == WIdentifier )
+                if ( k.Attribute( XRegistry.XID ).Value == WIdentifier )
                 {
                     return k;
                 }
@@ -231,7 +231,7 @@ namespace Net.Astropenguin.IO
         {
             foreach ( XAttribute xa in XRef.Attributes().ToArray() )
             {
-                if ( xa.Name == XRegistry.WIDENTIFIER ) continue;
+                if ( xa.Name == XRegistry.XID ) continue;
                 xa.Remove();
             }
         }

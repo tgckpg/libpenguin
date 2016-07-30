@@ -13,7 +13,7 @@ namespace Net.Astropenguin.IO
         public static readonly string ID = typeof( XRegistry ).Name;
         public static AppStorage AStorage;
 
-        public const string WIDENTIFIER = "WS_ID";
+        public const string XID = "WS_ID";
         public const string WTAG = "WTAG";
 
         public string Location { get; set; }

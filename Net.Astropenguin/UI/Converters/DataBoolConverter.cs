@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Windows.UI.Xaml.Data;
@@ -18,10 +19,10 @@ namespace Net.Astropenguin.UI.Converters
         {
             bool b = false;
 
-            IEnumerable<object> Enu = value as IEnumerable<object>;
+            IEnumerable Enu = value as IEnumerable;
             if ( Enu != null )
             {
-                b = 0 < Enu.Count();
+                b = 0 < Enumerable.Cast<object>( Enu ).Count();
             }
             else if( value is bool )
             {
@@ -30,6 +31,10 @@ namespace Net.Astropenguin.UI.Converters
             else if( value is string )
             {
                 b = !string.IsNullOrEmpty( ( string ) value );
+            }
+            else if( value is int )
+            {
+                b = ( int ) value != 0;
             }
             else
             {
