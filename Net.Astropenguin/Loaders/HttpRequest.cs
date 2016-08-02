@@ -179,7 +179,7 @@ namespace Net.Astropenguin.Loaders
 						}
 					}
 					DRequestCompletedEventArgs RArgs
-						= new DRequestCompletedEventArgs( Response.Headers, RefUrl, rBytes );
+						= new DRequestCompletedEventArgs( Response, RefUrl, rBytes );
 					if ( EN_UITHREAD )
 						// Raise event in the Main UI thread
 						Worker.UIInvoke( () => DRequestCompleted( RArgs ) );
