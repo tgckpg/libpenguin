@@ -38,11 +38,17 @@ namespace Net.Astropenguin.IO
             return null;
         }
 
-
         public async static Task<string> ReadString( this IStorageFile ISF )
         {
             IInputStream ips = await ISF.OpenSequentialReadAsync();
             StreamReader Reader = new StreamReader( ips.AsStreamForRead() );
+            return Reader.ReadToEnd();
+        }
+
+        public async static Task<string> ReadString( this IStorageFile ISF, Encoding Encoding )
+        {
+            IInputStream ips = await ISF.OpenSequentialReadAsync();
+            StreamReader Reader = new StreamReader( ips.AsStreamForRead(), Encoding );
             return Reader.ReadToEnd();
         }
 
