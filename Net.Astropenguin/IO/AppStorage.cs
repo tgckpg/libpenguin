@@ -272,6 +272,11 @@ namespace Net.Astropenguin.IO
             return UserStorage.DirectoryExists( Name );
         }
 
+        public void MoveDir( string From, string To )
+        {
+            UserStorage.MoveDirectory( From, To );
+        }
+
         public string[] ListDirs( string List )
         {
             return UserStorage.GetDirectoryNames( List );
