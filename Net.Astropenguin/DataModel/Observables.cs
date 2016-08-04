@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI.Xaml.Data;
@@ -18,91 +19,141 @@ namespace Net.Astropenguin.DataModel
         public event EventHandler LoadStart;
         public event EventHandler LoadEnd;
 
-        private ILoader<IN> ConnectedLoader;
+        private ILoader<IN> ActiveLoader;
         private Func<IList<IN>, IList<OUT>> Convert;
 
-        public bool HasMoreItems
+        private Stack<ILoader<IN>> SubLoaders = new Stack<ILoader<IN>>();
+        private Dictionary<ILoader<IN>, OUT> LastAnchor = new Dictionary<ILoader<IN>, OUT>();
+
+        virtual public bool HasMoreItems
         {
             get
             {
-                if( ConnectedLoader == null ) return false;
-                return !ConnectedLoader.PageEnded;
+                if ( ActiveLoader == null ) return false;
+
+                // Get the suspended loader when ActiveLoader is exhausted
+                if ( ActiveLoader.PageEnded )
+                {
+                    RestoreLoader();
+                }
+
+                return !ActiveLoader.PageEnded;
             }
         }
 
         public Observables() : base() { }
 
         public Observables( IList<OUT> Items )
-            :base( Items )
+            : base( Items )
         {
         }
 
         public void UpdateSource( IList<OUT> Items )
         {
             this.ClearItems();
-            foreach( OUT O in Items )
-            {
-                Add( O );
-            }
+            LockAdd( Items, ActiveLoader );
         }
 
-        public void ConnectLoader( ILoader<IN> Loader, Func<IList<IN>, IList<OUT>> Converter = null )
+        virtual public void ConnectLoader( ILoader<IN> Loader, Func<IList<IN>, IList<OUT>> Converter = null )
         {
-            ConnectedLoader = Loader;
+            ActiveLoader = Loader;
             Loader.Connector = null;
             Convert = Converter;
         }
 
+        virtual public void InsertLoader( int Idx, ILoader<IN> SubLoader )
+        {
+            SubLoaders.Push( ActiveLoader );
+            LastAnchor[ SubLoader ] = this[ Idx ];
+            ActiveLoader = SubLoader;
+        }
+
+        virtual protected uint LockAdd( IList<OUT> Items, ILoader<IN> Loader )
+        {
+            if ( Items.Count == 0 ) return 0;
+
+            lock ( this )
+            {
+                if ( this.Count == 0 )
+                {
+                    foreach ( OUT Item in Items )
+                        this.Add( Item );
+                }
+                else
+                {
+                    int i = this.IndexOf( LastAnchor[ Loader ] );
+
+                    foreach ( OUT Item in Items )
+                    {
+                        this.Insert( i++, Item );
+                    }
+                }
+
+                LastAnchor[ Loader ] = Items.Last();
+            }
+
+            return ( uint ) Items.Count;
+        }
+
+        private void RestoreLoader()
+        {
+            if ( SubLoaders == null || SubLoaders.Count == 0 ) return;
+
+            ILoader<IN> CurrentLoader = ActiveLoader;
+
+            while ( 0 < SubLoaders.Count && ActiveLoader.PageEnded )
+            {
+                CurrentLoader = SubLoaders.Pop();
+                LastAnchor.Remove( CurrentLoader );
+            }
+
+            ActiveLoader = CurrentLoader;
+        }
+
         public IAsyncOperation<LoadMoreItemsResult> LoadMoreItemsAsync( uint count )
         {
-            Logger.Log( ID, string.Format( "Requesting to load {0} items, Current Page is {1}", count, ConnectedLoader.CurrentPage ) );
+            return LoadNext( ActiveLoader, count ).AsAsyncOperation();
+        }
 
-            return Task.Run( async () =>
+        private async Task<LoadMoreItemsResult> LoadNext( ILoader<IN> CurrLoader, uint count )
+        {
+            Logger.Log( ID, string.Format( "Requesting to load {0} items, Current Page is {1}", count, CurrLoader.CurrentPage ) );
+
+            if ( LoadStart != null )
+                Worker.UIInvoke( () => LoadStart( this, new EventArgs() ) );
+
+            TaskCompletionSource<IList<IN>> NextItems = new TaskCompletionSource<IList<IN>>();
+
+            // Might get set twice via the connector and the returned result
+            // But it is safe
+            CurrLoader.Connector = x =>
             {
-                if ( LoadStart != null )
-                    Worker.UIInvoke( () => LoadStart( this, new EventArgs() ) );
+                if ( x == null ) return;
+                NextItems.TrySetResult( x );
+            };
 
-                TaskCompletionSource<IList<IN>> NextItems = new TaskCompletionSource<IList<IN>>();
+            CurrLoader.Connector( await CurrLoader.NextPage( count ) );
 
-                // Maybe set twice via connector and returned result
-                // But this is safe
-                ConnectedLoader.Connector = x =>
-                {
-                    if ( x == null ) return;
-                    NextItems.TrySetResult( x );
-                };
+            IList<IN> Items = await NextItems.Task;
 
-                ConnectedLoader.Connector( await ConnectedLoader.NextPage( count ) );
+            IList<OUT> Converted = Convert == null
+                ? ( IList<OUT> ) Items
+                : Convert( Items )
+            ;
 
-                IList<IN> Items = await NextItems.Task;
+            uint NumAdded = 0;
 
-                IList<OUT> Converted = Convert == null
-                    ? ( IList<OUT> ) Items
-                    : Convert( Items )
-                ;
+            await Worker.RunUIAsync( () =>
+            {
+                NumAdded = LockAdd( Converted, CurrLoader );
+            } );
 
-                TaskCompletionSource<uint> ItemsAdded = new TaskCompletionSource<uint>();
+            Logger.Log( ID, string.Format( "Loaded {0} item(s)", NumAdded ) );
 
-                // It seemed that items must be added via UI Thread
-                Worker.UIInvoke( () =>
-                {
-                    uint i = 0;
-                    foreach ( OUT a in Converted )
-                    {
-                        Add( a ); i++;
-                    }
-                    ItemsAdded.SetResult( i );
-                } );
+            if ( LoadEnd != null )
+                Worker.UIInvoke( () => LoadEnd( this, new EventArgs() ) );
 
-                uint Count = await ItemsAdded.Task;
-
-                Logger.Log( ID, string.Format( "Loaded {0} item(s)", Count ) );
-
-                if ( LoadEnd != null )
-                    Worker.UIInvoke( () => LoadEnd( this, new EventArgs() ) );
-
-                return new LoadMoreItemsResult() { Count = Count };
-            } ).AsAsyncOperation();
+            return new LoadMoreItemsResult() { Count = NumAdded };
         }
     }
 }
