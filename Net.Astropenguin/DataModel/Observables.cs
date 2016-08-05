@@ -19,6 +19,7 @@ namespace Net.Astropenguin.DataModel
         public event EventHandler LoadStart;
         public event EventHandler LoadEnd;
 
+        private volatile bool UniLoader = true;
         private ILoader<IN> ActiveLoader;
         private Func<IList<IN>, IList<OUT>> Convert;
 
@@ -63,6 +64,7 @@ namespace Net.Astropenguin.DataModel
 
         virtual public void InsertLoader( int Idx, ILoader<IN> SubLoader )
         {
+            UniLoader = false;
             SubLoaders.Push( ActiveLoader );
             LastAnchor[ SubLoader ] = this[ Idx ];
             ActiveLoader = SubLoader;
@@ -74,7 +76,7 @@ namespace Net.Astropenguin.DataModel
 
             lock ( this )
             {
-                if ( this.Count == 0 )
+                if ( UniLoader || this.Count == 0 )
                 {
                     foreach ( OUT Item in Items )
                         this.Add( Item );
