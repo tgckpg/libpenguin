@@ -64,13 +64,16 @@ namespace Net.Astropenguin.Helpers
             return true;
         }
 
-        public static void CloseDialog()
+        public static bool CloseDialog()
         {
             if ( DialogCommand != null )
             {
                 DialogCommand.Cancel();
                 DialogCommand = null;
+                return true;
             }
+
+            return false;
         }
     }
 }
