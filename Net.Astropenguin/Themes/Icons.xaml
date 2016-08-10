@@ -1274,4 +1274,28 @@
         </Setter>
     </Style>
 
+    <Style TargetType="i:IconMail">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconMail">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Canvas>
+                            <Canvas.RenderTransform>
+                                <ScaleTransform ScaleX="0.3" ScaleY="0.3" CenterX="-98.6" CenterY="-169.1"/>
+                            </Canvas.RenderTransform>
+                            <Path Data="F0 M 0,0 L 0,92.71 -192.94,92.71 -192.94,0 -96.47,52.08 z
+		                                M -192.94,-8.7 L -192.94,-21.75 0,-21.75 0,-8.7 -96.47,42.96 z"
+                                  Fill="{TemplateBinding Foreground}">
+                                <Path.RenderTransform>
+                                    <TranslateTransform X="493.27" Y="525.64" />
+                                </Path.RenderTransform>
+                            </Path>
+                        </Canvas>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

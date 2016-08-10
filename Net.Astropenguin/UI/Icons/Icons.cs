@@ -18,6 +18,7 @@
     public class IconStar : IconBase { public IconStar() { DefaultStyleKey = typeof( IconStar ); } }
     public class IconImage : IconBase { public IconImage() { DefaultStyleKey = typeof( IconImage ); } }
     public class IconComment : IconBase { public IconComment() { DefaultStyleKey = typeof( IconComment ); } }
+    public class IconMail : IconBase { public IconMail() { DefaultStyleKey = typeof( IconMail ); } }
 
     public class IconCross : IconBase { public IconCross() { DefaultStyleKey = typeof( IconCross ); } }
     public class IconTick : IconBase { public IconTick() { DefaultStyleKey = typeof( IconTick ); } }
