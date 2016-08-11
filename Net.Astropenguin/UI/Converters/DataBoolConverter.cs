@@ -36,6 +36,10 @@ namespace Net.Astropenguin.UI.Converters
             {
                 b = ( int ) value != 0;
             }
+            else if( value is DateTime )
+            {
+                b = !( ( DateTime ) value ).Equals( default( DateTime ) );
+            }
             else
             {
                 b = ( value != null );
