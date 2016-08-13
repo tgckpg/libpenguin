@@ -70,13 +70,14 @@ namespace Net.Astropenguin.IO
             return null;
         }
 
-        public static async Task<IStorageFile> SaveFileAsync( string Name, IList<string> Types )
+        public static async Task<IStorageFile> SaveFileAsync( string Name, IList<string> Types, string FileName = "" )
         {
             try
             {
                 FileSavePicker fpick = new FileSavePicker();
                 fpick.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
                 fpick.FileTypeChoices.Add( Name, Types );
+                fpick.SuggestedFileName = FileName;
 
                 StorageFile file = await fpick.PickSaveFileAsync();
 
