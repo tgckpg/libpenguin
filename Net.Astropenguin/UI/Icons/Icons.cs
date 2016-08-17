@@ -5,6 +5,7 @@
     public class IconLogout : DirectionalIcon { public IconLogout() { DefaultStyleKey = typeof( IconLogout ); } }
     public class IconFastForword : DirectionalIcon { public IconFastForword() { DefaultStyleKey = typeof( IconFastForword ); } }
     public class IconTOC : DirectionalIcon { public IconTOC() { DefaultStyleKey = typeof( IconTOC ); } }
+    public class IconKey : DirectionalIcon { public IconKey() { DefaultStyleKey = typeof( IconKey ); } }
     public class IconPlusSign : IconBase { public IconPlusSign() { DefaultStyleKey = typeof( IconPlusSign ); } }
     public class IconBookmark : IconBase { public IconBookmark() { DefaultStyleKey = typeof( IconBookmark ); } }
     public class IconReload : IconBase { public IconReload() { DefaultStyleKey = typeof( IconReload ); } }
@@ -17,6 +18,7 @@
     public class IconStar : IconBase { public IconStar() { DefaultStyleKey = typeof( IconStar ); } }
     public class IconImage : IconBase { public IconImage() { DefaultStyleKey = typeof( IconImage ); } }
     public class IconComment : IconBase { public IconComment() { DefaultStyleKey = typeof( IconComment ); } }
+    public class IconMail : IconBase { public IconMail() { DefaultStyleKey = typeof( IconMail ); } }
 
     public class IconCross : IconBase { public IconCross() { DefaultStyleKey = typeof( IconCross ); } }
     public class IconTick : IconBase { public IconTick() { DefaultStyleKey = typeof( IconTick ); } }
@@ -44,8 +46,4 @@
     public class IconTestTube : IconBase { public IconTestTube() { DefaultStyleKey = typeof( IconTestTube ); } }
 
     public class IconBookShelf : IconBase { public IconBookShelf() { DefaultStyleKey = typeof( IconBookShelf ); } }
-
-    public class KurukuruA : IconBase { public KurukuruA() { DefaultStyleKey = typeof( KurukuruA ); } }
-    public class KurukuruB : IconBase { public KurukuruB() { DefaultStyleKey = typeof( KurukuruB ); } }
-    public class KurukuruC : IconBase { public KurukuruC() { DefaultStyleKey = typeof( KurukuruC ); } }
 }

@@ -7,7 +7,7 @@ using Windows.UI.Xaml.Data;
 
 namespace Net.Astropenguin.UI.Converters
 {
-    public class EnumNameConvorter : IValueConverter
+    public sealed class EnumNameConvorter : IValueConverter
     {
         public object Convert( object value, Type targetType, object parameter, string language )
         {

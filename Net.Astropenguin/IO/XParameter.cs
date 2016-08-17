@@ -6,15 +6,15 @@ namespace Net.Astropenguin.IO
 {
     public class XParameter : XElement
     {
-        public string ID
+        public string Id
         {
             get
             {
-                return this.GetValue( XRegistry.WIDENTIFIER );
+                return this.GetValue( XRegistry.XID );
             }
             set
             {
-                this.SetValue( new XKey( XRegistry.WIDENTIFIER, value ) );
+                this.SetValue( new XKey( XRegistry.XID, value ) );
             }
         }
 
@@ -27,7 +27,7 @@ namespace Net.Astropenguin.IO
                 int i = 0;
                 foreach ( XAttribute attr in this.Attributes() )
                 {
-                    if ( attr.Name == XRegistry.WIDENTIFIER ) continue;
+                    if ( attr.Name == XRegistry.XID ) continue;
                     K[ i++ ] = new XKey( attr.Name.ToString(), attr.Value );
                 }
                 return K;
@@ -53,7 +53,7 @@ namespace Net.Astropenguin.IO
         public XParameter( string ID )
             : base( XRegistry.WTAG )
         {
-            this.ID = ID;
+            this.Id = ID;
         }
 
         public string GetValue( string key ) { return this.GetXValue( key ); }

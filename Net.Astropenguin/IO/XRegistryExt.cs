@@ -8,7 +8,7 @@ namespace Net.Astropenguin.IO
     public static class XRegistryExt
     {
         #region Node Functions
-        public static XParameter GetFirstParameterWithKey( this XElement Root, string key )
+        public static XParameter FirstParameter( this XElement Root, string key )
         {
             XElement p = Root.FindFirstParameterWithKey( key );
             if ( p != null )
@@ -16,7 +16,7 @@ namespace Net.Astropenguin.IO
             else return null;
         }
 
-        public static XParameter GetParameter( this XElement Root, string WIdentifier )
+        public static XParameter Parameter( this XElement Root, string WIdentifier )
         {
             XElement p = Root.FindParameter( WIdentifier );
             if ( p != null )
@@ -40,10 +40,14 @@ namespace Net.Astropenguin.IO
             return new XParameter[ 0 ];
         }
 
-        public static XParameter[] GetParametersWithKey( this XElement Root, string key )
+        public static XParameter[] Parameters( this XElement Root, string key, string value = null )
         {
             IEnumerable<XElement> xe = Root.Elements( XRegistry.WTAG )
                 .Where( p => p.Attribute( key ) != null );
+
+            if ( value != null )
+                xe = xe.Where( p => p.Attribute( key ).Value == value );
+
             if ( xe == null ) return new XParameter[ 0 ];
 
             xe = xe.ToArray();
@@ -69,7 +73,7 @@ namespace Net.Astropenguin.IO
                 Root.Add( new XElement(
                     XRegistry.WTAG
                     , new XAttribute[] {
-                        new XAttribute( XRegistry.WIDENTIFIER, WIdentifier ) }
+                        new XAttribute( XRegistry.XID, WIdentifier ) }
                         .Concat( keys ), Params )
                 );
             }
@@ -84,16 +88,16 @@ namespace Net.Astropenguin.IO
             }
             else
             {
-                Root.Add( new XElement( XRegistry.WTAG, new XAttribute[] { new XAttribute( XRegistry.WIDENTIFIER, WIdentifier ), key } ) );
+                Root.Add( new XElement( XRegistry.WTAG, new XAttribute[] { new XAttribute( XRegistry.XID, WIdentifier ), key } ) );
             }
         }
 
         public static void SetParameter( this XElement Root, XParameter Param )
         {
-            XElement P = Root.FindParameter( Param.ID );
+            XElement P = Root.FindParameter( Param.Id );
             if ( P == null )
             {
-                Root.SetParameter( Param.ID, Param.Keys, Param.GetParameters() );
+                Root.SetParameter( Param.Id, Param.Keys, Param.GetParameters() );
             }
             else
             {
@@ -124,7 +128,7 @@ namespace Net.Astropenguin.IO
             IEnumerable<XElement> xe = Root.Elements( XRegistry.WTAG );
             foreach ( XElement k in xe )
             {
-                if ( k.Attribute( XRegistry.WIDENTIFIER ).Value == WIdentifier )
+                if ( k.Attribute( XRegistry.XID ).Value == WIdentifier )
                 {
                     return k;
                 }
@@ -227,7 +231,7 @@ namespace Net.Astropenguin.IO
         {
             foreach ( XAttribute xa in XRef.Attributes().ToArray() )
             {
-                if ( xa.Name == XRegistry.WIDENTIFIER ) continue;
+                if ( xa.Name == XRegistry.XID ) continue;
                 xa.Remove();
             }
         }

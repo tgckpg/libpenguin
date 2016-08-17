@@ -13,7 +13,7 @@ namespace Net.Astropenguin.IO
         public static readonly string ID = typeof( XRegistry ).Name;
         public static AppStorage AStorage;
 
-        public const string WIDENTIFIER = "WS_ID";
+        public const string XID = "WS_ID";
         public const string WTAG = "WTAG";
 
         public string Location { get; set; }
@@ -57,15 +57,15 @@ namespace Net.Astropenguin.IO
         // I am LHS, Always favor Master
         public void Sync( XRegistry MergeReg, bool IsMaster, global::System.Func<XParameter, XParameter, bool> LHSWin )
         {
-            XParameter[] LHSs = GetParameters();
-            XParameter[] RHSs = MergeReg.GetParameters();
+            XParameter[] LHSs = Parameters();
+            XParameter[] RHSs = MergeReg.Parameters();
 
             IEnumerable<XParameter> All = new List<XParameter>( LHSs ).Concat( RHSs );
 
             foreach ( XParameter US in All )
             {
-                XParameter LHS = LHSs.Contains( US ) ? US : GetParameter( US.ID );
-                XParameter RHS = RHSs.Contains( US ) ? US : MergeReg.GetParameter( US.ID );
+                XParameter LHS = LHSs.Contains( US ) ? US : Parameter( US.Id );
+                XParameter RHS = RHSs.Contains( US ) ? US : MergeReg.Parameter( US.Id );
 
                 if ( LHS == null && !IsMaster )
                 {
@@ -73,7 +73,7 @@ namespace Net.Astropenguin.IO
                 }
                 else if ( RHS == null && !IsMaster )
                 {
-                    RemoveParameter( LHS.ID );
+                    RemoveParameter( LHS.Id );
                 }
                 else if ( !( LHS == null || RHS == null ) )
                 {
@@ -84,15 +84,15 @@ namespace Net.Astropenguin.IO
 
         public void Merge( XRegistry MergeReg, global::System.Func<XParameter, XParameter, bool> LHSWin )
         {
-            XParameter[] LHSs = GetParameters();
-            XParameter[] RHSs = MergeReg.GetParameters();
+            XParameter[] LHSs = Parameters();
+            XParameter[] RHSs = MergeReg.Parameters();
 
             IEnumerable<XParameter> All = new List<XParameter>( LHSs ).Concat( RHSs );
 
             foreach ( XParameter US in All )
             {
-                XParameter LHS = LHSs.Contains( US ) ? US : GetParameter( US.ID );
-                XParameter RHS = RHSs.Contains( US ) ? US : MergeReg.GetParameter( US.ID );
+                XParameter LHS = LHSs.Contains( US ) ? US : Parameter( US.Id );
+                XParameter RHS = RHSs.Contains( US ) ? US : MergeReg.Parameter( US.Id );
 
                 if ( LHS == null )
                 {
@@ -105,10 +105,10 @@ namespace Net.Astropenguin.IO
             }
         }
 
-        public XParameter GetParameter( string WIdentifier ) { return Root.GetParameter( WIdentifier ); }
-        public XParameter[] GetParameters() { return Root.GetParameters(); }
-        public XParameter[] GetParametersWithKey( string key ) { return Root.GetParametersWithKey( key ); }
-        public XParameter GetFirstParameterWithKey( string key ) { return Root.GetFirstParameterWithKey( key ); }
+        public XParameter Parameter( string WIdentifier ) { return Root.Parameter( WIdentifier ); }
+        public XParameter[] Parameters() { return Root.GetParameters(); }
+        public XParameter[] Parameters( string key, string value = null ) { return Root.Parameters( key, value ); }
+        public XParameter FirstParameter( string key ) { return Root.FirstParameter( key ); }
         public void SetParameter( string WIdentifier, XKey key ) { Root.SetParameter( WIdentifier, key ); }
         public void SetParameter( string WIdentifier, XKey[] keys ) { Root.SetParameter( WIdentifier, keys ); }
         public void SetParameter( XParameter Param ) { Root.SetParameter( Param ); }
@@ -120,7 +120,7 @@ namespace Net.Astropenguin.IO
             if ( p != null )
             {
                 p.Remove();
-                this.Root.Add( p );
+                Root.Add( p );
             }
         }
 

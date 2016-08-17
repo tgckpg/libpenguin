@@ -90,7 +90,13 @@ namespace Net.Astropenguin.Helpers
 			}
 		}
 
-		public static async void UIInvoke( Action p )
+        [System.Diagnostics.CodeAnalysis.SuppressMessage( "Await.Warning", "CS4014:Await.Warning" )]
+		public static void UIInvoke( Action p )
+        {
+            RunUIAsync( p );
+        }
+
+		public static async Task RunUIAsync( Action p )
 		{
             if( CoreUIInstance == null )
             {

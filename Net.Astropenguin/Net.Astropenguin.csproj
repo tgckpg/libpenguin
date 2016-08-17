@@ -110,6 +110,9 @@
     <Compile Include="Logging\Handler\FileSystemLog.cs" />
     <Compile Include="Messaging\Message.cs" />
     <Compile Include="Messaging\MessageBus.cs" />
+    <Compile Include="UI\Converters\DataCountConverter.cs" />
+    <Compile Include="UI\Converters\DataBoolConverter.cs" />
+    <Compile Include="UI\Converters\DataVisConverter.cs" />
     <Compile Include="UI\Converters\EnumNameConvorter.cs" />
     <Compile Include="IO\AppStorage.cs" />
     <Compile Include="IO\StorageExt.cs" />
@@ -119,7 +122,6 @@
     <Compile Include="Loaders\StorageFileStreamer.cs" />
     <Compile Include="Loaders\StringResources.cs" />
     <Compile Include="UI\Clip.cs" />
-    <Compile Include="UI\Converters\BoolStateConverter.cs" />
     <Compile Include="UI\Converters\DataStateConverter.cs" />
     <Compile Include="UI\Icons\DirectionalIcon.cs" />
     <Compile Include="UI\Icons\IconBase.cs" />

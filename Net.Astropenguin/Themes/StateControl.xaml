@@ -24,6 +24,11 @@
                                                 <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0" EasingFunction="{StaticResource EaseOutQuintic}" />
                                                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1" EasingFunction="{StaticResource EaseOutQuintic}" />
                                             </DoubleAnimationUsingKeyFrames>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(CompositeTransform.TranslateY)"
+                                                                           Storyboard.TargetName="ControlContext">
+                                                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="-20" EasingFunction="{StaticResource EaseOutQuintic}" />
+                                                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0" EasingFunction="{StaticResource EaseOutQuintic}" />
+                                            </DoubleAnimationUsingKeyFrames>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Visibility)" Storyboard.TargetName="ControlContext">
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="Visible" />
                                             </ObjectAnimationUsingKeyFrames>
@@ -36,6 +41,11 @@
                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="ControlContext">
                                                 <EasingDoubleKeyFrame KeyTime="0:0:0" Value="1" EasingFunction="{StaticResource EaseOutQuintic}" />
                                                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0" EasingFunction="{StaticResource EaseOutQuintic}" />
+                                            </DoubleAnimationUsingKeyFrames>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(CompositeTransform.TranslateY)"
+                                                                           Storyboard.TargetName="ControlContext">
+                                                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0" EasingFunction="{StaticResource EaseOutQuintic}" />
+                                                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="-20" EasingFunction="{StaticResource EaseOutQuintic}" />
                                             </DoubleAnimationUsingKeyFrames>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Visibility)" Storyboard.TargetName="ControlContext">
                                                 <DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="Collapsed" />
@@ -50,8 +60,11 @@
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="Visible" />
                                             </ObjectAnimationUsingKeyFrames>
                                             <DoubleAnimation Storyboard.TargetName="ControlContext"
-                                                                         Storyboard.TargetProperty="Opacity"
-                                                                         Duration="0" To="1" />
+                                                             Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(CompositeTransform.TranslateY)"
+                                                             Duration="0" To="0" />
+                                            <DoubleAnimation Storyboard.TargetName="ControlContext"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             Duration="0" To="1" />
                                         </Storyboard>
                                     </VisualState>
                                     <VisualState x:Name="Foreatii">
@@ -60,8 +73,11 @@
                                                 <DiscreteObjectKeyFrame KeyTime="1" Value="Collapsed" />
                                             </ObjectAnimationUsingKeyFrames>
                                             <DoubleAnimation Storyboard.TargetName="ControlContext"
-                                                                         Storyboard.TargetProperty="Opacity"
-                                                                         Duration="0" To="0" />
+                                                             Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(CompositeTransform.TranslateY)"
+                                                             Duration="0" To="-20" />
+                                            <DoubleAnimation Storyboard.TargetName="ControlContext"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             Duration="0" To="0" />
                                         </Storyboard>
                                     </VisualState>
                                 </VisualStateGroup.States>
@@ -70,7 +86,11 @@
                         <ContentPresenter x:Name="ControlContext"
                                           Visibility="Collapsed"
                                           Background="{TemplateBinding Background}"
-                                          Content="{TemplateBinding ControlContext}" />
+                                          Content="{TemplateBinding ControlContext}">
+                            <ContentPresenter.RenderTransform>
+                                <CompositeTransform TranslateY="0" />
+                            </ContentPresenter.RenderTransform>
+                        </ContentPresenter>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

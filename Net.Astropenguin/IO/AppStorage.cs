@@ -70,13 +70,14 @@ namespace Net.Astropenguin.IO
             return null;
         }
 
-        public static async Task<IStorageFile> SaveFileAsync( string Name, IList<string> Types )
+        public static async Task<IStorageFile> SaveFileAsync( string Name, IList<string> Types, string FileName = "" )
         {
             try
             {
                 FileSavePicker fpick = new FileSavePicker();
                 fpick.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
                 fpick.FileTypeChoices.Add( Name, Types );
+                fpick.SuggestedFileName = FileName;
 
                 StorageFile file = await fpick.PickSaveFileAsync();
 
@@ -270,6 +271,11 @@ namespace Net.Astropenguin.IO
         public bool DirExist( string Name )
         {
             return UserStorage.DirectoryExists( Name );
+        }
+
+        public void MoveDir( string From, string To )
+        {
+            UserStorage.MoveDirectory( From, To );
         }
 
         public string[] ListDirs( string List )

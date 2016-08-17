@@ -45,7 +45,7 @@ namespace Net.Astropenguin.Loaders
 
 	public class DRequestCompletedEventArgs : EventArgs
 	{
-        public static readonly string ID = typeof( DRequestCompletedEventArgs ).Name;
+		public static readonly string ID = typeof( DRequestCompletedEventArgs ).Name;
 
 		private string rString;
 		private Exception RequestException;
@@ -56,7 +56,6 @@ namespace Net.Astropenguin.Loaders
 		public Exception Error { get; private set; }
 
 		public WebHeaderCollection ResponseHeaders { get; private set; }
-
 
 		public byte[] ResponseBytes
 		{
@@ -85,11 +84,14 @@ namespace Net.Astropenguin.Loaders
 			}
 		}
 
-		public DRequestCompletedEventArgs( WebHeaderCollection RHeader, string Url, byte[] RawBytes )
+		public CookieCollection Cookies { get; private set; }
+
+		public DRequestCompletedEventArgs( HttpWebResponse Resp, string Url, byte[] RawBytes )
 		{
 			RequestUrl = Url;
 			RBytes = RawBytes;
-			ResponseHeaders = RHeader;
+			ResponseHeaders = Resp.Headers;
+			Cookies = Resp.Cookies;
 		}
 
 		public DRequestCompletedEventArgs( string Url, Exception ex )
