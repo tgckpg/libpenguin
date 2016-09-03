@@ -66,7 +66,7 @@ namespace Net.Astropenguin.DataModel
         {
             UniLoader = false;
             SubLoaders.Push( ActiveLoader );
-            LastAnchor[ SubLoader ] = this[ Idx ];
+            LastAnchor[ SubLoader ] = this.ElementAtOrDefault( Idx );
             ActiveLoader = SubLoader;
         }
 
@@ -76,7 +76,7 @@ namespace Net.Astropenguin.DataModel
 
             lock ( this )
             {
-                if ( UniLoader || this.Count == 0 )
+                if ( UniLoader || this.Count == 0 || LastAnchor[ Loader ] == null )
                 {
                     foreach ( OUT Item in Items )
                         this.Add( Item );
@@ -89,9 +89,9 @@ namespace Net.Astropenguin.DataModel
                     {
                         this.Insert( i++, Item );
                     }
-                }
 
-                LastAnchor[ Loader ] = Items.Last();
+                    LastAnchor[ Loader ] = Items.Last();
+                }
             }
 
             return ( uint ) Items.Count;
