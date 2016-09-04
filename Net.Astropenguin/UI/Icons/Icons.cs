@@ -10,8 +10,6 @@
     public class IconBookmark : IconBase { public IconBookmark() { DefaultStyleKey = typeof( IconBookmark ); } }
     public class IconReload : IconBase { public IconReload() { DefaultStyleKey = typeof( IconReload ); } }
     public class IconSettings : IconBase { public IconSettings() { DefaultStyleKey = typeof( IconSettings ); } }
-    public class IconFav : IconBase { public IconFav() { DefaultStyleKey = typeof( IconFav ); } }
-    public class IconFaved : IconBase { public IconFaved() { DefaultStyleKey = typeof( IconFaved ); } }
     public class IconOneDrive : IconBase { public IconOneDrive() { DefaultStyleKey = typeof( IconOneDrive ); } }
     public class IconExpand : IconBase { public IconExpand() { DefaultStyleKey = typeof( IconExpand ); } }
     public class IconRetract : IconBase { public IconRetract() { DefaultStyleKey = typeof( IconRetract ); } }
