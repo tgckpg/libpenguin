@@ -283,6 +283,11 @@ namespace Net.Astropenguin.IO
             return UserStorage.GetDirectoryNames( List );
         }
 
+        public string[] ListFiles( string Dir )
+        {
+            return UserStorage.GetFileNames( Dir );
+        }
+
         public Stream GetStream( string fileName )
         {
             // Open the file

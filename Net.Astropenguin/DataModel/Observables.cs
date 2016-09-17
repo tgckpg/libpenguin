@@ -62,6 +62,19 @@ namespace Net.Astropenguin.DataModel
             Convert = Converter;
         }
 
+        virtual public void DisconnectLoaders()
+        {
+            if( ActiveLoader != null )
+            {
+                ActiveLoader.Connector = null;
+                ActiveLoader = null;
+                Convert = null;
+            }
+
+            foreach ( ILoader<IN> Loader in SubLoaders )
+                Loader.Connector = null;
+        }
+
         virtual public void InsertLoader( int Idx, ILoader<IN> SubLoader )
         {
             UniLoader = false;

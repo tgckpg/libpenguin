@@ -73,7 +73,7 @@ namespace Net.Astropenguin.Controls
 
         private void RootFrame_KeyDown( CoreWindow sender, KeyEventArgs e )
         {
-            if ( KeyDown != null ) KeyDown( sender, e );
+            KeyDown?.Invoke( sender, e );
 
             HoldingKeys[ e.VirtualKey ] = true;
 
