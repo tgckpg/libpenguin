@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -36,7 +37,7 @@ namespace Net.Astropenguin.IO
                 {
                     AStorage.WriteString( Location, base.ToString() );
                 }
-                catch ( global::System.Exception ex )
+                catch ( Exception ex )
                 {
                     Logger.Log(
                         ID
@@ -55,7 +56,7 @@ namespace Net.Astropenguin.IO
         }
 
         // I am LHS, Always favor Master
-        public void Sync( XRegistry MergeReg, bool IsMaster, global::System.Func<XParameter, XParameter, bool> LHSWin )
+        public void Sync( XRegistry MergeReg, bool IsMaster, Func<XParameter, XParameter, bool> LHSWin )
         {
             XParameter[] LHSs = Parameters();
             XParameter[] RHSs = MergeReg.Parameters();
@@ -82,7 +83,7 @@ namespace Net.Astropenguin.IO
             }
         }
 
-        public void Merge( XRegistry MergeReg, global::System.Func<XParameter, XParameter, bool> LHSWin )
+        public void Merge( XRegistry MergeReg, Func<XParameter, XParameter, bool> LHSWin )
         {
             XParameter[] LHSs = Parameters();
             XParameter[] RHSs = MergeReg.Parameters();
@@ -147,7 +148,7 @@ namespace Net.Astropenguin.IO
                     XDocument doc = Parse( xml );
                     return doc;
                 }
-                catch ( global::System.Exception )
+                catch ( Exception )
                 {
                     Logger.Log( ID, "File is corrupted: " + Path, LogType.ERROR );
                 }
@@ -157,7 +158,7 @@ namespace Net.Astropenguin.IO
                 {
                     AStorage.DeleteFile( Path );
                 }
-                catch ( global::System.Exception )
+                catch ( Exception )
                 {
                     Logger.Log( ID, "Unable to remove the corrupted file: " + Path, LogType.ERROR );
                 }
