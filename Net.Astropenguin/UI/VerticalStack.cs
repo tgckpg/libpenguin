@@ -11,7 +11,7 @@ using System.Runtime.CompilerServices;
 
 namespace Net.Astropenguin.UI
 {
-    [TemplatePart( Name = StageName, Type = typeof( StackPanel ))]
+    [TemplatePart( Name = StageName, Type = typeof( StackPanel ) )]
     public class VerticalStack : Control
     {
         public static readonly string ID = typeof( VerticalStack ).Name;
@@ -23,26 +23,37 @@ namespace Net.Astropenguin.UI
         internal static bool LOCKED = true;
 
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register( "Text", typeof( string ), typeof( VerticalStack ), new PropertyMetadata( "", VisualPropertyChanged ) );
-        public string Text {
+        public string Text
+        {
             get { return GetValue( TextProperty ) as string; }
             set { SetValue( TextProperty, value ); }
         }
 
         new public static readonly DependencyProperty FontSizeProperty = DependencyProperty.Register( "FontSize", typeof( double ), typeof( VerticalStack ), new PropertyMetadata( 0.0, VisualPropertyChanged ) );
-        new public double FontSize {
-            get
-            {
-                return ( double ) GetValue( FontSizeProperty );
-            }
+        new public double FontSize
+        {
+            get { return ( double ) GetValue( FontSizeProperty ); }
             set { SetValue( FontSizeProperty, value ); }
         }
 
+        public static readonly DependencyProperty TrimProperty = DependencyProperty.Register( "Trim", typeof( bool ), typeof( VerticalStack ), new PropertyMetadata( false, VisualPropertyChanged ) );
+        public bool Trim
+        {
+            get { return ( bool ) GetValue( TrimProperty ); }
+            set { SetValue( TrimProperty, value ); }
+        }
+
+        public static readonly DependencyProperty MaxLinesProperty = DependencyProperty.Register( "MaxLines", typeof( int ), typeof( VerticalStack ), new PropertyMetadata( 0, VisualPropertyChanged ) );
+        public int MaxLines
+        {
+            get { return ( int ) GetValue( MaxLinesProperty ); }
+            set { SetValue( MaxLinesProperty, value ); }
+        }
+
         public static readonly DependencyProperty LineHeightProperty = DependencyProperty.Register( "LineHeight", typeof( double ), typeof( VerticalStack ), new PropertyMetadata( -1.0, LineHeightChanged ) );
-        public double LineHeight {
-            get
-            {
-                return ( double ) GetValue( LineHeightProperty );
-            }
+        public double LineHeight
+        {
+            get { return ( double ) GetValue( LineHeightProperty ); }
             set { SetValue( LineHeightProperty, value ); }
         }
 
@@ -61,7 +72,7 @@ namespace Net.Astropenguin.UI
         private StackPanel Stage;
 
         public VerticalStack()
-            :base()
+            : base()
         {
             DefaultStyleKey = typeof( VerticalStack );
 
@@ -94,7 +105,7 @@ namespace Net.Astropenguin.UI
             //*/
             // If the Size Changes, we need to update the text
             // TODO: Use a more efficient approach
-            if( GivenSizeAvailable.Equals( SIZE_NULL ) && !GivenSizeAvailable.Equals( availableSize ) )
+            if ( GivenSizeAvailable.Equals( SIZE_NULL ) && !GivenSizeAvailable.Equals( availableSize ) )
             {
                 UpdateDisplay( availableSize );
             }
@@ -155,7 +166,7 @@ namespace Net.Astropenguin.UI
                 return;
             }
 
-            foreach( TextBlock Tx in Stage.Children )
+            foreach ( TextBlock Tx in Stage.Children )
             {
                 double lh = -.5 * FontSize + LineHeight;
                 Tx.Margin = new Thickness( lh, 0, lh, 0 );
@@ -167,11 +178,35 @@ namespace Net.Astropenguin.UI
             TextBlock t = NewTextBlock( Text );
 
             TextBlock Tx;
-            while ( ( Tx = TrimText( t ) ) != null )
+
+            if ( Trim && MaxLines != 0 )
             {
-                // Two special char to ensure the center alignment
-                Tx.Text += "\u3000\u2007";
-                Stage.Children.Add( Tx );
+                int i = 0; int l = MaxLines;
+                TextBlock Last = null;
+                while ( ( Tx = TrimText( t ) ) != null && i < l )
+                {
+                    // Two special char to ensure the center alignment
+                    Tx.Text += "\u3000\u2007";
+                    Stage.Children.Add( Tx );
+
+                    Last = Tx;
+                    i++;
+                }
+
+                if( 0 < t.Text.Length && Last != null )
+                {
+                    Last.Text = Last.Text.Substring( 0, Last.Text.Length - 3 ) + "\u22EE\u3000\u2007";
+                    t.Text = "";
+                }
+            }
+            else
+            {
+                while ( ( Tx = TrimText( t ) ) != null )
+                {
+                    // Two special char to ensure the center alignment
+                    Tx.Text += "\u3000\u2007";
+                    Stage.Children.Add( Tx );
+                }
             }
 
             /* INTENSIVE_LOG
@@ -202,7 +237,7 @@ namespace Net.Astropenguin.UI
 
         private TextBlock TrimText( TextBlock t )
         {
-            if( double.IsInfinity( GivenSizeAvailable.Height ) )
+            if ( double.IsInfinity( GivenSizeAvailable.Height ) )
             {
                 return null;
             }
@@ -212,7 +247,7 @@ namespace Net.Astropenguin.UI
             int EstTrimmingLength = 0;
 
             VerticalLogaTable Table = VerticalLogaManager.GetLoga( FontSize );
-            if( LOGA_BECAME_CERTAIN < Table.CertaintyLevel )
+            if ( LOGA_BECAME_CERTAIN < Table.CertaintyLevel )
             {
                 EstTrimmingLength = Table.GetTrimLenForHeight( GivenSizeAvailable.Height );
 
@@ -239,13 +274,13 @@ namespace Net.Astropenguin.UI
                     && ( EstTrimmingLength + i ) < t.Text.Length
                 )
                 {
-                    TrimmedText.Text += t.Text[ EstTrimmingLength + ( i ++ ) ];
+                    TrimmedText.Text += t.Text[ EstTrimmingLength + ( i++ ) ];
                 }
 
                 // Then remove them one by one to get the best estimation
                 while ( GivenSizeAvailable.Height < BlockHeightOf( TrimmedText ) )
                 {
-                    TrimmedText.Text = TrimmedText.Text.Substring( 0, EstTrimmingLength + ( -- i ) );
+                    TrimmedText.Text = TrimmedText.Text.Substring( 0, EstTrimmingLength + ( --i ) );
                 }
 
                 EstTrimmingLength += i;
@@ -273,7 +308,7 @@ namespace Net.Astropenguin.UI
 
             // Squeeze all half-width character to second row
             t.CharacterSpacing = 1000;
-            t.Width = 2*FontSize;
+            t.Width = 2 * FontSize;
 
             // Restore the original width using minus fontsize prop
             t.Margin = new Thickness( lh, 0, lh, 0 );
