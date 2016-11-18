@@ -31,6 +31,9 @@ namespace Net.Astropenguin.Loaders
         public string Text( string Key ) { return DefaultRes.GetString( Key + "/Text" ); }
         public string Text( string Key, string View ) { return ResCont[ View ].GetString( Key + "/Text" ); }
 
+        public string Header( string Key ) { return DefaultRes.GetString( Key + "/Header" ); }
+        public string Header( string Key, string View ) { return ResCont[ View ].GetString( Key + "/Header" ); }
+
         public string Str( string Key ) { return DefaultRes.GetString( Key ); }
         public string Str( string Key, string View ) { return ResCont[ View ].GetString( Key ); }
 	}
