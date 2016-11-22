@@ -44,7 +44,11 @@ namespace Net.Astropenguin.Controls
 
         public static event EventHandler<XBackRequestedEventArgs> OnNavigatedBack
         {
-            add { NavigationHandlers.Add( value ); }
+            add
+            {
+                OnNavigatedBack -= value;
+                NavigationHandlers.Add( value );
+            }
             remove { NavigationHandlers.Remove( value ); }
         }
 
@@ -60,7 +64,9 @@ namespace Net.Astropenguin.Controls
 
         public static void InsertHandlerOnNavigatedBack( EventHandler<XBackRequestedEventArgs> H )
         {
+            OnNavigatedBack -= H;
             NavigationHandlers.Insert( 0, H );
         }
     }
+
 }
