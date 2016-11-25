@@ -58,7 +58,11 @@ namespace Net.Astropenguin.Controls
             {
                 XBackRequestedEventArgs x = new XBackRequestedEventArgs( e );
                 H( sender, x );
-                if ( x.Handled ) break;
+                if ( x.Handled )
+                {
+                    e.Handled = true;
+                    break;
+                }
             }
         }
 
