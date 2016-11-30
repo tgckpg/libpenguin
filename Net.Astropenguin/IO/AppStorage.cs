@@ -352,6 +352,21 @@ namespace Net.Astropenguin.IO
             return p;
         }
 
+        public byte[] GetBytes( string fileName )
+        {
+            if ( FileExists( fileName ) )
+            {
+                using ( MemoryStream ms = new MemoryStream() )
+                using ( Stream s = GetStream( fileName ) )
+                {
+                    s.CopyTo( ms );
+                    return ms.ToArray();
+                }
+            }
+
+            return null;
+        }
+
         public DateTimeOffset FileTime( string filename )
         {
             return UserStorage.GetLastWriteTime( filename );
@@ -444,15 +459,11 @@ namespace Net.Astropenguin.IO
         {
             try
             {
-                // Get Stream
                 using ( Stream StreamData = s )
                 {
-                    // Set buffer
                     byte[] buffer = new byte[ 1024 ];
-                    // Save the file into cache
                     using ( IsolatedStorageFileStream isfs = new IsolatedStorageFileStream( fileName, FileMode.Create, UserStorage ) )
                     {
-                        // This write the stream into file
                         int count = 0;
                         while ( 0 < ( count = StreamData.Read( buffer, 0, buffer.Length ) ) )
                         {

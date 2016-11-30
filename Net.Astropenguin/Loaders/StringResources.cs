@@ -13,6 +13,8 @@ namespace Net.Astropenguin.Loaders
 
         protected ResourceLoader DefaultRes;
 
+        protected StringResources() { }
+
         public StringResources( params string[] Views )
         {
             if ( Views.Length == 0 )
@@ -37,4 +39,24 @@ namespace Net.Astropenguin.Loaders
         public string Str( string Key ) { return DefaultRes.GetString( Key ); }
         public string Str( string Key, string View ) { return ResCont[ View ].GetString( Key ); }
 	}
+
+    public class StringResBg : StringResources
+    {
+        public StringResBg( params string[] Views )
+            :base()
+        {
+            if ( Views.Length == 0 )
+            {
+                DefaultRes = ResourceLoader.GetForViewIndependentUse( "AppResources" );
+                return;
+            }
+
+            ResCont = new Dictionary<string, ResourceLoader>();
+            foreach ( string View in Views )
+                ResCont.Add( View, ResourceLoader.GetForViewIndependentUse( View ) );
+
+            DefaultRes = ResCont[ Views[ 0 ] ];
+        }
+    }
+
 }
