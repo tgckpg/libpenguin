@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml.Controls;
+﻿using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Shapes;
@@ -21,8 +22,6 @@ namespace Net.Astropenguin.UI.Icons
     public class IconRetract : IconBase { public IconRetract() { DefaultStyleKey = typeof( IconRetract ); } }
     public class IconStar : IconBase { public IconStar() { DefaultStyleKey = typeof( IconStar ); } }
     public class IconImage : IconBase { public IconImage() { DefaultStyleKey = typeof( IconImage ); } }
-    public class IconComment : IconBase { public IconComment() { DefaultStyleKey = typeof( IconComment ); } }
-    public class IconMail : IconBase { public IconMail() { DefaultStyleKey = typeof( IconMail ); } }
 
     public class IconCross : IconBase { public IconCross() { DefaultStyleKey = typeof( IconCross ); } }
     public class IconTick : IconBase { public IconTick() { DefaultStyleKey = typeof( IconTick ); } }
@@ -32,9 +31,7 @@ namespace Net.Astropenguin.UI.Icons
 
     public class IconInfo : IconBase { public IconInfo() { DefaultStyleKey = typeof( IconInfo ); } }
     public class IconPlay : IconBase { public IconPlay() { DefaultStyleKey = typeof( IconPlay ); } }
-    public class IconPause : IconBase { public IconPause() { DefaultStyleKey = typeof( IconPause ); } }
     public class IconSave : IconBase { public IconSave() { DefaultStyleKey = typeof( IconSave ); } }
-    public class IconScan : IconBase { public IconScan() { DefaultStyleKey = typeof( IconScan ); } }
     public class IconSearch : IconBase { public IconSearch() { DefaultStyleKey = typeof( IconSearch ); } }
     public class IconSpider : IconBase { public IconSpider() { DefaultStyleKey = typeof( IconSpider ); } }
     public class IconSteps : IconBase { public IconSteps() { DefaultStyleKey = typeof( IconSteps ); } }
@@ -46,8 +43,6 @@ namespace Net.Astropenguin.UI.Icons
     public class IconParallel : IconBase { public IconParallel() { DefaultStyleKey = typeof( IconParallel ); } }
 
     public class IconTestTube : IconBase { public IconTestTube() { DefaultStyleKey = typeof( IconTestTube ); } }
-
-    public class IconBookShelf : IconBase { public IconBookShelf() { DefaultStyleKey = typeof( IconBookShelf ); } }
 
     public sealed class IconOneDrive : PathIcon
     {
@@ -76,6 +71,24 @@ L 9.91,-10.34 9.36,-10.89 C 7.83,-12.42 5.32,-12.76 3.19,-11.71 2.34,-11.28 1.66
             Trans.Matrix = new Matrix( 1, 0, 0, 1, 30.29, 18.4 );
 
             P.RenderTransform = Trans;
+        }
+    }
+
+    public sealed class IconBing : PathIcon
+    {
+        protected override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            Path P = this.ChildAt<Path>( 0, 0 );
+            P.SetBinding(
+                Path.DataProperty
+                , new Binding() { Source = @"M 0,0 L 3.97,1.39 3.97,15.36 9.56,12.14 6.82,10.85 5.09,6.55 13.89,9.64 13.89,14.14 3.97,19.87 0,17.66 Z" }
+            );
+            P.VerticalAlignment = VerticalAlignment.Center;
+            P.HorizontalAlignment = HorizontalAlignment.Center;
+
+            P.Width = 14;
+            P.Height = 20;
         }
     }
 }
