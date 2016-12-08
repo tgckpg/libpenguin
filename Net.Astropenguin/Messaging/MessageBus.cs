@@ -44,5 +44,6 @@ namespace Net.Astropenguin.Messaging
         {
             Task.Run( () => { DoDelivery?.Invoke( Mesg ); } );
         }
+
     }
 }

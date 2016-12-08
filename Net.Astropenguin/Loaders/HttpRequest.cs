@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.IO.Compression;
 using System.Text;
 using System.Net;
 
@@ -163,21 +164,24 @@ namespace Net.Astropenguin.Loaders
 				if ( DRequestCompleted != null )
 				{
 					byte[] rBytes;
-					using ( Stream ResponseStream = Response.GetResponseStream() )
-					{
-						// Read stream in to byte
-						byte[] buffer = new byte[16 * 1024];
 
-						using ( MemoryStream ms = new MemoryStream() )
-						{
-							int read;
-							while ( 0 < ( read = ResponseStream.Read( buffer, 0, buffer.Length ) ) )
-							{
-								ms.Write( buffer, 0, read );
-							}
-							rBytes = ms.ToArray();
-						}
-					}
+                    string ContentEnc = Response.Headers[ HttpRequestHeader.ContentEncoding ];
+
+                    if ( ContentEnc != null && ContentEnc.Contains( "gzip" ) )
+                    {
+                        using ( GZipStream ResponseStream = new GZipStream( Response.GetResponseStream(), CompressionMode.Decompress ) )
+                        {
+                            ReadResponse( ResponseStream, out rBytes );
+                        }
+                    }
+                    else
+                    {
+                        using ( Stream ResponseStream = Response.GetResponseStream() )
+                        {
+                            ReadResponse( ResponseStream, out rBytes );
+                        }
+                    }
+
 					DRequestCompletedEventArgs RArgs
 						= new DRequestCompletedEventArgs( Response, RefUrl, rBytes );
 					if ( EN_UITHREAD )
@@ -207,5 +211,20 @@ namespace Net.Astropenguin.Loaders
             }
 		}
 
-	}
+        private void ReadResponse( Stream s, out byte[] rBytes )
+        {
+            // Read stream in to byte
+            byte[] buffer = new byte[ 16 * 1024 ];
+
+            using ( MemoryStream ms = new MemoryStream() )
+            {
+                int read;
+                while ( 0 < ( read = s.Read( buffer, 0, buffer.Length ) ) )
+                {
+                    ms.Write( buffer, 0, read );
+                }
+                rBytes = ms.ToArray();
+            }
+        }
+    }
 }

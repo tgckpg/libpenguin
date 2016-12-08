@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.IsolatedStorage;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
 using Windows.Storage.Pickers;
 using Windows.Storage.FileProperties;
+using Windows.Storage.Streams;
 
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Helpers;
@@ -29,6 +31,14 @@ namespace Net.Astropenguin.IO
             return await ApplicationData.Current.TemporaryFolder.CreateFileAsync( FileName, CreationCollisionOption.GenerateUniqueName );
         }
 
+        public static async Task<byte[]> AppXGetBytes( string path )
+        {
+            IStorageFile ISF = await StorageFile.GetFileFromApplicationUriAsync( new Uri( "ms-appx:///" + path ) );
+            IBuffer Buff = await FileIO.ReadBufferAsync( ISF );
+
+            return Buff.ToArray();
+        }
+
         public static async Task<IStorageFolder> OpenDirAsync( Action<FolderPicker> PickerHandler = null )
         {
             try
@@ -36,7 +46,7 @@ namespace Net.Astropenguin.IO
                 FolderPicker fpick = new FolderPicker();
                 fpick.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
                 fpick.FileTypeFilter.Add( "*" );
-                if ( PickerHandler != null ) PickerHandler( fpick );
+                PickerHandler?.Invoke( fpick );
 
                 StorageFolder folder = await fpick.PickSingleFolderAsync();
 
@@ -342,6 +352,21 @@ namespace Net.Astropenguin.IO
             return p;
         }
 
+        public byte[] GetBytes( string fileName )
+        {
+            if ( FileExists( fileName ) )
+            {
+                using ( MemoryStream ms = new MemoryStream() )
+                using ( Stream s = GetStream( fileName ) )
+                {
+                    s.CopyTo( ms );
+                    return ms.ToArray();
+                }
+            }
+
+            return null;
+        }
+
         public DateTimeOffset FileTime( string filename )
         {
             return UserStorage.GetLastWriteTime( filename );
@@ -434,15 +459,11 @@ namespace Net.Astropenguin.IO
         {
             try
             {
-                // Get Stream
                 using ( Stream StreamData = s )
                 {
-                    // Set buffer
                     byte[] buffer = new byte[ 1024 ];
-                    // Save the file into cache
                     using ( IsolatedStorageFileStream isfs = new IsolatedStorageFileStream( fileName, FileMode.Create, UserStorage ) )
                     {
-                        // This write the stream into file
                         int count = 0;
                         while ( 0 < ( count = StreamData.Read( buffer, 0, buffer.Length ) ) )
                         {

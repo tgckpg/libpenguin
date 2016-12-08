@@ -29,3 +29,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 [assembly: InternalsVisibleTo("wenku10")]
+[assembly: InternalsVisibleTo("Tasks")]

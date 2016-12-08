@@ -5,7 +5,7 @@ using Windows.UI.Core;
 namespace Net.Astropenguin.Controls
 {
     /// <summary>
-    /// Modify the flow of NavigatedBack event
+    /// This modifies NavigatedBack's event flow
     /// Remeber to unsubscribe on page destruct
     /// </summary>
     public class XBackRequestedEventArgs
@@ -44,7 +44,11 @@ namespace Net.Astropenguin.Controls
 
         public static event EventHandler<XBackRequestedEventArgs> OnNavigatedBack
         {
-            add { NavigationHandlers.Add( value ); }
+            add
+            {
+                OnNavigatedBack -= value;
+                NavigationHandlers.Add( value );
+            }
             remove { NavigationHandlers.Remove( value ); }
         }
 
@@ -54,13 +58,19 @@ namespace Net.Astropenguin.Controls
             {
                 XBackRequestedEventArgs x = new XBackRequestedEventArgs( e );
                 H( sender, x );
-                if ( x.Handled ) break;
+                if ( x.Handled )
+                {
+                    if ( e != null ) e.Handled = true;
+                    break;
+                }
             }
         }
 
         public static void InsertHandlerOnNavigatedBack( EventHandler<XBackRequestedEventArgs> H )
         {
+            OnNavigatedBack -= H;
             NavigationHandlers.Insert( 0, H );
         }
     }
+
 }

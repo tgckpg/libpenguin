@@ -52,6 +52,7 @@ namespace Net.Astropenguin.IO
             return Lines;
         }
 
+
         public async static Task<string> ReadString( this IStorageFile ISF )
         {
             IInputStream ips = await ISF.OpenSequentialReadAsync();
