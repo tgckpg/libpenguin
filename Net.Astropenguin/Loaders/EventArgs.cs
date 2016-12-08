@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 
 using Net.Astropenguin.Logging;
@@ -55,7 +57,7 @@ namespace Net.Astropenguin.Loaders
 
 		public Exception Error { get; private set; }
 
-		public WebHeaderCollection ResponseHeaders { get; private set; }
+		public HttpResponseHeaders ResponseHeaders { get; private set; }
 
 		public byte[] ResponseBytes
 		{
@@ -86,12 +88,13 @@ namespace Net.Astropenguin.Loaders
 
 		public CookieCollection Cookies { get; private set; }
 
-		public DRequestCompletedEventArgs( HttpWebResponse Resp, string Url, byte[] RawBytes )
+		public DRequestCompletedEventArgs( HttpResponseMessage Resp, CookieCollection Cookies, string Url, byte[] RawBytes )
 		{
 			RequestUrl = Url;
 			RBytes = RawBytes;
 			ResponseHeaders = Resp.Headers;
-			Cookies = Resp.Cookies;
+
+            this.Cookies = Cookies;
 		}
 
 		public DRequestCompletedEventArgs( string Url, Exception ex )

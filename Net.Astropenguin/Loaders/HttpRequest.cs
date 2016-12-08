@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
-using System.IO.Compression;
-using System.Text;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using Windows.Foundation;
 
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Logging;
@@ -35,51 +37,80 @@ namespace Net.Astropenguin.Loaders
 		public HttpStatusCode StatusCode;
 		public bool EN_UITHREAD = true;
 
-        public WebHeaderCollection RequestHeaders
+        public HttpRequestHeaders RequestHeaders
         {
-            get { return WCRequest.Headers; }
+            get { return WCMessage.Headers; }
         }
 
         public int Timeout { get; set; }
 
-		protected HttpWebRequest WCRequest;
+		protected HttpClient WCRequest;
+        protected HttpRequestMessage WCMessage;
+        protected HttpClientHandler ClientHandler;
+
+        protected CookieContainer Kookies
+        {
+            get { return ClientHandler.CookieContainer; }
+            set { ClientHandler.CookieContainer = value; }
+        }
+
 		protected byte[] PostData;
+        private IAsyncOperation<HttpResponseMessage> AsyncOp;
 
 		public Uri ReqUri;
 
 		public string ContentType { get; set; }
+        public string UserAgent { get; protected set; }
 
 		public long ContentLength
 		{
-			get { return int.Parse( WCRequest.Headers[ HttpRequestHeader.ContentLength ] ); }
+			get { return ( long ) WCMessage.Content.Headers.ContentLength; }
 		}
 
-        public string Method
+        public HttpMethod Method
         {
-            get { return WCRequest.Method; }
-            set { WCRequest.Method = value; }
+            get { return WCMessage.Method; }
+            set { WCMessage.Method = value; }
         }
 
 		public HttpRequest( Uri RequestUri )
 		{
 			ReqUri = RequestUri;
+
 			PostData = new byte[0];
 			CreateRequest();
 		}
 
-		virtual protected void CreateRequest()
-		{
-			WCRequest = ( HttpWebRequest ) WebRequest.Create( ReqUri );
-			WCRequest.Method = "GET";
-			WCRequest.Headers[ HttpRequestHeader.UserAgent ] = "libpenguin - HTTPRequest";
-		}
+        virtual protected void CreateRequest()
+        {
+            ClientHandler = new HttpClientHandler()
+            {
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+            };
+
+            WCRequest = new HttpClient( ClientHandler );
+            WCMessage = new HttpRequestMessage( HttpMethod.Get, ReqUri );
+        }
 
         virtual protected void SetProps()
         {
-			WCRequest.ContentType = ContentType;
+            if ( !( WCMessage.Content == null || string.IsNullOrEmpty( ContentType ) ) )
+            {
+                WCMessage.Content.Headers.ContentType = MediaTypeHeaderValue.Parse( ContentType );
+            }
+
+            if ( string.IsNullOrEmpty( UserAgent ) )
+            {
+                WCMessage.Headers.Add( "User-Agent", "libpenguin - HTTPRequest" );
+            }
+            else
+            {
+                WCMessage.Headers.Add( "User-Agent", UserAgent );
+            }
+
             if ( Timeout != 0 )
             {
-                WCRequest.ContinueTimeout = Timeout;
+                WCRequest.Timeout = TimeSpan.FromMilliseconds( Timeout );
             }
         }
 
@@ -87,23 +118,22 @@ namespace Net.Astropenguin.Loaders
 		{
 			// Prepare streaming bytes
 			PostData = Encoding.UTF8.GetBytes( DataString );
-
 			OpenWriteAsync();
 		}
 
         // Primary Request Method
 		public void OpenWriteAsync()
 		{
+            WCMessage.Content = new ByteArrayContent( PostData );
             SetProps();
-			WCRequest.Headers[ HttpRequestHeader.ContentLength ] = PostData.Length.ToString();
-			WCRequest.BeginGetRequestStream( new AsyncCallback( GetRequestStreamCallback ), WCRequest );
+            Send();
 		}
 
         // Primary Request Method
         public void OpenAsync()
         {
             SetProps();
-            WCRequest.BeginGetResponse( new AsyncCallback( GetResponseCallback ), WCRequest );
+            Send();
         }
 
         public void UpdateProto( Uri Url )
@@ -122,24 +152,15 @@ namespace Net.Astropenguin.Loaders
 
 		public void Stop()
 		{
-			WCRequest.Abort();
+            AsyncOp.Cancel();
 		}
 
-		private void GetRequestStreamCallback( IAsyncResult AsyncResult )
+		private async void Send()
 		{
 			try
 			{
-				HttpWebRequest Request = ( HttpWebRequest ) AsyncResult.AsyncState;
-
-				// End Request
-				Stream POSTWriter = Request.EndGetRequestStream( AsyncResult );
-
-				// Write request stream.
-				POSTWriter.Write( PostData, 0, PostData.Length );
-				POSTWriter.Dispose();
-
-				// GetResponse
-				Request.BeginGetResponse( new AsyncCallback( GetResponseCallback ) , Request );
+                AsyncOp = WCRequest.SendAsync( WCMessage ).AsAsyncOperation();
+                GetResponseCallback( await AsyncOp );
 			}
 			catch ( Exception )
 			{
@@ -147,9 +168,8 @@ namespace Net.Astropenguin.Loaders
 			}
 		}
 
-		private void GetResponseCallback( IAsyncResult AsyncResult )
+		private async void GetResponseCallback( HttpResponseMessage Response )
 		{
-			HttpWebRequest Request = ( HttpWebRequest ) AsyncResult.AsyncState;
 			string RefUrl = 0 < PostData.Length
 				// Mostly PostData
 				? Encoding.UTF8.GetString( PostData, 0, PostData.Length )
@@ -158,32 +178,20 @@ namespace Net.Astropenguin.Loaders
 				;
 			try
 			{
-				HttpWebResponse Response = ( HttpWebResponse ) Request.EndGetResponse( AsyncResult );
 				StatusCode = Response.StatusCode;
 
 				if ( DRequestCompleted != null )
 				{
 					byte[] rBytes;
 
-                    string ContentEnc = Response.Headers[ HttpRequestHeader.ContentEncoding ];
-
-                    if ( ContentEnc != null && ContentEnc.Contains( "gzip" ) )
+                    using ( Stream ResponseStream = await Response.Content.ReadAsStreamAsync() )
                     {
-                        using ( GZipStream ResponseStream = new GZipStream( Response.GetResponseStream(), CompressionMode.Decompress ) )
-                        {
-                            ReadResponse( ResponseStream, out rBytes );
-                        }
-                    }
-                    else
-                    {
-                        using ( Stream ResponseStream = Response.GetResponseStream() )
-                        {
-                            ReadResponse( ResponseStream, out rBytes );
-                        }
+                        ReadResponse( ResponseStream, out rBytes );
                     }
 
+                    CookieCollection CC = ClientHandler.CookieContainer.GetCookies( ReqUri );
 					DRequestCompletedEventArgs RArgs
-						= new DRequestCompletedEventArgs( Response, RefUrl, rBytes );
+						= new DRequestCompletedEventArgs( Response, CC, RefUrl, rBytes );
 					if ( EN_UITHREAD )
 						// Raise event in the Main UI thread
 						Worker.UIInvoke( () => DRequestCompleted( RArgs ) );
