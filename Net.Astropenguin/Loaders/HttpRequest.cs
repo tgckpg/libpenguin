@@ -155,34 +155,42 @@ namespace Net.Astropenguin.Loaders
             AsyncOp.Cancel();
 		}
 
-		private async void Send()
-		{
-			try
-			{
+        private async void Send()
+        {
+            try
+            {
                 AsyncOp = WCRequest.SendAsync( WCMessage ).AsAsyncOperation();
                 GetResponseCallback( await AsyncOp );
-			}
-			catch ( Exception )
-			{
-				// MessageBus.Send( typeof( this ), ex.ToString() );
-			}
-		}
+            }
+            catch ( OperationCanceledException ex )
+            {
+                string RefUrl = 0 < PostData.Length
+                    ? Encoding.UTF8.GetString( PostData, 0, PostData.Length )
+                    : ReqUri.ToString()
+                    ;
+                RequestComplete( new DRequestCompletedEventArgs( RefUrl, ex ) );
+            }
+            catch ( Exception )
+            {
+                // MessageBus.Send( typeof( this ), ex.ToString() );
+            }
+        }
 
-		private async void GetResponseCallback( HttpResponseMessage Response )
-		{
-			string RefUrl = 0 < PostData.Length
-				// Mostly PostData
-				? Encoding.UTF8.GetString( PostData, 0, PostData.Length )
-				// Rarely GET Requests
-				: ReqUri.ToString()
-				;
-			try
-			{
-				StatusCode = Response.StatusCode;
+        private async void GetResponseCallback( HttpResponseMessage Response )
+        {
+            string RefUrl = 0 < PostData.Length
+                // Mostly PostData
+                ? Encoding.UTF8.GetString( PostData, 0, PostData.Length )
+                // Rarely GET Requests
+                : ReqUri.ToString()
+                ;
+            try
+            {
+                StatusCode = Response.StatusCode;
 
-				if ( DRequestCompleted != null )
-				{
-					byte[] rBytes;
+                if ( DRequestCompleted != null )
+                {
+                    byte[] rBytes;
 
                     using ( Stream ResponseStream = await Response.Content.ReadAsStreamAsync() )
                     {
@@ -190,34 +198,25 @@ namespace Net.Astropenguin.Loaders
                     }
 
                     CookieCollection CC = ClientHandler.CookieContainer.GetCookies( ReqUri );
-					DRequestCompletedEventArgs RArgs
-						= new DRequestCompletedEventArgs( Response, CC, RefUrl, rBytes );
-					if ( EN_UITHREAD )
-						// Raise event in the Main UI thread
-						Worker.UIInvoke( () => DRequestCompleted( RArgs ) );
-					else
-						DRequestCompleted( RArgs );
-				}
+                    DRequestCompletedEventArgs RArgs = new DRequestCompletedEventArgs( Response, CC, RefUrl, rBytes );
+                    RequestComplete( RArgs );
+                }
 
-				// Close HttpWebResponse
-				Response.Dispose();
-			}
-			catch ( Exception ex )
-			{
-                if ( EN_UITHREAD )
-                {
-                    Worker.UIInvoke( () =>
-                    {
-                        // Throw Exception to CompletedArgs
-                        DRequestCompleted( new DRequestCompletedEventArgs( RefUrl, ex ) );
-                    } );
-                }
-                else
-                {
-                    DRequestCompleted( new DRequestCompletedEventArgs( RefUrl, ex ) );
-                }
+                // Close HttpWebResponse
+                Response.Dispose();
             }
-		}
+            catch ( Exception ex )
+            {
+                RequestComplete( new DRequestCompletedEventArgs( RefUrl, ex ) );
+            }
+        }
+
+        private void RequestComplete( DRequestCompletedEventArgs Args )
+        {
+            // Raise event in the Main UI thread
+            if ( EN_UITHREAD ) Worker.UIInvoke( () => DRequestCompleted( Args ) );
+            else DRequestCompleted( Args );
+        }
 
         private void ReadResponse( Stream s, out byte[] rBytes )
         {
@@ -234,5 +233,6 @@ namespace Net.Astropenguin.Loaders
                 rBytes = ms.ToArray();
             }
         }
+
     }
 }

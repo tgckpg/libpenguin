@@ -26,6 +26,8 @@ namespace Net.Astropenguin.DataModel
         private Stack<ILoader<IN>> SubLoaders = new Stack<ILoader<IN>>();
         private Dictionary<ILoader<IN>, OUT> LastAnchor = new Dictionary<ILoader<IN>, OUT>();
 
+        private IAsyncOperation<LoadMoreItemsResult> CurrentAsyncOp;
+
         virtual public bool HasMoreItems
         {
             get
@@ -127,7 +129,12 @@ namespace Net.Astropenguin.DataModel
 
         public IAsyncOperation<LoadMoreItemsResult> LoadMoreItemsAsync( uint count )
         {
-            return LoadNext( ActiveLoader, count ).AsAsyncOperation();
+            if ( CurrentAsyncOp == null || CurrentAsyncOp.Status != AsyncStatus.Started )
+            {
+                CurrentAsyncOp = LoadNext( ActiveLoader, count ).AsAsyncOperation();
+            }
+
+            return CurrentAsyncOp;
         }
 
         private async Task<LoadMoreItemsResult> LoadNext( ILoader<IN> CurrLoader, uint count )
