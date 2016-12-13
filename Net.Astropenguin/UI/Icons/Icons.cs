@@ -11,7 +11,6 @@ namespace Net.Astropenguin.UI.Icons
     public class IconNavigateArrow : DirectionalIcon { public IconNavigateArrow() { DefaultStyleKey = typeof( IconNavigateArrow ); } }
     public class IconLogin : DirectionalIcon { public IconLogin() { DefaultStyleKey = typeof( IconLogin ); } }
     public class IconLogout : DirectionalIcon { public IconLogout() { DefaultStyleKey = typeof( IconLogout ); } }
-    public class IconFastForword : DirectionalIcon { public IconFastForword() { DefaultStyleKey = typeof( IconFastForword ); } }
     public class IconTOC : DirectionalIcon { public IconTOC() { DefaultStyleKey = typeof( IconTOC ); } }
     public class IconKey : DirectionalIcon { public IconKey() { DefaultStyleKey = typeof( IconKey ); } }
     public class IconPlusSign : IconBase { public IconPlusSign() { DefaultStyleKey = typeof( IconPlusSign ); } }
