@@ -55,6 +55,15 @@ namespace Net.Astropenguin.IO
             }
         }
 
+        public void Reload()
+        {
+            if( AStorage.FileExists( Location ) )
+            {
+                XDocument Doc = FromDocument( "<xml />", Location );
+                Root.ReplaceWith( Doc.Root );
+            }
+        }
+
         // I am LHS, Always favor Master
         public void Sync( XRegistry MergeReg, bool IsMaster, Func<XParameter, XParameter, bool> LHSWin )
         {

@@ -305,38 +305,6 @@
         </Setter>
     </Style>
 
-    <Style TargetType="i:IconFastForword">
-        <Setter Property="Foreground" Value="White" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="i:IconFastForword">
-                    <Canvas x:Name="Stage" Width="100" Height="100">
-                        <Rectangle Height="10" Width="40" Fill="{TemplateBinding Foreground}" Canvas.Left="13.166" Canvas.Top="24" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" >
-                            <Rectangle.RenderTransform>
-                                <CompositeTransform Rotation="135" TranslateX="31.713" TranslateY="33.108"/>
-                            </Rectangle.RenderTransform>
-                        </Rectangle>
-                        <Rectangle Height="40" Width="10" Fill="{TemplateBinding Foreground}" Canvas.Left="13.166" Canvas.Top="24" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" >
-                            <Rectangle.RenderTransform>
-                                <CompositeTransform Rotation="135" TranslateX="46.713" TranslateY="-3.108"/>
-                            </Rectangle.RenderTransform>
-                        </Rectangle>
-                        <Rectangle Height="10" Width="40" Fill="{TemplateBinding Foreground}" Canvas.Left="31.166" Canvas.Top="39" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" >
-                            <Rectangle.RenderTransform>
-                                <CompositeTransform Rotation="135" TranslateX="-10.5" TranslateY="18.108"/>
-                            </Rectangle.RenderTransform>
-                        </Rectangle>
-                        <Rectangle Height="40" Width="10" Fill="{TemplateBinding Foreground}" Canvas.Left="31.166" Canvas.Top="39" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" >
-                            <Rectangle.RenderTransform>
-                                <CompositeTransform Rotation="135" TranslateX="4.5" TranslateY="-18.108"/>
-                            </Rectangle.RenderTransform>
-                        </Rectangle>
-                    </Canvas>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
     <Style TargetType="i:IconCross">
         <Setter Property="Foreground" Value="White" />
         <Setter Property="Template">
