@@ -30,17 +30,7 @@ namespace Net.Astropenguin.Controls
         private Dictionary<string, HashSet<Action<KeyCombinationEventArgs>>> RegisteredCombinations;
         private int SequenceIndex = 0;
 
-        public bool IsCtrl
-        {
-            get { return IsHolding( VirtualKey.Control ); }
-        }
-
-        public bool IsShift
-        {
-            get { return IsHolding( VirtualKey.Shift ); }
-        }
-
-        private Dictionary<VirtualKey, bool> HoldingKeys;
+        private HashSet<VirtualKey> PressedKeys;
         private List<VirtualKey[]> RegisteredSequence;
         private List<VirtualKey[]> SelectedSequence;
 
@@ -52,36 +42,23 @@ namespace Net.Astropenguin.Controls
             RegisteredCombinations = new Dictionary<string, HashSet<Action<KeyCombinationEventArgs>>>();
             RegisteredSequence = new List<VirtualKey[]>();
             SelectedSequence = new List<VirtualKey[]>();
-            HoldingKeys = new Dictionary<VirtualKey, bool>();
+            PressedKeys = new HashSet<VirtualKey>();
 
             RootFrame.KeyDown += RootFrame_KeyDown;
-            RootFrame.KeyUp += RootFrame_KeyUp;
-        }
-
-        public bool IsHolding( VirtualKey K )
-        {
-            if( HoldingKeys.ContainsKey( K ) )
-                return HoldingKeys[ K ];
-
-            return false;
-        }
-
-        private void RootFrame_KeyUp( CoreWindow sender, KeyEventArgs e )
-        {
-            HoldingKeys[ e.VirtualKey ] = false;
         }
 
         private void RootFrame_KeyDown( CoreWindow sender, KeyEventArgs e )
         {
             KeyDown?.Invoke( sender, e );
 
-            HoldingKeys[ e.VirtualKey ] = true;
+            PressedKeys.Add( e.VirtualKey );
 
             List<VirtualKey> Keys = new List<VirtualKey>();
-            foreach( KeyValuePair<VirtualKey, bool> Key in HoldingKeys )
+            foreach ( VirtualKey Key in PressedKeys )
             {
-                if ( Key.Key == VirtualKey.Menu ) continue;
-                if ( Key.Value ) Keys.Add( Key.Key );
+                if ( Key == VirtualKey.Menu ) continue;
+                if ( ( sender.GetKeyState( Key ) & CoreVirtualKeyStates.Down ) != 0 )
+                    Keys.Add( Key );
             }
 
             string KeyCombo = GetComboHash( Keys );
