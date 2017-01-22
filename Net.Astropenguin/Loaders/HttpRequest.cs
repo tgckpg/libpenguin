@@ -164,16 +164,25 @@ namespace Net.Astropenguin.Loaders
             }
             catch ( OperationCanceledException ex )
             {
-                string RefUrl = 0 < PostData.Length
-                    ? Encoding.UTF8.GetString( PostData, 0, PostData.Length )
-                    : ReqUri.ToString()
-                    ;
-                RequestComplete( new DRequestCompletedEventArgs( RefUrl, ex ) );
+                RequestException( ex );
+            }
+            catch ( HttpRequestException ex )
+            {
+                RequestException( ex );
             }
             catch ( Exception )
             {
                 // MessageBus.Send( typeof( this ), ex.ToString() );
             }
+        }
+
+        private void RequestException( Exception ex )
+        {
+            string RefUrl = 0 < PostData.Length
+                ? Encoding.UTF8.GetString( PostData, 0, PostData.Length )
+                : ReqUri.ToString()
+                ;
+            RequestComplete( new DRequestCompletedEventArgs( RefUrl, ex ) );
         }
 
         private async void GetResponseCallback( HttpResponseMessage Response )

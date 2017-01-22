@@ -22,5 +22,11 @@ namespace Net.Astropenguin.UI
 
             return L;
         }
+
+        public static void Destroy( double FontSize )
+        {
+            LogaCache.Remove( FontSize );
+        }
+
     }
 }

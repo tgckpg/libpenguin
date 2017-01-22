@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+
 using Net.Astropenguin.Logging;
-using System.Runtime.CompilerServices;
 
 namespace Net.Astropenguin.UI
 {
@@ -321,13 +322,6 @@ namespace Net.Astropenguin.UI
         {
             t.Measure( new Size( double.PositiveInfinity, double.PositiveInfinity ) );
             t.Arrange( new Rect( new Point(), t.DesiredSize ) );
-
-            /* INTENSIVE_LOG
-            if( t.FontSize == 16 )
-            {
-                Logger.Log( ID, string.Format( "FontSize 16 detected {0}, Should be {1}. Text {2}", t.FontSize, FontSize, t.Text ), LogType.DEBUG );
-            }
-            //*/
 
             return t.ActualHeight;
         }
