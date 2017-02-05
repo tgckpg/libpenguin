@@ -72,6 +72,46 @@ namespace Net.Astropenguin.IO
             return await ISF.WriteBytes( Encoding.UTF8.GetBytes( Content ), Append );
         }
 
+        public async static Task<bool> WriteFile( this IStorageFile ISF, IStorageFile Source, bool Append = false, byte[] AdBytes = null )
+        {
+            try
+            {
+                if ( Append )
+                {
+                    // Write and Append
+                    using ( Stream StreamData = await ISF.OpenStreamForWriteAsync() )
+                    using ( Stream SourceData = await Source.OpenStreamForReadAsync() )
+                    {
+                        StreamData.Seek( 0, SeekOrigin.End );
+
+                        if( AdBytes != null ) await StreamData.WriteAsync( AdBytes, 0, AdBytes.Length );
+                        await SourceData.CopyToAsync( StreamData );
+                        await StreamData.FlushAsync();
+                    }
+                }
+                else
+                {
+                    // Write truncate
+                    using ( Stream StreamData = await ISF.OpenStreamForWriteAsync() )
+                    using ( Stream SourceData = await Source.OpenStreamForReadAsync() )
+                    {
+                        await SourceData.CopyToAsync( StreamData );
+                        if( AdBytes != null ) await StreamData.WriteAsync( AdBytes, 0, AdBytes.Length );
+                        await StreamData.FlushAsync();
+                    }
+                }
+
+                return true;
+            }
+            catch ( Exception ex )
+            {
+                Logger.Log( ID, "WriteFile@" + ISF.Name + ": " + ex.Message, LogType.ERROR );
+                Logger.Log( ID, ex.StackTrace, LogType.INFO );
+            }
+
+            return false;
+        }
+
         public async static Task<bool> WriteBytes( this IStorageFile ISF, byte[] Bytes, bool Append = false )
         {
             try
