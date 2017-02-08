@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -44,7 +45,7 @@ namespace Net.Astropenguin.IO
             StreamReader Reader = new StreamReader( ips.AsStreamForRead() );
             string[] Lines = new string[ Count ];
 
-            for( int i = 0; i < Count && !Reader.EndOfStream; i ++ )
+            for ( int i = 0; i < Count && !Reader.EndOfStream; i++ )
             {
                 Lines[ i ] = Reader.ReadLine();
             }
@@ -52,6 +53,11 @@ namespace Net.Astropenguin.IO
             return Lines;
         }
 
+        public async static Task<byte[]> ReadAllBytes( this IStorageFile ISF )
+        {
+            IBuffer Buff = await FileIO.ReadBufferAsync( ISF );
+            return Buff.ToArray();
+        }
 
         public async static Task<string> ReadString( this IStorageFile ISF )
         {
@@ -84,8 +90,8 @@ namespace Net.Astropenguin.IO
                     {
                         StreamData.Seek( 0, SeekOrigin.End );
 
-                        if( AdBytes != null ) await StreamData.WriteAsync( AdBytes, 0, AdBytes.Length );
                         await SourceData.CopyToAsync( StreamData );
+                        if ( AdBytes != null ) await StreamData.WriteAsync( AdBytes, 0, AdBytes.Length );
                         await StreamData.FlushAsync();
                     }
                 }
@@ -96,7 +102,7 @@ namespace Net.Astropenguin.IO
                     using ( Stream SourceData = await Source.OpenStreamForReadAsync() )
                     {
                         await SourceData.CopyToAsync( StreamData );
-                        if( AdBytes != null ) await StreamData.WriteAsync( AdBytes, 0, AdBytes.Length );
+                        if ( AdBytes != null ) await StreamData.WriteAsync( AdBytes, 0, AdBytes.Length );
                         await StreamData.FlushAsync();
                     }
                 }
@@ -112,7 +118,7 @@ namespace Net.Astropenguin.IO
             return false;
         }
 
-        public async static Task<bool> WriteBytes( this IStorageFile ISF, byte[] Bytes, bool Append = false )
+        public async static Task<bool> WriteBytes( this IStorageFile ISF, byte[] Bytes, bool Append = false, byte[] AdBytes = null )
         {
             try
             {
@@ -124,6 +130,7 @@ namespace Net.Astropenguin.IO
                         StreamData.Seek( 0, SeekOrigin.End );
 
                         await StreamData.WriteAsync( Bytes, 0, Bytes.Length );
+                        if ( AdBytes != null ) await StreamData.WriteAsync( AdBytes, 0, AdBytes.Length );
                         await StreamData.FlushAsync();
                     }
                 }
@@ -135,6 +142,7 @@ namespace Net.Astropenguin.IO
                         StreamData.SetLength( Bytes.Length );
 
                         await StreamData.WriteAsync( Bytes, 0, Bytes.Length );
+                        if ( AdBytes != null ) await StreamData.WriteAsync( AdBytes, 0, AdBytes.Length );
                         await StreamData.FlushAsync();
                     }
                 }
