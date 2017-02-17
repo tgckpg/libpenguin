@@ -10,6 +10,8 @@ namespace Net.Astropenguin.DataModel
 
         protected void NotifyChanged( params string[] Names )
         {
+            if ( Worker.BackgroundOnly ) return;
+
             Worker.UIInvoke( () =>
             {
                 // Must check each time after property changed is called
