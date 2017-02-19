@@ -99,8 +99,12 @@ namespace Net.Astropenguin.Loaders
 
 		public DRequestCompletedEventArgs( string Url, Exception ex )
 		{
-			// Failed Exception will thrown in Getting ResponseString or ResponseBytes Method
-			Logger.Log( ID, "A WebException occured at " + Url + ": " + ex.Message, LogType.DEBUG );
+            // Failed Exception will thrown in Getting ResponseString or ResponseBytes Method
+            Logger.Log(
+                ID
+                , "A WebException occured at " + Url + ": " + ex.Message
+                    + ( ex.InnerException == null ? "" : ", " + ex.InnerException.Message )
+                , LogType.DEBUG );
 
 			RequestUrl = Url;
 			RequestException = ex;

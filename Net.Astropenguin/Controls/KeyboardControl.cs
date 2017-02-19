@@ -81,7 +81,7 @@ namespace Net.Astropenguin.Controls
             }
 
             KeyCombinationEventArgs d = new KeyCombinationEventArgs( Keys.ToArray() );
-            foreach( Action<KeyCombinationEventArgs> P in RegisteredCombinations[ KeyCombo ] )
+            foreach( Action<KeyCombinationEventArgs> P in RegisteredCombinations[ KeyCombo ].Reverse() )
             {
                 P( d );
                 if ( d.Handled ) break;
