@@ -12,11 +12,11 @@ namespace Net.Astropenguin.Logging.Handler
 
         public string Location { get; private set; }
 
-		public FileSystemLog( string path )
-		{
+        public FileSystemLog( string path )
+        {
             Location = path;
             Start();
-		}
+        }
 
         public void Stop()
         {
@@ -26,22 +26,25 @@ namespace Net.Astropenguin.Logging.Handler
 
         public IsolatedStorageFileStream GetStream()
         {
-			IsolatedStorageFile isf = new AppStorage().GetISOStorage();
-			return new IsolatedStorageFileStream( Location, FileMode.Open, isf );
+            IsolatedStorageFile isf = new AppStorage().GetISOStorage();
+            return new IsolatedStorageFileStream( Location, FileMode.Open, isf );
         }
 
         public void Start()
         {
-			IsolatedStorageFile isf = new AppStorage().GetISOStorage();
-			LogFile = new IsolatedStorageFileStream( Location, FileMode.Append, isf );
-			Logger.OnLog += Logger_OnLog;
+            IsolatedStorageFile isf = new AppStorage().GetISOStorage();
+            LogFile = new IsolatedStorageFileStream( Location, FileMode.Append, isf );
+            Logger.OnLog += Logger_OnLog;
         }
 
-		private void Logger_OnLog( LogArgs LogArgs )
-		{
-			byte[] b = Encoding.UTF8.GetBytes( LogArgs.LogLine + "\n" );
-			LogFile.Write( b, 0, b.Length );
-			LogFile.Flush();
-		}
-	}
+        private void Logger_OnLog( LogArgs LogArgs )
+        {
+            lock ( LogFile )
+            {
+                byte[] b = Encoding.UTF8.GetBytes( LogArgs.LogLine + "\n" );
+                LogFile.Write( b, 0, b.Length );
+                LogFile.Flush();
+            }
+        }
+    }
 }
