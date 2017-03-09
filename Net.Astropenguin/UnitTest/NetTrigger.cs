@@ -12,7 +12,7 @@ namespace Net.Astropenguin.UnitTest
 {
 	public abstract class NetTrigger : TestExecutor
 	{
-        public static new readonly string ID = typeof( NetTrigger ).Name;
+		public static new readonly string ID = typeof( NetTrigger ).Name;
 
 		ManualResetEvent clientDone = new ManualResetEvent( false );
 
@@ -86,7 +86,7 @@ namespace Net.Astropenguin.UnitTest
 			else
 			{
 				Logger.Log( ID, "No protocol present", LogType.DEBUG );
-                clientDone.Set();
+				clientDone.Set();
 			}
 		}
 
@@ -115,7 +115,7 @@ namespace Net.Astropenguin.UnitTest
 			else
 			{
 				Logger.Log( ID, "Cannot receive signal from protocol", LogType.DEBUG );
-                clientDone.Set();
+				clientDone.Set();
 			}
 		}
 

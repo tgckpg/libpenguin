@@ -12,7 +12,7 @@ namespace Net.Astropenguin.Logging
 
 		private static event LogEvent WLogHandler;
 
-        public static List<LogType> LogFilter = new List<LogType>();
+		public static List<LogType> LogFilter = new List<LogType>();
 
 		public static event LogEvent OnLog
 		{
@@ -27,10 +27,10 @@ namespace Net.Astropenguin.Logging
 			}
 		}
 
-        public static void Log( string id, string str )
-        {
-            Log( id, str, LogType.DEBUG );
-        }
+		public static void Log( string id, string str )
+		{
+			Log( id, str, LogType.DEBUG );
+		}
 
 		public static void Log( string str, LogType p, Signal s )
 		{
@@ -46,7 +46,7 @@ namespace Net.Astropenguin.Logging
 			VSLog( str, p );
 			if ( WLogHandler != null )
 			{
-                if ( 0 < LogFilter.Count && !LogFilter.Contains( p ) ) return;
+				if ( 0 < LogFilter.Count && !LogFilter.Contains( p ) ) return;
 
 				Task.Factory.StartNew( () => WLogHandler( new LogArgs( id, str, p, Signal.LOG ) ) );
 			}

@@ -13,7 +13,7 @@ namespace Net.Astropenguin.Loaders
 {
 	public class HttpRequest
 	{
-        public static readonly string ID = typeof( HttpRequest ).Name;
+		public static readonly string ID = typeof( HttpRequest ).Name;
 
 		#region DThread Handlers
 		public delegate void DRequestCompleteHandler( DRequestCompletedEventArgs DArgs );
@@ -37,41 +37,41 @@ namespace Net.Astropenguin.Loaders
 		public HttpStatusCode StatusCode;
 		public bool EN_UITHREAD = true;
 
-        public HttpRequestHeaders RequestHeaders
-        {
-            get { return WCMessage.Headers; }
-        }
+		public HttpRequestHeaders RequestHeaders
+		{
+			get { return WCMessage.Headers; }
+		}
 
-        public int Timeout { get; set; }
+		public int Timeout { get; set; }
 
 		protected HttpClient WCRequest;
-        protected HttpRequestMessage WCMessage;
-        protected HttpClientHandler ClientHandler;
+		protected HttpRequestMessage WCMessage;
+		protected HttpClientHandler ClientHandler;
 
-        protected CookieContainer Kookies
-        {
-            get { return ClientHandler.CookieContainer; }
-            set { ClientHandler.CookieContainer = value; }
-        }
+		protected CookieContainer Kookies
+		{
+			get { return ClientHandler.CookieContainer; }
+			set { ClientHandler.CookieContainer = value; }
+		}
 
 		protected byte[] PostData;
-        private IAsyncOperation<HttpResponseMessage> AsyncOp;
+		private IAsyncOperation<HttpResponseMessage> AsyncOp;
 
 		public Uri ReqUri;
 
 		public string ContentType { get; set; }
-        public string UserAgent { get; protected set; }
+		public string UserAgent { get; protected set; }
 
 		public long ContentLength
 		{
 			get { return ( long ) WCMessage.Content.Headers.ContentLength; }
 		}
 
-        public HttpMethod Method
-        {
-            get { return WCMessage.Method; }
-            set { WCMessage.Method = value; }
-        }
+		public HttpMethod Method
+		{
+			get { return WCMessage.Method; }
+			set { WCMessage.Method = value; }
+		}
 
 		public HttpRequest( Uri RequestUri )
 		{
@@ -81,38 +81,38 @@ namespace Net.Astropenguin.Loaders
 			CreateRequest();
 		}
 
-        virtual protected void CreateRequest()
-        {
-            ClientHandler = new HttpClientHandler()
-            {
-                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
-            };
+		virtual protected void CreateRequest()
+		{
+			ClientHandler = new HttpClientHandler()
+			{
+				AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+			};
 
-            WCRequest = new HttpClient( ClientHandler );
-            WCMessage = new HttpRequestMessage( HttpMethod.Get, ReqUri );
-        }
+			WCRequest = new HttpClient( ClientHandler );
+			WCMessage = new HttpRequestMessage( HttpMethod.Get, ReqUri );
+		}
 
-        virtual protected void SetProps()
-        {
-            if ( !( WCMessage.Content == null || string.IsNullOrEmpty( ContentType ) ) )
-            {
-                WCMessage.Content.Headers.ContentType = MediaTypeHeaderValue.Parse( ContentType );
-            }
+		virtual protected void SetProps()
+		{
+			if ( !( WCMessage.Content == null || string.IsNullOrEmpty( ContentType ) ) )
+			{
+				WCMessage.Content.Headers.ContentType = MediaTypeHeaderValue.Parse( ContentType );
+			}
 
-            if ( string.IsNullOrEmpty( UserAgent ) )
-            {
-                WCMessage.Headers.Add( "User-Agent", "libpenguin - HTTPRequest" );
-            }
-            else
-            {
-                WCMessage.Headers.Add( "User-Agent", UserAgent );
-            }
+			if ( string.IsNullOrEmpty( UserAgent ) )
+			{
+				WCMessage.Headers.Add( "User-Agent", "libpenguin - HTTPRequest" );
+			}
+			else
+			{
+				WCMessage.Headers.Add( "User-Agent", UserAgent );
+			}
 
-            if ( Timeout != 0 )
-            {
-                WCRequest.Timeout = TimeSpan.FromMilliseconds( Timeout );
-            }
-        }
+			if ( Timeout != 0 )
+			{
+				WCRequest.Timeout = TimeSpan.FromMilliseconds( Timeout );
+			}
+		}
 
 		public void OpenWriteAsync( string DataString )
 		{
@@ -121,26 +121,26 @@ namespace Net.Astropenguin.Loaders
 			OpenWriteAsync();
 		}
 
-        // Primary Request Method
+		// Primary Request Method
 		public void OpenWriteAsync()
 		{
-            WCMessage.Content = new ByteArrayContent( PostData );
-            SetProps();
-            Send();
+			WCMessage.Content = new ByteArrayContent( PostData );
+			SetProps();
+			Send();
 		}
 
-        // Primary Request Method
-        public void OpenAsync()
-        {
-            SetProps();
-            Send();
-        }
+		// Primary Request Method
+		public void OpenAsync()
+		{
+			SetProps();
+			Send();
+		}
 
-        public void UpdateProto( Uri Url )
-        {
-            ReqUri = Url;
-            CreateRequest();
-        }
+		public void UpdateProto( Uri Url )
+		{
+			ReqUri = Url;
+			CreateRequest();
+		}
 
 		public void OpenAsyncThread( string DataString, bool EnableUIThread )
 		{
@@ -152,96 +152,96 @@ namespace Net.Astropenguin.Loaders
 
 		public void Stop()
 		{
-            AsyncOp.Cancel();
+			AsyncOp.Cancel();
 		}
 
-        private async void Send()
-        {
-            try
-            {
-                AsyncOp = WCRequest.SendAsync( WCMessage ).AsAsyncOperation();
-                GetResponseCallback( await AsyncOp );
-            }
-            catch ( OperationCanceledException ex )
-            {
-                RequestException( ex );
-            }
-            catch ( HttpRequestException ex )
-            {
-                RequestException( ex );
-            }
-            catch ( Exception )
-            {
-                // MessageBus.Send( typeof( this ), ex.ToString() );
-            }
-        }
+		private async void Send()
+		{
+			try
+			{
+				AsyncOp = WCRequest.SendAsync( WCMessage ).AsAsyncOperation();
+				GetResponseCallback( await AsyncOp );
+			}
+			catch ( OperationCanceledException ex )
+			{
+				RequestException( ex );
+			}
+			catch ( HttpRequestException ex )
+			{
+				RequestException( ex );
+			}
+			catch ( Exception )
+			{
+				// MessageBus.Send( typeof( this ), ex.ToString() );
+			}
+		}
 
-        private void RequestException( Exception ex )
-        {
-            string RefUrl = 0 < PostData.Length
-                ? Encoding.UTF8.GetString( PostData, 0, PostData.Length )
-                : ReqUri.ToString()
-                ;
-            RequestComplete( new DRequestCompletedEventArgs( RefUrl, ex ) );
-        }
+		private void RequestException( Exception ex )
+		{
+			string RefUrl = 0 < PostData.Length
+				? Encoding.UTF8.GetString( PostData, 0, PostData.Length )
+				: ReqUri.ToString()
+				;
+			RequestComplete( new DRequestCompletedEventArgs( RefUrl, ex ) );
+		}
 
-        private async void GetResponseCallback( HttpResponseMessage Response )
-        {
-            string RefUrl = 0 < PostData.Length
-                // Mostly PostData
-                ? Encoding.UTF8.GetString( PostData, 0, PostData.Length )
-                // Rarely GET Requests
-                : ReqUri.ToString()
-                ;
-            try
-            {
-                StatusCode = Response.StatusCode;
+		private async void GetResponseCallback( HttpResponseMessage Response )
+		{
+			string RefUrl = 0 < PostData.Length
+				// Mostly PostData
+				? Encoding.UTF8.GetString( PostData, 0, PostData.Length )
+				// Rarely GET Requests
+				: ReqUri.ToString()
+				;
+			try
+			{
+				StatusCode = Response.StatusCode;
 
-                if ( DRequestCompleted != null )
-                {
-                    byte[] rBytes;
+				if ( DRequestCompleted != null )
+				{
+					byte[] rBytes;
 
-                    using ( Stream ResponseStream = await Response.Content.ReadAsStreamAsync() )
-                    {
-                        ReadResponse( ResponseStream, out rBytes );
-                    }
+					using ( Stream ResponseStream = await Response.Content.ReadAsStreamAsync() )
+					{
+						ReadResponse( ResponseStream, out rBytes );
+					}
 
-                    CookieCollection CC = ClientHandler.CookieContainer.GetCookies( ReqUri );
-                    DRequestCompletedEventArgs RArgs = new DRequestCompletedEventArgs( Response, CC, RefUrl, rBytes );
-                    RequestComplete( RArgs );
-                }
+					CookieCollection CC = ClientHandler.CookieContainer.GetCookies( ReqUri );
+					DRequestCompletedEventArgs RArgs = new DRequestCompletedEventArgs( Response, CC, RefUrl, rBytes );
+					RequestComplete( RArgs );
+				}
 
-                // Close HttpWebResponse
-                Response.Dispose();
-            }
-            catch ( Exception ex )
-            {
-                RequestComplete( new DRequestCompletedEventArgs( RefUrl, ex ) );
-            }
-        }
+				// Close HttpWebResponse
+				Response.Dispose();
+			}
+			catch ( Exception ex )
+			{
+				RequestComplete( new DRequestCompletedEventArgs( RefUrl, ex ) );
+			}
+		}
 
-        private void RequestComplete( DRequestCompletedEventArgs Args )
-        {
-            // Raise event in the Main UI thread
-            if ( EN_UITHREAD ) Worker.UIInvoke( () => DRequestCompleted( Args ) );
-            else DRequestCompleted( Args );
-        }
+		private void RequestComplete( DRequestCompletedEventArgs Args )
+		{
+			// Raise event in the Main UI thread
+			if ( EN_UITHREAD ) Worker.UIInvoke( () => DRequestCompleted( Args ) );
+			else DRequestCompleted( Args );
+		}
 
-        private void ReadResponse( Stream s, out byte[] rBytes )
-        {
-            // Read stream in to byte
-            byte[] buffer = new byte[ 16 * 1024 ];
+		private void ReadResponse( Stream s, out byte[] rBytes )
+		{
+			// Read stream in to byte
+			byte[] buffer = new byte[ 16 * 1024 ];
 
-            using ( MemoryStream ms = new MemoryStream() )
-            {
-                int read;
-                while ( 0 < ( read = s.Read( buffer, 0, buffer.Length ) ) )
-                {
-                    ms.Write( buffer, 0, read );
-                }
-                rBytes = ms.ToArray();
-            }
-        }
+			using ( MemoryStream ms = new MemoryStream() )
+			{
+				int read;
+				while ( 0 < ( read = s.Read( buffer, 0, buffer.Length ) ) )
+				{
+					ms.Write( buffer, 0, read );
+				}
+				rBytes = ms.ToArray();
+			}
+		}
 
-    }
+	}
 }

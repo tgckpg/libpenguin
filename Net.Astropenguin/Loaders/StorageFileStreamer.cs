@@ -9,63 +9,63 @@ using Windows.Storage.Streams;
 
 namespace Net.Astropenguin.Loaders
 {
-    using IO;
-    using Logging;
+	using IO;
+	using Logging;
 
-    class StorageFileStreamer : ILoader<string>
-    {
-        public static readonly string ID = typeof( StorageFileStreamer ).Name;
+	class StorageFileStreamer : ILoader<string>
+	{
+		public static readonly string ID = typeof( StorageFileStreamer ).Name;
 
-        private StorageFile File;
+		private StorageFile File;
 
-        public Action<IList<string>> Connector { get; set; }
-        public int CurrentPage { get; set; }
-        public bool PageEnded { get; set; }
+		public Action<IList<string>> Connector { get; set; }
+		public int CurrentPage { get; set; }
+		public bool PageEnded { get; set; }
 
-        private long CurrentPos = 0;
+		private long CurrentPos = 0;
 
-        public async Task<IList<string>> NextPage( uint count )
-        {
-            return await OpenRead( ( ulong ) CurrentPos, count );
-        }
+		public async Task<IList<string>> NextPage( uint count )
+		{
+			return await OpenRead( ( ulong ) CurrentPos, count );
+		}
 
-        public StorageFileStreamer( StorageFile SF )
-        {
-            File = SF;
-        }
+		public StorageFileStreamer( StorageFile SF )
+		{
+			File = SF;
+		}
 
-        private async Task<IList<string>> OpenRead( ulong start = 0, uint lines = 10 )
-        {
-            List<string> p = new List<string>();
+		private async Task<IList<string>> OpenRead( ulong start = 0, uint lines = 10 )
+		{
+			List<string> p = new List<string>();
 
-            try
-            {
-                IInputStream s = await File.OpenSequentialReadAsync();
+			try
+			{
+				IInputStream s = await File.OpenSequentialReadAsync();
 
-                using ( LineReader ms = new LineReader( s.AsStreamForRead() ) )
-                {
-                    ms.SeekLine( CurrentPos );
-                    for( int i = 0; i < lines; i ++ )
-                    {
-                        if ( ms.EndOfStream ) break;
-                        string line = ms.ReadLine();
+				using ( LineReader ms = new LineReader( s.AsStreamForRead() ) )
+				{
+					ms.SeekLine( CurrentPos );
+					for( int i = 0; i < lines; i ++ )
+					{
+						if ( ms.EndOfStream ) break;
+						string line = ms.ReadLine();
 
-                        // This is needed for ListView igoring empty lines
-                        if ( string.IsNullOrEmpty( line ) ) line = " ";
+						// This is needed for ListView igoring empty lines
+						if ( string.IsNullOrEmpty( line ) ) line = " ";
 
-                        p.Add( line );
-                    }
+						p.Add( line );
+					}
 
-                    PageEnded = ms.EndOfStream;
-                    CurrentPos = ms.LinePos;
-                }
-            }
-            catch( Exception ex )
-            {
-                Logger.Log( ID, ex.Message, LogType.ERROR );
-            }
+					PageEnded = ms.EndOfStream;
+					CurrentPos = ms.LinePos;
+				}
+			}
+			catch( Exception ex )
+			{
+				Logger.Log( ID, ex.Message, LogType.ERROR );
+			}
 
-            return p;
-        }
-    }
+			return p;
+		}
+	}
 }

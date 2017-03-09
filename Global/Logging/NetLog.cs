@@ -9,21 +9,21 @@ namespace Net.Astropenguin.Logging
 {
 	public class NetLog
 	{
-        public static readonly string ID = typeof( NetLog ).Name;
+		public static readonly string ID = typeof( NetLog ).Name;
 
 		#if DEBUG
 		public static bool Enabled = true;
-        public static string RemoteIP = "10.10.0.118";
+		public static string RemoteIP = "10.10.0.118";
 		#else
 		public static bool Enabled = false;
-        public static string RemoteIP = "255.255.255.255";
+		public static string RemoteIP = "255.255.255.255";
 		#endif
 		public static bool Ended { get; private set; }
 
 		private static Socket soc;
 
 		static Exception CrashedEx;
-        static IPAddress IP;
+		static IPAddress IP;
 
 		public static void Initialize()
 		{
@@ -35,19 +35,19 @@ namespace Net.Astropenguin.Logging
 					Logger.OnLog += dMesg;
 					Logger.Log( ID, "NetLog Begin At: " + DateTime.Now.ToUniversalTime() , LogType.INFO );
 				}
-            }
-        }
+			}
+		}
 
-        public static void PostInit()
-        {
-            if ( soc != null )
-            {
-                Logger.Log( ID, "Socket is already initialized ... perhaps the root log is available?", LogType.INFO );
-                return;
-            }
-            Logger.Log( ID, "Post init Called", LogType.INFO );
-            Initialize();
-        }
+		public static void PostInit()
+		{
+			if ( soc != null )
+			{
+				Logger.Log( ID, "Socket is already initialized ... perhaps the root log is available?", LogType.INFO );
+				return;
+			}
+			Logger.Log( ID, "Post init Called", LogType.INFO );
+			Initialize();
+		}
 
 		public static void FireEndSignal( Exception ex )
 		{
@@ -57,7 +57,7 @@ namespace Net.Astropenguin.Logging
 			CrashedEx = ex;
 		}
 
-        static void End()
+		static void End()
 		{
 			Logger.OnLog -= dMesg;
 			if ( soc != null ) soc.Shutdown( SocketShutdown.Both );
@@ -76,10 +76,10 @@ namespace Net.Astropenguin.Logging
 
 		protected static void dMesg( LogArgs LArgs )
 		{
-            /*
+			/*
 			Send( new DnsEndPoint( "2.astropneguin.net", 9730 ), LArgs );
 			/*/
-            Send( new IPEndPoint( IP, 9730 ), LArgs );
+			Send( new IPEndPoint( IP, 9730 ), LArgs );
 			//*/
 		}
 

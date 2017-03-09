@@ -9,7 +9,7 @@ namespace Net.Astropenguin.UnitTest
 {
 	public class TestExecutor
 	{
-        public static readonly string ID = typeof( TestExecutor ).Name;
+		public static readonly string ID = typeof( TestExecutor ).Name;
 		protected List<TestResult> Results;
 
 		private int TestsToWait = 0;
