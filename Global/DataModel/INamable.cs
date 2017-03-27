@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Net.Astropenguin.DataModel
 {
-    public interface INamable
-    {
-        string Name { get; set; }
-    }
+	public interface INamable
+	{
+		string Name { get; set; }
+	}
 }

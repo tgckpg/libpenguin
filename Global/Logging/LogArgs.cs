@@ -22,7 +22,7 @@ namespace Net.Astropenguin.Logging
 
 	public class LogArgs
 	{
-        public string id { get; private set; }
+		public string id { get; private set; }
 		public string Message { get; private set; }
 		public LogType Type { get; private set; }
 		public Signal sig { get; private set; }
@@ -34,7 +34,7 @@ namespace Net.Astropenguin.Logging
 			get
 			{
 				string d = string.Format( "{0:MM-dd-yyyy HH:mm:ss}", timestamp );
-                if ( id != null )
+				if ( id != null )
 				return String.Format( "[{0}][{1}][{2}] {3}", d, Type, id, Message );
 
 				return String.Format( "[{0}][{1}] {2}", d, Type, Message );
@@ -50,9 +50,9 @@ namespace Net.Astropenguin.Logging
 		}
 
 		public LogArgs( string id, string str, LogType p, Signal s )
-            :this( str, p, s )
+			:this( str, p, s )
 		{
-            this.id = id;
+			this.id = id;
 		}
 
 		public LogArgs( string str, LogType p, Signal s )

@@ -94,17 +94,17 @@ namespace Net.Astropenguin.Loaders
 			RBytes = RawBytes;
 			ResponseHeaders = Resp.Headers;
 
-            this.Cookies = Cookies;
+			this.Cookies = Cookies;
 		}
 
 		public DRequestCompletedEventArgs( string Url, Exception ex )
 		{
-            // Failed Exception will thrown in Getting ResponseString or ResponseBytes Method
-            Logger.Log(
-                ID
-                , "A WebException occured at " + Url + ": " + ex.Message
-                    + ( ex.InnerException == null ? "" : ", " + ex.InnerException.Message )
-                , LogType.DEBUG );
+			// Failed Exception will thrown in Getting ResponseString or ResponseBytes Method
+			Logger.Log(
+				ID
+				, "A WebException occured at " + Url + ": " + ex.Message
+					+ ( ex.InnerException == null ? "" : ", " + ex.InnerException.Message )
+				, LogType.DEBUG );
 
 			RequestUrl = Url;
 			RequestException = ex;

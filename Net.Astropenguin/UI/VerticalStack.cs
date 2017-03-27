@@ -12,318 +12,318 @@ using Net.Astropenguin.Logging;
 
 namespace Net.Astropenguin.UI
 {
-    [TemplatePart( Name = StageName, Type = typeof( StackPanel ) )]
-    public class VerticalStack : Control
-    {
-        public static readonly string ID = typeof( VerticalStack ).Name;
-        private static readonly Size SIZE_NULL = new Size( 0, 0 );
-        private const int LOGA_BECAME_CERTAIN = 10;
+	[TemplatePart( Name = StageName, Type = typeof( StackPanel ) )]
+	public class VerticalStack : Control
+	{
+		public static readonly string ID = typeof( VerticalStack ).Name;
+		private static readonly Size SIZE_NULL = new Size( 0, 0 );
+		private const int LOGA_BECAME_CERTAIN = 10;
 
-        public const string StageName = "Stage";
+		public const string StageName = "Stage";
 
-        internal static bool LOCKED = true;
+		internal static bool LOCKED = true;
 
-        public static readonly DependencyProperty TextProperty = DependencyProperty.Register( "Text", typeof( string ), typeof( VerticalStack ), new PropertyMetadata( "", VisualPropertyChanged ) );
-        public string Text
-        {
-            get { return GetValue( TextProperty ) as string; }
-            set { SetValue( TextProperty, value ); }
-        }
+		public static readonly DependencyProperty TextProperty = DependencyProperty.Register( "Text", typeof( string ), typeof( VerticalStack ), new PropertyMetadata( "", VisualPropertyChanged ) );
+		public string Text
+		{
+			get { return GetValue( TextProperty ) as string; }
+			set { SetValue( TextProperty, value ); }
+		}
 
-        new public static readonly DependencyProperty FontSizeProperty = DependencyProperty.Register( "FontSize", typeof( double ), typeof( VerticalStack ), new PropertyMetadata( 0.0, VisualPropertyChanged ) );
-        new public double FontSize
-        {
-            get { return ( double ) GetValue( FontSizeProperty ); }
-            set { SetValue( FontSizeProperty, value ); }
-        }
+		new public static readonly DependencyProperty FontSizeProperty = DependencyProperty.Register( "FontSize", typeof( double ), typeof( VerticalStack ), new PropertyMetadata( 0.0, VisualPropertyChanged ) );
+		new public double FontSize
+		{
+			get { return ( double ) GetValue( FontSizeProperty ); }
+			set { SetValue( FontSizeProperty, value ); }
+		}
 
-        public static readonly DependencyProperty TrimProperty = DependencyProperty.Register( "Trim", typeof( bool ), typeof( VerticalStack ), new PropertyMetadata( false, VisualPropertyChanged ) );
-        public bool Trim
-        {
-            get { return ( bool ) GetValue( TrimProperty ); }
-            set { SetValue( TrimProperty, value ); }
-        }
+		public static readonly DependencyProperty TrimProperty = DependencyProperty.Register( "Trim", typeof( bool ), typeof( VerticalStack ), new PropertyMetadata( false, VisualPropertyChanged ) );
+		public bool Trim
+		{
+			get { return ( bool ) GetValue( TrimProperty ); }
+			set { SetValue( TrimProperty, value ); }
+		}
 
-        public static readonly DependencyProperty MaxLinesProperty = DependencyProperty.Register( "MaxLines", typeof( int ), typeof( VerticalStack ), new PropertyMetadata( 0, VisualPropertyChanged ) );
-        public int MaxLines
-        {
-            get { return ( int ) GetValue( MaxLinesProperty ); }
-            set { SetValue( MaxLinesProperty, value ); }
-        }
+		public static readonly DependencyProperty MaxLinesProperty = DependencyProperty.Register( "MaxLines", typeof( int ), typeof( VerticalStack ), new PropertyMetadata( 0, VisualPropertyChanged ) );
+		public int MaxLines
+		{
+			get { return ( int ) GetValue( MaxLinesProperty ); }
+			set { SetValue( MaxLinesProperty, value ); }
+		}
 
-        public static readonly DependencyProperty LineHeightProperty = DependencyProperty.Register( "LineHeight", typeof( double ), typeof( VerticalStack ), new PropertyMetadata( -1.0, LineHeightChanged ) );
-        public double LineHeight
-        {
-            get { return ( double ) GetValue( LineHeightProperty ); }
-            set { SetValue( LineHeightProperty, value ); }
-        }
+		public static readonly DependencyProperty LineHeightProperty = DependencyProperty.Register( "LineHeight", typeof( double ), typeof( VerticalStack ), new PropertyMetadata( -1.0, LineHeightChanged ) );
+		public double LineHeight
+		{
+			get { return ( double ) GetValue( LineHeightProperty ); }
+			set { SetValue( LineHeightProperty, value ); }
+		}
 
-        protected Size GivenSizeAvailable { get; private set; }
+		protected Size GivenSizeAvailable { get; private set; }
 
-        private static void VisualPropertyChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
-        {
-            ( d as VerticalStack ).UpdateDisplay();
-        }
+		private static void VisualPropertyChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
+		{
+			( d as VerticalStack ).UpdateDisplay();
+		}
 
-        private static void LineHeightChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
-        {
-            ( d as VerticalStack ).RedrawLineHeight();
-        }
+		private static void LineHeightChanged( DependencyObject d, DependencyPropertyChangedEventArgs e )
+		{
+			( d as VerticalStack ).RedrawLineHeight();
+		}
 
-        private StackPanel Stage;
+		private StackPanel Stage;
 
-        public VerticalStack()
-            : base()
-        {
-            DefaultStyleKey = typeof( VerticalStack );
+		public VerticalStack()
+			: base()
+		{
+			DefaultStyleKey = typeof( VerticalStack );
 
-            if ( LOCKED ) throw new Exception( "UnAuthorized Access" );
-            // Perhaps a bad idea for cached pages?
-            // Unloaded += DisposeStage;
-        }
+			if ( LOCKED ) throw new Exception( "UnAuthorized Access" );
+			// Perhaps a bad idea for cached pages?
+			// Unloaded += DisposeStage;
+		}
 
-        private void DisposeStage( object sender, RoutedEventArgs e )
-        {
-            // ClearStage();
-        }
+		private void DisposeStage( object sender, RoutedEventArgs e )
+		{
+			// ClearStage();
+		}
 
-        protected override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
+		protected override void OnApplyTemplate()
+		{
+			base.OnApplyTemplate();
 
-            Stage = GetTemplateChild( StageName ) as StackPanel;
-            UpdateDisplay();
-        }
+			Stage = GetTemplateChild( StageName ) as StackPanel;
+			UpdateDisplay();
+		}
 
-        protected override Size MeasureOverride( Size availableSize )
-        {
-            /* INTENSIVE_LOG
-            Logger.Log(
-                ID
-                , string.Format( "MeasureOverride {{ W: {0}, H: {1} }}", availableSize.Width, availableSize.Height )
-                , LogType.DEBUG
-            );
-            //*/
-            // If the Size Changes, we need to update the text
-            // TODO: Use a more efficient approach
-            if ( GivenSizeAvailable.Equals( SIZE_NULL ) && !GivenSizeAvailable.Equals( availableSize ) )
-            {
-                UpdateDisplay( availableSize );
-            }
+		protected override Size MeasureOverride( Size availableSize )
+		{
+			/* INTENSIVE_LOG
+			Logger.Log(
+				ID
+				, string.Format( "MeasureOverride {{ W: {0}, H: {1} }}", availableSize.Width, availableSize.Height )
+				, LogType.DEBUG
+			);
+			//*/
+			// If the Size Changes, we need to update the text
+			// TODO: Use a more efficient approach
+			if ( GivenSizeAvailable.Equals( SIZE_NULL ) && !GivenSizeAvailable.Equals( availableSize ) )
+			{
+				UpdateDisplay( availableSize );
+			}
 
-            // Get the available size from parent
-            GivenSizeAvailable = new Size( availableSize.Width, availableSize.Height );
+			// Get the available size from parent
+			GivenSizeAvailable = new Size( availableSize.Width, availableSize.Height );
 
-            return base.MeasureOverride( availableSize );
-        }
+			return base.MeasureOverride( availableSize );
+		}
 
-        private void UpdateDisplay()
-        {
-            /* INTENSIVE_LOG
-            Logger.Log( ID, "UpdateDisplay", LogType.DEBUG );
-            //*/
+		private void UpdateDisplay()
+		{
+			/* INTENSIVE_LOG
+			Logger.Log( ID, "UpdateDisplay", LogType.DEBUG );
+			//*/
 
-            ClearStage();
-            // I can't draw nothing, so... remove everything?
-            if ( GivenSizeAvailable.Height == 0
-                || string.IsNullOrEmpty( Text ) || FontSize == 0 || LineHeight < 0 ) return;
+			ClearStage();
+			// I can't draw nothing, so... remove everything?
+			if ( GivenSizeAvailable.Height == 0
+				|| string.IsNullOrEmpty( Text ) || FontSize == 0 || LineHeight < 0 ) return;
 
-            DrawTextBlocks( Text );
-        }
+			DrawTextBlocks( Text );
+		}
 
-        private void UpdateDisplay( Size availableSize )
-        {
-            if ( availableSize.Height == GivenSizeAvailable.Height )
-            {
-                // If height is equal, that means the width is changed
-                // So we either need to do nothing, or remove children from Stage
-                // if ( Width < FontSize ) ClearStage();
-            }
-            // If the height is changed, we need to redo the drawings
-            else
-            {
-                GivenSizeAvailable = availableSize;
-                UpdateDisplay();
-            }
-        }
+		private void UpdateDisplay( Size availableSize )
+		{
+			if ( availableSize.Height == GivenSizeAvailable.Height )
+			{
+				// If height is equal, that means the width is changed
+				// So we either need to do nothing, or remove children from Stage
+				// if ( Width < FontSize ) ClearStage();
+			}
+			// If the height is changed, we need to redo the drawings
+			else
+			{
+				GivenSizeAvailable = availableSize;
+				UpdateDisplay();
+			}
+		}
 
-        private void ClearStage()
-        {
-            if ( Stage == null ) return;
-            Stage.Children.Clear();
+		private void ClearStage()
+		{
+			if ( Stage == null ) return;
+			Stage.Children.Clear();
 
-            /* INTENSIVE_LOG
-            Logger.Log( ID, "Stage Cleared " + Stage.Children.Count, LogType.DEBUG );
-            //*/
-        }
+			/* INTENSIVE_LOG
+			Logger.Log( ID, "Stage Cleared " + Stage.Children.Count, LogType.DEBUG );
+			//*/
+		}
 
-        private void RedrawLineHeight()
-        {
-            if ( Stage == null ) return;
+		private void RedrawLineHeight()
+		{
+			if ( Stage == null ) return;
 
-            if ( Stage.Children.Count == 0 && !string.IsNullOrEmpty( Text ) )
-            {
-                UpdateDisplay();
-                return;
-            }
+			if ( Stage.Children.Count == 0 && !string.IsNullOrEmpty( Text ) )
+			{
+				UpdateDisplay();
+				return;
+			}
 
-            foreach ( TextBlock Tx in Stage.Children )
-            {
-                double lh = -.5 * FontSize + LineHeight;
-                Tx.Margin = new Thickness( lh, 0, lh, 0 );
-            }
-        }
+			foreach ( TextBlock Tx in Stage.Children )
+			{
+				double lh = -.5 * FontSize + LineHeight;
+				Tx.Margin = new Thickness( lh, 0, lh, 0 );
+			}
+		}
 
-        private void DrawTextBlocks( string Text )
-        {
-            TextBlock t = NewTextBlock( Text );
+		private void DrawTextBlocks( string Text )
+		{
+			TextBlock t = NewTextBlock( Text );
 
-            TextBlock Tx;
+			TextBlock Tx;
 
-            if ( Trim && MaxLines != 0 )
-            {
-                int i = 0; int l = MaxLines;
-                TextBlock Last = null;
-                while ( ( Tx = TrimText( t ) ) != null && i < l )
-                {
-                    // Two special char to ensure the center alignment
-                    Tx.Text += "\u3000\u2007";
-                    Stage.Children.Add( Tx );
+			if ( Trim && MaxLines != 0 )
+			{
+				int i = 0; int l = MaxLines;
+				TextBlock Last = null;
+				while ( ( Tx = TrimText( t ) ) != null && i < l )
+				{
+					// Two special char to ensure the center alignment
+					Tx.Text += "\u3000\u2007";
+					Stage.Children.Add( Tx );
 
-                    Last = Tx;
-                    i++;
-                }
+					Last = Tx;
+					i++;
+				}
 
-                if( 0 < t.Text.Length && Last != null )
-                {
-                    Last.Text = Last.Text.Substring( 0, Last.Text.Length - 3 ) + "\u22EE\u3000\u2007";
-                    t.Text = "";
-                }
-            }
-            else
-            {
-                while ( ( Tx = TrimText( t ) ) != null )
-                {
-                    // Two special char to ensure the center alignment
-                    Tx.Text += "\u3000\u2007";
-                    Stage.Children.Add( Tx );
-                }
-            }
+				if( 0 < t.Text.Length && Last != null )
+				{
+					Last.Text = Last.Text.Substring( 0, Last.Text.Length - 3 ) + "\u22EE\u3000\u2007";
+					t.Text = "";
+				}
+			}
+			else
+			{
+				while ( ( Tx = TrimText( t ) ) != null )
+				{
+					// Two special char to ensure the center alignment
+					Tx.Text += "\u3000\u2007";
+					Stage.Children.Add( Tx );
+				}
+			}
 
-            /* INTENSIVE_LOG
-            if( Tx != null )
-            {
-                Logger.Log(
-                    ID
-                    , string.Format( "LastText is: {0}", Tx.Text )
-                    , LogType.DEBUG
-                );
-            }
-            //*/
+			/* INTENSIVE_LOG
+			if( Tx != null )
+			{
+				Logger.Log(
+					ID
+					, string.Format( "LastText is: {0}", Tx.Text )
+					, LogType.DEBUG
+				);
+			}
+			//*/
 
-            // Does the MasterTextBlock still have some text?
-            if ( 0 < t.Text.Length )
-            {
-                /* INTENSIVE_LOG
-                Logger.Log(
-                    ID
-                    , string.Format( "TextBlock still have texts: {0}", t.Text )
-                    , LogType.DEBUG
-                );
-                //*/
-                t.Text += "\u3000\u2007";
-                Stage.Children.Add( t );
-            }
-        }
+			// Does the MasterTextBlock still have some text?
+			if ( 0 < t.Text.Length )
+			{
+				/* INTENSIVE_LOG
+				Logger.Log(
+					ID
+					, string.Format( "TextBlock still have texts: {0}", t.Text )
+					, LogType.DEBUG
+				);
+				//*/
+				t.Text += "\u3000\u2007";
+				Stage.Children.Add( t );
+			}
+		}
 
-        private TextBlock TrimText( TextBlock t )
-        {
-            if ( double.IsInfinity( GivenSizeAvailable.Height ) )
-            {
-                return null;
-            }
+		private TextBlock TrimText( TextBlock t )
+		{
+			if ( double.IsInfinity( GivenSizeAvailable.Height ) )
+			{
+				return null;
+			}
 
-            TextBlock TrimmedText = null;
+			TextBlock TrimmedText = null;
 
-            int EstTrimmingLength = 0;
+			int EstTrimmingLength = 0;
 
-            VerticalLogaTable Table = VerticalLogaManager.GetLoga( FontSize );
-            if ( LOGA_BECAME_CERTAIN < Table.CertaintyLevel )
-            {
-                EstTrimmingLength = Table.GetTrimLenForHeight( GivenSizeAvailable.Height );
+			VerticalLogaTable Table = VerticalLogaManager.GetLoga( FontSize );
+			if ( LOGA_BECAME_CERTAIN < Table.CertaintyLevel )
+			{
+				EstTrimmingLength = Table.GetTrimLenForHeight( GivenSizeAvailable.Height );
 
-                if ( EstTrimmingLength == 0 || t.Text.Length < EstTrimmingLength || t.Text == "" ) return null;
+				if ( EstTrimmingLength == 0 || t.Text.Length < EstTrimmingLength || t.Text == "" ) return null;
 
-                TrimmedText = NewTextBlock(
-                    t.Text.Substring( 0, EstTrimmingLength )
-                );
-            }
-            else
-            {
-                BlockHeightOf( t );
-                EstTrimmingLength = ( int ) Math.Floor( t.Text.Length * GivenSizeAvailable.Height / t.ActualHeight );
+				TrimmedText = NewTextBlock(
+					t.Text.Substring( 0, EstTrimmingLength )
+				);
+			}
+			else
+			{
+				BlockHeightOf( t );
+				EstTrimmingLength = ( int ) Math.Floor( t.Text.Length * GivenSizeAvailable.Height / t.ActualHeight );
 
-                if ( EstTrimmingLength == 0 || t.Text.Length < EstTrimmingLength || t.Text == "" ) return null;
+				if ( EstTrimmingLength == 0 || t.Text.Length < EstTrimmingLength || t.Text == "" ) return null;
 
-                TrimmedText = NewTextBlock(
-                    t.Text.Substring( 0, EstTrimmingLength )
-                );
+				TrimmedText = NewTextBlock(
+					t.Text.Substring( 0, EstTrimmingLength )
+				);
 
-                // Add text one by one
-                int i = 0;
-                while ( BlockHeightOf( TrimmedText ) < GivenSizeAvailable.Height
-                    && ( EstTrimmingLength + i ) < t.Text.Length
-                )
-                {
-                    TrimmedText.Text += t.Text[ EstTrimmingLength + ( i++ ) ];
-                }
+				// Add text one by one
+				int i = 0;
+				while ( BlockHeightOf( TrimmedText ) < GivenSizeAvailable.Height
+					&& ( EstTrimmingLength + i ) < t.Text.Length
+				)
+				{
+					TrimmedText.Text += t.Text[ EstTrimmingLength + ( i++ ) ];
+				}
 
-                // Then remove them one by one to get the best estimation
-                while ( GivenSizeAvailable.Height < BlockHeightOf( TrimmedText ) )
-                {
-                    TrimmedText.Text = TrimmedText.Text.Substring( 0, EstTrimmingLength + ( --i ) );
-                }
+				// Then remove them one by one to get the best estimation
+				while ( GivenSizeAvailable.Height < BlockHeightOf( TrimmedText ) )
+				{
+					TrimmedText.Text = TrimmedText.Text.Substring( 0, EstTrimmingLength + ( --i ) );
+				}
 
-                EstTrimmingLength += i;
+				EstTrimmingLength += i;
 
-                Table.PushTrimSample( EstTrimmingLength, GivenSizeAvailable.Height );
-            }
+				Table.PushTrimSample( EstTrimmingLength, GivenSizeAvailable.Height );
+			}
 
-            t.Text = t.Text.Substring( EstTrimmingLength );
+			t.Text = t.Text.Substring( EstTrimmingLength );
 
-            return TrimmedText;
-        }
+			return TrimmedText;
+		}
 
-        private TextBlock NewTextBlock( string Text )
-        {
-            TextBlock t = new TextBlock()
-            {
-                TextAlignment = TextAlignment.Center,
-                TextWrapping = TextWrapping.Wrap,
-                TextLineBounds = TextLineBounds.TrimToBaseline
-            };
+		private TextBlock NewTextBlock( string Text )
+		{
+			TextBlock t = new TextBlock()
+			{
+				TextAlignment = TextAlignment.Center,
+				TextWrapping = TextWrapping.Wrap,
+				TextLineBounds = TextLineBounds.TrimToBaseline
+			};
 
-            double lh = -.5 * FontSize + LineHeight;
+			double lh = -.5 * FontSize + LineHeight;
 
-            t.FontSize = FontSize;
+			t.FontSize = FontSize;
 
-            // Squeeze all half-width character to second row
-            t.CharacterSpacing = 1000;
-            t.Width = 2 * FontSize;
+			// Squeeze all half-width character to second row
+			t.CharacterSpacing = 1000;
+			t.Width = 2 * FontSize;
 
-            // Restore the original width using minus fontsize prop
-            t.Margin = new Thickness( lh, 0, lh, 0 );
+			// Restore the original width using minus fontsize prop
+			t.Margin = new Thickness( lh, 0, lh, 0 );
 
-            t.Text = Text;
-            return t;
-        }
+			t.Text = Text;
+			return t;
+		}
 
-        private double BlockHeightOf( TextBlock t )
-        {
-            t.Measure( new Size( double.PositiveInfinity, double.PositiveInfinity ) );
-            t.Arrange( new Rect( new Point(), t.DesiredSize ) );
+		private double BlockHeightOf( TextBlock t )
+		{
+			t.Measure( new Size( double.PositiveInfinity, double.PositiveInfinity ) );
+			t.Arrange( new Rect( new Point(), t.DesiredSize ) );
 
-            return t.ActualHeight;
-        }
-    }
+			return t.ActualHeight;
+		}
+	}
 }

@@ -8,55 +8,55 @@ namespace Net.Astropenguin.Loaders
 	{
 		protected Dictionary<string,ResourceLoader> ResCont;
 
-        public string Language { get; internal set; }
-        public CultureInfo Culture = CultureInfo.CurrentUICulture;
+		public string Language { get; internal set; }
+		public CultureInfo Culture = CultureInfo.CurrentUICulture;
 
-        protected ResourceLoader DefaultRes;
+		protected ResourceLoader DefaultRes;
 
-        protected StringResources() { }
+		protected StringResources() { }
 
-        public StringResources( params string[] Views )
-        {
-            if ( Views.Length == 0 )
-            {
-                DefaultRes = ResourceLoader.GetForCurrentView( "AppResources" );
-                return;
-            }
+		public StringResources( params string[] Views )
+		{
+			if ( Views.Length == 0 )
+			{
+				DefaultRes = ResourceLoader.GetForCurrentView( "AppResources" );
+				return;
+			}
 
-            ResCont = new Dictionary<string, ResourceLoader>();
-            foreach ( string View in Views )
-                ResCont.Add( View, ResourceLoader.GetForCurrentView( View ) );
+			ResCont = new Dictionary<string, ResourceLoader>();
+			foreach ( string View in Views )
+				ResCont.Add( View, ResourceLoader.GetForCurrentView( View ) );
 
-            DefaultRes = ResCont[ Views[ 0 ] ];
-        }
+			DefaultRes = ResCont[ Views[ 0 ] ];
+		}
 
-        public string Text( string Key ) { return DefaultRes.GetString( Key + "/Text" ); }
-        public string Text( string Key, string View ) { return ResCont[ View ].GetString( Key + "/Text" ); }
+		public string Text( string Key ) { return DefaultRes.GetString( Key + "/Text" ); }
+		public string Text( string Key, string View ) { return ResCont[ View ].GetString( Key + "/Text" ); }
 
-        public string Header( string Key ) { return DefaultRes.GetString( Key + "/Header" ); }
-        public string Header( string Key, string View ) { return ResCont[ View ].GetString( Key + "/Header" ); }
+		public string Header( string Key ) { return DefaultRes.GetString( Key + "/Header" ); }
+		public string Header( string Key, string View ) { return ResCont[ View ].GetString( Key + "/Header" ); }
 
-        public string Str( string Key ) { return DefaultRes.GetString( Key ); }
-        public string Str( string Key, string View ) { return ResCont[ View ].GetString( Key ); }
+		public string Str( string Key ) { return DefaultRes.GetString( Key ); }
+		public string Str( string Key, string View ) { return ResCont[ View ].GetString( Key ); }
 	}
 
-    public class StringResBg : StringResources
-    {
-        public StringResBg( params string[] Views )
-            :base()
-        {
-            if ( Views.Length == 0 )
-            {
-                DefaultRes = ResourceLoader.GetForViewIndependentUse( "AppResources" );
-                return;
-            }
+	public class StringResBg : StringResources
+	{
+		public StringResBg( params string[] Views )
+			:base()
+		{
+			if ( Views.Length == 0 )
+			{
+				DefaultRes = ResourceLoader.GetForViewIndependentUse( "AppResources" );
+				return;
+			}
 
-            ResCont = new Dictionary<string, ResourceLoader>();
-            foreach ( string View in Views )
-                ResCont.Add( View, ResourceLoader.GetForViewIndependentUse( View ) );
+			ResCont = new Dictionary<string, ResourceLoader>();
+			foreach ( string View in Views )
+				ResCont.Add( View, ResourceLoader.GetForViewIndependentUse( View ) );
 
-            DefaultRes = ResCont[ Views[ 0 ] ];
-        }
-    }
+			DefaultRes = ResCont[ Views[ 0 ] ];
+		}
+	}
 
 }
