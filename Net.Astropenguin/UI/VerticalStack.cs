@@ -21,7 +21,8 @@ namespace Net.Astropenguin.UI
 
 		public const string StageName = "Stage";
 
-		internal static bool LOCKED = true;
+		internal static int UpdateDelay = 500;
+		private volatile bool DLock = false;
 
 		public static readonly DependencyProperty TextProperty = DependencyProperty.Register( "Text", typeof( string ), typeof( VerticalStack ), new PropertyMetadata( "", VisualPropertyChanged ) );
 		public string Text
@@ -77,7 +78,6 @@ namespace Net.Astropenguin.UI
 		{
 			DefaultStyleKey = typeof( VerticalStack );
 
-			if ( LOCKED ) throw new Exception( "UnAuthorized Access" );
 			// Perhaps a bad idea for cached pages?
 			// Unloaded += DisposeStage;
 		}
@@ -106,15 +106,23 @@ namespace Net.Astropenguin.UI
 			//*/
 			// If the Size Changes, we need to update the text
 			// TODO: Use a more efficient approach
-			if ( GivenSizeAvailable.Equals( SIZE_NULL ) && !GivenSizeAvailable.Equals( availableSize ) )
+			if ( !GivenSizeAvailable.Equals( availableSize ) )
 			{
-				UpdateDisplay( availableSize );
+				// Get the available size from parent
+				GivenSizeAvailable = new Size( availableSize.Width, availableSize.Height );
+				DelaySizeUpdate();
 			}
 
-			// Get the available size from parent
-			GivenSizeAvailable = new Size( availableSize.Width, availableSize.Height );
-
 			return base.MeasureOverride( availableSize );
+		}
+
+		private async void DelaySizeUpdate()
+		{
+			if ( DLock ) return;
+			DLock = true;
+			await Task.Delay( UpdateDelay );
+			UpdateDisplay();
+			DLock = false;
 		}
 
 		private void UpdateDisplay()
@@ -129,22 +137,6 @@ namespace Net.Astropenguin.UI
 				|| string.IsNullOrEmpty( Text ) || FontSize == 0 || LineHeight < 0 ) return;
 
 			DrawTextBlocks( Text );
-		}
-
-		private void UpdateDisplay( Size availableSize )
-		{
-			if ( availableSize.Height == GivenSizeAvailable.Height )
-			{
-				// If height is equal, that means the width is changed
-				// So we either need to do nothing, or remove children from Stage
-				// if ( Width < FontSize ) ClearStage();
-			}
-			// If the height is changed, we need to redo the drawings
-			else
-			{
-				GivenSizeAvailable = availableSize;
-				UpdateDisplay();
-			}
 		}
 
 		private void ClearStage()
@@ -245,51 +237,51 @@ namespace Net.Astropenguin.UI
 
 			TextBlock TrimmedText = null;
 
-			int EstTrimmingLength = 0;
+			int EstTrimLen = 0;
 
 			VerticalLogaTable Table = VerticalLogaManager.GetLoga( FontSize );
 			if ( LOGA_BECAME_CERTAIN < Table.CertaintyLevel )
 			{
-				EstTrimmingLength = Table.GetTrimLenForHeight( GivenSizeAvailable.Height );
+				EstTrimLen = Table.GetTrimLenForHeight( GivenSizeAvailable.Height );
 
-				if ( EstTrimmingLength == 0 || t.Text.Length < EstTrimmingLength || t.Text == "" ) return null;
+				if ( EstTrimLen == 0 || t.Text.Length < EstTrimLen || t.Text == "" ) return null;
 
 				TrimmedText = NewTextBlock(
-					t.Text.Substring( 0, EstTrimmingLength )
+					t.Text.Substring( 0, EstTrimLen )
 				);
 			}
 			else
 			{
 				BlockHeightOf( t );
-				EstTrimmingLength = ( int ) Math.Floor( t.Text.Length * GivenSizeAvailable.Height / t.ActualHeight );
+				EstTrimLen = ( int ) Math.Floor( t.Text.Length * GivenSizeAvailable.Height / t.ActualHeight );
 
-				if ( EstTrimmingLength == 0 || t.Text.Length < EstTrimmingLength || t.Text == "" ) return null;
+				if ( EstTrimLen == 0 || t.Text.Length < EstTrimLen || t.Text == "" ) return null;
 
 				TrimmedText = NewTextBlock(
-					t.Text.Substring( 0, EstTrimmingLength )
+					t.Text.Substring( 0, EstTrimLen )
 				);
 
 				// Add text one by one
 				int i = 0;
 				while ( BlockHeightOf( TrimmedText ) < GivenSizeAvailable.Height
-					&& ( EstTrimmingLength + i ) < t.Text.Length
+					&& ( EstTrimLen + i ) < t.Text.Length
 				)
 				{
-					TrimmedText.Text += t.Text[ EstTrimmingLength + ( i++ ) ];
+					TrimmedText.Text += t.Text[ EstTrimLen + ( i++ ) ];
 				}
 
 				// Then remove them one by one to get the best estimation
 				while ( GivenSizeAvailable.Height < BlockHeightOf( TrimmedText ) )
 				{
-					TrimmedText.Text = TrimmedText.Text.Substring( 0, EstTrimmingLength + ( --i ) );
+					TrimmedText.Text = TrimmedText.Text.Substring( 0, EstTrimLen + ( --i ) );
 				}
 
-				EstTrimmingLength += i;
+				EstTrimLen += i;
 
-				Table.PushTrimSample( EstTrimmingLength, GivenSizeAvailable.Height );
+				Table.PushTrimSample( EstTrimLen, GivenSizeAvailable.Height );
 			}
 
-			t.Text = t.Text.Substring( EstTrimmingLength );
+			t.Text = t.Text.Substring( EstTrimLen );
 
 			return TrimmedText;
 		}
