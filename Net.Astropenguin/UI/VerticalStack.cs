@@ -118,6 +118,12 @@ namespace Net.Astropenguin.UI
 
 		private async void DelaySizeUpdate()
 		{
+			if ( UpdateDelay == 0 )
+			{
+				UpdateDisplay();
+				return;
+			}
+
 			if ( DLock ) return;
 			DLock = true;
 			await Task.Delay( UpdateDelay );
