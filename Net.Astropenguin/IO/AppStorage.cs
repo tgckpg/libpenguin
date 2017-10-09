@@ -21,6 +21,8 @@ namespace Net.Astropenguin.IO
 	{
 		public static readonly string ID = typeof( AppStorage ).Name;
 
+		private static Dictionary<int, IStorageFile> StaticCaches = new Dictionary<int, IStorageFile>();
+
 		public static StorageItemAccessList FutureAccessList
 		{
 			get { return StorageApplicationPermissions.FutureAccessList; }
@@ -29,6 +31,20 @@ namespace Net.Astropenguin.IO
 		public static async Task<StorageFile> MkTemp( string FileName = "tmp" )
 		{
 			return await ApplicationData.Current.TemporaryFolder.CreateFileAsync( FileName, CreationCollisionOption.GenerateUniqueName );
+		}
+
+		public static async Task<IStorageFile> StaticTemp( IStorageFile SrcFile )
+		{
+			int FileHash = SrcFile.Path.GetHashCode();
+			if ( StaticCaches.ContainsKey( FileHash ) )
+			{
+				return StaticCaches[ FileHash ];
+			}
+
+			IStorageFile SF = await SrcFile.CopyAsync( ApplicationData.Current.TemporaryFolder, "static", NameCollisionOption.GenerateUniqueName );
+			StaticCaches[ FileHash ] = SF;
+
+			return SF;
 		}
 
 		public static async Task<byte[]> AppXGetBytes( string path )
