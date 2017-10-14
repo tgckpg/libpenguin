@@ -22,6 +22,11 @@ namespace Net.Astropenguin.Linq
 			return Translated;
 		}
 
+		public static void ExecEach<T>( this IEnumerable<T> Items, Action<T> A )
+		{
+			foreach ( T Item in Items ) A( Item );
+		}
+
 		public static void Filter<TSource>( this IList<TSource> source, Func<TSource, bool> keySelector )
 		{
 			TSource[] FilteredList = source.Where( keySelector ).ToArray();
