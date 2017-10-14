@@ -9,7 +9,7 @@ namespace Net.Astropenguin.Linq
 {
 	public static class LinqExtensions
 	{
-		public static IEnumerable<TTarget> Remap<TSource, TTarget>( this IEnumerable<TSource> Source, Func<TSource, TTarget> Translator )
+		public static TTarget[] Remap<TSource, TTarget>( this IEnumerable<TSource> Source, Func<TSource, TTarget> Translator )
 		{
 			int i = 0; int l = Source.Count();
 
@@ -20,6 +20,11 @@ namespace Net.Astropenguin.Linq
 			}
 
 			return Translated;
+		}
+
+		public static void ExecEach<T>( this IEnumerable<T> Items, Action<T> A )
+		{
+			foreach ( T Item in Items ) A( Item );
 		}
 
 		public static void Filter<TSource>( this IList<TSource> source, Func<TSource, bool> keySelector )

@@ -97,13 +97,6 @@ namespace Net.Astropenguin.UI
 
 		protected override Size MeasureOverride( Size availableSize )
 		{
-			/* INTENSIVE_LOG
-			Logger.Log(
-				ID
-				, string.Format( "MeasureOverride {{ W: {0}, H: {1} }}", availableSize.Width, availableSize.Height )
-				, LogType.DEBUG
-			);
-			//*/
 			// If the Size Changes, we need to update the text
 			// TODO: Use a more efficient approach
 			if ( !GivenSizeAvailable.Equals( availableSize ) )
@@ -118,6 +111,12 @@ namespace Net.Astropenguin.UI
 
 		private async void DelaySizeUpdate()
 		{
+			if ( UpdateDelay == 0 )
+			{
+				UpdateDisplay();
+				return;
+			}
+
 			if ( DLock ) return;
 			DLock = true;
 			await Task.Delay( UpdateDelay );
@@ -127,10 +126,6 @@ namespace Net.Astropenguin.UI
 
 		private void UpdateDisplay()
 		{
-			/* INTENSIVE_LOG
-			Logger.Log( ID, "UpdateDisplay", LogType.DEBUG );
-			//*/
-
 			ClearStage();
 			// I can't draw nothing, so... remove everything?
 			if ( GivenSizeAvailable.Height == 0
@@ -143,10 +138,6 @@ namespace Net.Astropenguin.UI
 		{
 			if ( Stage == null ) return;
 			Stage.Children.Clear();
-
-			/* INTENSIVE_LOG
-			Logger.Log( ID, "Stage Cleared " + Stage.Children.Count, LogType.DEBUG );
-			//*/
 		}
 
 		private void RedrawLineHeight()
@@ -202,27 +193,9 @@ namespace Net.Astropenguin.UI
 				}
 			}
 
-			/* INTENSIVE_LOG
-			if( Tx != null )
-			{
-				Logger.Log(
-					ID
-					, string.Format( "LastText is: {0}", Tx.Text )
-					, LogType.DEBUG
-				);
-			}
-			//*/
-
 			// Does the MasterTextBlock still have some text?
 			if ( 0 < t.Text.Length )
 			{
-				/* INTENSIVE_LOG
-				Logger.Log(
-					ID
-					, string.Format( "TextBlock still have texts: {0}", t.Text )
-					, LogType.DEBUG
-				);
-				//*/
 				t.Text += "\u3000\u2007";
 				Stage.Children.Add( t );
 			}
