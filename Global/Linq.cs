@@ -27,6 +27,12 @@ namespace Net.Astropenguin.Linq
 			foreach ( T Item in Items ) A( Item );
 		}
 
+		public static void ExecEach<T>( this IEnumerable<T> Items, Action<T, int> A )
+		{
+			int i = 0;
+			foreach ( T Item in Items ) A( Item, i++ );
+		}
+
 		public static void Filter<TSource>( this IList<TSource> source, Func<TSource, bool> keySelector )
 		{
 			TSource[] FilteredList = source.Where( keySelector ).ToArray();
