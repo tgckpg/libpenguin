@@ -4,9 +4,7 @@ namespace Net.Astropenguin.DataModel
 {
 	using Helpers;
 
-	public interface IActiveData : INotifyPropertyChanged { }
-
-	public class ActiveData : IActiveData
+	public class ActiveData : INotifyPropertyChanged
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
 
