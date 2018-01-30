@@ -29,7 +29,8 @@ namespace Net.Astropenguin.Linq
 			TTarget[] Translated = new TTarget[ l ];
 			foreach ( TSource Item in Source )
 			{
-				Translated[ i++ ] = Translator( Item, i );
+				Translated[ i ] = Translator( Item, i );
+				i++;
 			}
 
 			return Translated;
