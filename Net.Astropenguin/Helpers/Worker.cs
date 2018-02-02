@@ -33,28 +33,21 @@ namespace Net.Astropenguin.Helpers
 
 		private static void Bw_DoWork( object sender, DoWorkEventArgs e )
 		{
-			Logger.Log( ID, "Work Cycle Started", LogType.INFO );
-
 			while ( ActionQueue.TryDequeue( out Action Work ) )
-			{
 				Work();
-			}
-
-			Logger.Log( ID, "Work Cycle Complete", LogType.INFO );
 		}
 
 		private static void Bw_RunWorkerCompleted( object sender, RunWorkerCompletedEventArgs e )
 		{
-			Logger.Log( ID, string.Format( "Completed ({0}): {1}, {2}", e.Cancelled ? "Canceled" : "Done", e.Error, e.Result ), LogType.DEBUG );
+			Logger.Log( ID, string.Format( "Worker Completed ({0}): {1}, {2}", e.Cancelled ? "Canceled" : "Done", e.Error, e.Result ), LogType.DEBUG );
 		}
 
 		public static void ReisterBackgroundWork( Action Work )
 		{
-			Logger.Log( ID, "Registering Work: " + Work.GetHashCode(), LogType.INFO );
 			ActionQueue.Enqueue( Work );
 			if ( !bw.IsBusy )
 			{
-				Logger.Log( ID, "Worker idle, fire working signal.", LogType.INFO );
+				Logger.Log( ID, "Starting Worker ...", LogType.INFO );
 				bw.RunWorkerAsync();
 			}
 		}
