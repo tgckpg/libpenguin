@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 using Net.Astropenguin.Logging;
 using Windows.UI.Core;
+using System.Collections.Concurrent;
 
 namespace Net.Astropenguin.Helpers
 {
@@ -17,31 +18,29 @@ namespace Net.Astropenguin.Helpers
 		private static CoreWindow CoreUIInstance = null;
 		private static Stack<Action> SuspendedList = new Stack<Action>();
 
-		static Action[] ActionList;
-		const int l = 256;
-		static int i = 0;
+		private static ConcurrentQueue<Action> ActionQueue;
 
 		public static bool BackgroundOnly { get; internal set; }
 
 		public static void Initialize()
 		{
-			ActionList = new Action[ l ];
+			ActionQueue = new ConcurrentQueue<Action>();
 			bw = new BackgroundWorker();
 			bw.WorkerSupportsCancellation = true;
-			bw.DoWork += async ( sender, e ) =>
-			{
-				Logger.Log( ID, "Work Cycle Started", LogType.INFO );
-				// Global background working cycle
-				while ( -1 < ( i = GetNextWorkIndex() ) )
-				{
-					ActionList[ i ]();
-					ActionList[ i ] = null;
-					// Each cycle rest for 200ms
-					await Task.Delay( TimeSpan.FromMilliseconds( 200 ) );
-				}
-				Logger.Log( ID, "Work Cycle Complete", LogType.INFO );
-			};
+			bw.DoWork += Bw_DoWork;
 			bw.RunWorkerCompleted += Bw_RunWorkerCompleted;
+		}
+
+		private static void Bw_DoWork( object sender, DoWorkEventArgs e )
+		{
+			Logger.Log( ID, "Work Cycle Started", LogType.INFO );
+
+			while ( ActionQueue.TryDequeue( out Action Work ) )
+			{
+				Work();
+			}
+
+			Logger.Log( ID, "Work Cycle Complete", LogType.INFO );
 		}
 
 		private static void Bw_RunWorkerCompleted( object sender, RunWorkerCompletedEventArgs e )
@@ -49,20 +48,10 @@ namespace Net.Astropenguin.Helpers
 			Logger.Log( ID, string.Format( "Completed ({0}): {1}, {2}", e.Cancelled ? "Canceled" : "Done", e.Error, e.Result ), LogType.DEBUG );
 		}
 
-		public static int GetNextWorkIndex()
-		{
-			for ( i = 0; i < l; i++ )
-			{
-				if ( ActionList[ i ] != null )
-					return i;
-			}
-			return -1;
-		}
-
 		public static void ReisterBackgroundWork( Action Work )
 		{
-			Logger.Log( ID, "Registering Work", LogType.INFO );
-			RegisterAction( Work );
+			Logger.Log( ID, "Registering Work: " + Work.GetHashCode(), LogType.INFO );
+			ActionQueue.Enqueue( Work );
 			if ( !bw.IsBusy )
 			{
 				Logger.Log( ID, "Worker idle, fire working signal.", LogType.INFO );
@@ -70,26 +59,13 @@ namespace Net.Astropenguin.Helpers
 			}
 		}
 
-		private static bool RegisterAction( Action Work )
-		{
-			for ( int j = 0; j < l; j++ )
-			{
-				if ( ActionList[ j ] == null )
-				{
-					ActionList[ j ] = Work;
-					return true;
-				}
-			}
-			return false;
-		}
-
 		public static void TerminateBackgroundWork()
 		{
 			if ( bw.WorkerSupportsCancellation )
 			{
 				Logger.Log( ID, "Work Cycle Canceled", LogType.INFO );
-				ActionList = new Action[ l ];
 				bw.CancelAsync();
+				ActionQueue = new ConcurrentQueue<Action>();
 			}
 		}
 
