@@ -39,7 +39,14 @@ namespace Net.Astropenguin.Helpers
 
 		private static void Bw_RunWorkerCompleted( object sender, RunWorkerCompletedEventArgs e )
 		{
-			Logger.Log( ID, string.Format( "Worker Completed ({0}): {1}, {2}", e.Cancelled ? "Canceled" : "Done", e.Error, e.Result ), LogType.DEBUG );
+			if ( !bw.IsBusy && ActionQueue.Any() )
+			{
+				bw.RunWorkerAsync();
+			}
+			else
+			{
+				Logger.Log( ID, string.Format( "Worker Completed ({0}): {1}, {2}", e.Cancelled ? "Canceled" : "Done", e.Error, e.Result ), LogType.DEBUG );
+			}
 		}
 
 		public static void ReisterBackgroundWork( Action Work )
