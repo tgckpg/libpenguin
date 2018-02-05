@@ -22,6 +22,22 @@ namespace Net.Astropenguin.Linq
 			return Translated;
 		}
 
+		public static T[] Where<T>( this IEnumerable<T> Source, Func<int, T, bool> Translator )
+		{
+			int i = 0; int l = Source.Count();
+
+			List<T> Translated = new List<T>();
+			foreach ( T Item in Source )
+			{
+				if ( Translator( i++, Item ) )
+				{
+					Translated.Add( Item );
+				}
+			}
+
+			return Translated.ToArray();
+		}
+
 		public static TTarget[] Remap<TSource, TTarget>( this IEnumerable<TSource> Source, Func<TSource, int, TTarget> Translator )
 		{
 			int i = 0; int l = Source.Count();
