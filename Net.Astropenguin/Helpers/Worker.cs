@@ -15,9 +15,12 @@ namespace Net.Astropenguin.Helpers
 
 		private BackgroundWorker BgWorker;
 		private ConcurrentQueue<Action> TaskQueue;
+		private string Name;
 
-		public Worker()
+		public Worker( string Name )
 		{
+			this.Name = Name;
+
 			TaskQueue = new ConcurrentQueue<Action>();
 			BgWorker = new BackgroundWorker();
 			BgWorker.WorkerSupportsCancellation = true;
@@ -38,10 +41,11 @@ namespace Net.Astropenguin.Helpers
 
 		private void WorkCompleted( object sender, RunWorkerCompletedEventArgs e )
 		{
-			Logger.Log( ID, string.Format( "Worker Completed ({0}): {1}, {2}", e.Cancelled ? "Canceled" : "Done", e.Error, e.Result ), LogType.DEBUG );
-			if ( !BgWorker.IsBusy && TaskQueue.Any() )
+			Logger.Log( ID, string.Format( "Worker Completed ({0}): {1}, {2}. {3}", Name, e.Cancelled ? "Cancelled" : "Done", e.Result, e.Error ), LogType.DEBUG );
+			if ( TaskQueue.Any() )
 			{
-				BgWorker.RunWorkerAsync();
+				if ( !BgWorker.IsBusy )
+					BgWorker.RunWorkerAsync();
 			}
 		}
 
@@ -50,8 +54,8 @@ namespace Net.Astropenguin.Helpers
 			TaskQueue.Enqueue( Work );
 			if ( !BgWorker.IsBusy )
 			{
-				Logger.Log( ID, "Starting Worker ...", LogType.INFO );
 				BgWorker.RunWorkerAsync();
+				Logger.Log( ID, "Worker Started: " + Name, LogType.INFO );
 			}
 		}
 
@@ -69,7 +73,7 @@ namespace Net.Astropenguin.Helpers
 		{
 			if ( Instance == null )
 			{
-				Instance = new Worker();
+				Instance = new Worker( "Global" );
 			}
 
 			Instance.Queue( Work );
