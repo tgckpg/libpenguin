@@ -224,7 +224,7 @@ namespace Net.Astropenguin.Loaders
 		{
 			// Raise event in the Main UI thread
 			if ( EN_UITHREAD ) Worker.UIInvoke( () => DRequestCompleted( Args ) );
-			else Worker.ReisterBackgroundWork( () => DRequestCompleted( Args ) );
+			else Worker.Register( () => DRequestCompleted( Args ) );
 		}
 
 		private void ReadResponse( Stream s, out byte[] rBytes )

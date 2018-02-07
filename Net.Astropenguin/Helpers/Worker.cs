@@ -1,73 +1,83 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic;
+using Windows.UI.Core;
 
 using Net.Astropenguin.Logging;
-using Windows.UI.Core;
-using System.Collections.Concurrent;
 
 namespace Net.Astropenguin.Helpers
 {
 	public class Worker
 	{
 		public static readonly string ID = typeof( Worker ).Name;
-		static BackgroundWorker bw;
 
-		private static CoreWindow CoreUIInstance = null;
-		private static Stack<Action> SuspendedList = new Stack<Action>();
+		private BackgroundWorker BgWorker;
+		private ConcurrentQueue<Action> TaskQueue;
 
-		private static ConcurrentQueue<Action> ActionQueue;
-
-		public static bool BackgroundOnly { get; internal set; }
-
-		public static void Initialize()
+		public Worker()
 		{
-			ActionQueue = new ConcurrentQueue<Action>();
-			bw = new BackgroundWorker();
-			bw.WorkerSupportsCancellation = true;
-			bw.DoWork += Bw_DoWork;
-			bw.RunWorkerCompleted += Bw_RunWorkerCompleted;
+			TaskQueue = new ConcurrentQueue<Action>();
+			BgWorker = new BackgroundWorker();
+			BgWorker.WorkerSupportsCancellation = true;
+			BgWorker.DoWork += DoWork;
+			BgWorker.RunWorkerCompleted += WorkCompleted;
 		}
 
-		private static void Bw_DoWork( object sender, DoWorkEventArgs e )
+		private void DoWork( object sender, DoWorkEventArgs e )
 		{
-			while ( ActionQueue.TryDequeue( out Action Work ) )
+			int i = 0;
+			while ( TaskQueue.TryDequeue( out Action Work ) )
+			{
 				Work();
+				i++;
+			}
+			e.Result = i;
 		}
 
-		private static void Bw_RunWorkerCompleted( object sender, RunWorkerCompletedEventArgs e )
+		private void WorkCompleted( object sender, RunWorkerCompletedEventArgs e )
 		{
-			if ( !bw.IsBusy && ActionQueue.Any() )
+			Logger.Log( ID, string.Format( "Worker Completed ({0}): {1}, {2}", e.Cancelled ? "Canceled" : "Done", e.Error, e.Result ), LogType.DEBUG );
+			if ( !BgWorker.IsBusy && TaskQueue.Any() )
 			{
-				bw.RunWorkerAsync();
-			}
-			else
-			{
-				Logger.Log( ID, string.Format( "Worker Completed ({0}): {1}, {2}", e.Cancelled ? "Canceled" : "Done", e.Error, e.Result ), LogType.DEBUG );
+				BgWorker.RunWorkerAsync();
 			}
 		}
 
-		public static void ReisterBackgroundWork( Action Work )
+		public void Queue( Action Work )
 		{
-			ActionQueue.Enqueue( Work );
-			if ( !bw.IsBusy )
+			TaskQueue.Enqueue( Work );
+			if ( !BgWorker.IsBusy )
 			{
 				Logger.Log( ID, "Starting Worker ...", LogType.INFO );
-				bw.RunWorkerAsync();
+				BgWorker.RunWorkerAsync();
 			}
 		}
 
-		public static void TerminateBackgroundWork()
+		public void Cancel()
 		{
-			if ( bw.WorkerSupportsCancellation )
+			if ( BgWorker.WorkerSupportsCancellation )
 			{
-				Logger.Log( ID, "Work Cycle Canceled", LogType.INFO );
-				bw.CancelAsync();
-				ActionQueue = new ConcurrentQueue<Action>();
+				BgWorker.CancelAsync();
 			}
 		}
+
+		private static volatile Worker Instance;
+
+		public static void Register( Action Work )
+		{
+			if ( Instance == null )
+			{
+				Instance = new Worker();
+			}
+
+			Instance.Queue( Work );
+		}
+
+		private static CoreWindow CoreUIInstance = null;
+		private static ConcurrentStack<Action> SuspendedList = new ConcurrentStack<Action>();
+		public static bool BackgroundOnly { get; internal set; }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage( "Await.Warning", "CS4014:Await.Warning" )]
 		public static void UIInvoke( Action p )
@@ -101,16 +111,14 @@ namespace Net.Astropenguin.Helpers
 				Logger.Log( ID, "Hurray, got the CoreWindow. Let's resume in operations.", LogType.INFO );
 			}
 
-			if ( 0 < SuspendedList.Count )
+			if ( SuspendedList.Any() )
 			{
 				Logger.Log( ID, "Dispatching Suspended actions", LogType.INFO );
 
-				foreach ( Action s in SuspendedList )
+				while ( SuspendedList.TryPop( out Action s ) )
 				{
 					await CoreUIInstance.Dispatcher.RunAsync( CoreDispatcherPriority.Normal, new DispatchedHandler( s ) );
 				}
-
-				SuspendedList.Clear();
 			}
 
 			try
