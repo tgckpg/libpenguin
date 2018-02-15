@@ -20,30 +20,17 @@ namespace Net.Astropenguin.UI.Converters
 			bool b = false;
 
 			IEnumerable Enu = value as IEnumerable;
-			if ( Enu != null )
-			{
-				b = 0 < Enumerable.Cast<object>( Enu ).Count();
-			}
-			else if( value is bool )
-			{
-				b = ( bool ) value;
-			}
-			else if( value is string )
-			{
-				b = !string.IsNullOrEmpty( ( string ) value );
-			}
-			else if( value is int )
-			{
-				b = ( int ) value != 0;
-			}
-			else if( value is DateTime )
-			{
-				b = !( ( DateTime ) value ).Equals( default( DateTime ) );
-			}
-			else
-			{
-				b = ( value != null );
-			}
+			if ( Enu != null ) b = 0 < Enumerable.Cast<object>( Enu ).Count();
+			else if ( value is string ) b = !string.IsNullOrEmpty( ( string ) value );
+			else if ( value is bool ) b = ( bool ) value;
+			else if ( value is int ) b = ( int ) value != 0;
+			else if ( value is double ) b = ( double ) value != 0;
+			else if ( value is float ) b = ( float ) value != 0;
+			else if ( value is uint ) b = ( uint ) value != 0;
+			else if ( value is long ) b = ( long ) value != 0;
+			else if ( value is decimal ) b = ( decimal ) value != 0;
+			else if ( value is DateTime ) b = !( ( DateTime ) value ).Equals( default( DateTime ) );
+			else b = ( value != null );
 
 			if ( Invert ) return !b;
 			return b;
