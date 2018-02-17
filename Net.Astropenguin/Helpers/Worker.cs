@@ -79,17 +79,73 @@ namespace Net.Astropenguin.Helpers
 			Instance.Queue( Work );
 		}
 
+		struct StackedTask
+		{
+			public TaskCompletionSource<bool> TCS;
+			public Func<Task> Work;
+			public Action WorkSync;
+		}
+
 		private static CoreWindow CoreUIInstance = null;
-		private static ConcurrentStack<Action> SuspendedList = new ConcurrentStack<Action>();
+		private static ConcurrentStack<StackedTask> TaskList = new ConcurrentStack<StackedTask>();
 		public static bool BackgroundOnly { get; internal set; }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage( "Await.Warning", "CS4014:Await.Warning" )]
-		public static void UIInvoke( Action p )
-		{
-			RunUIAsync( p );
-		}
+		public static void UIInvoke( Action p ) => RunUIAsync( p );
 
 		public static async Task RunUIAsync( Action p )
+		{
+			if ( !CanCoreUI() )
+			{
+				StackedTask s = new StackedTask() { TCS = new TaskCompletionSource<bool>(), WorkSync = p };
+				TaskList.Push( s );
+				await s.TCS.Task;
+				return;
+			}
+
+			try
+			{
+				await CoreUIInstance.Dispatcher.RunAsync( CoreDispatcherPriority.Normal, new DispatchedHandler( p ) );
+			}
+			catch ( Exception e )
+			{
+				Logger.Log( ID, "Action Dispatched an Error", LogType.SYSTEM );
+				Logger.Log( ID, e.Message, LogType.ERROR );
+			}
+		}
+
+		public static async Task RunUITaskAsync( Func<Task> p )
+		{
+			StackedTask K = new StackedTask() { TCS = new TaskCompletionSource<bool>(), Work = p };
+
+			if( !CanCoreUI() )
+			{
+				TaskList.Push( K );
+				await K.TCS.Task;
+				return;
+			}
+
+			RunTask( K );
+			await K.TCS.Task;
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage( "Await.Warning", "CS4014:Await.Warning" )]
+		private static void RunTask( StackedTask s )
+		{
+			CoreUIInstance.Dispatcher.RunAsync( CoreDispatcherPriority.Normal, new DispatchedHandler( async () =>
+			{
+				s.WorkSync?.Invoke();
+
+				if ( s.Work != null )
+				{
+					await s.Work();
+				}
+
+				s.TCS.SetResult( true );
+			} ) );
+		}
+
+		private static bool CanCoreUI()
 		{
 			if ( CoreUIInstance == null )
 			{
@@ -107,38 +163,27 @@ namespace Net.Astropenguin.Helpers
 				if ( CoreUIInstance == null )
 				{
 					SSLog( "Cannot get a CoreWindow. Suspending this action" );
-					SuspendedList.Push( p );
-					Logger.Log( ID, string.Format( "Now we have {0} suspended actions", SuspendedList.Count ), LogType.INFO );
-					return;
+					Logger.Log( ID, string.Format( "Now we have {0} suspended actions", TaskList.Count ), LogType.INFO );
+					return false;
 				}
 
 				Logger.Log( ID, "Hurray, got the CoreWindow. Let's resume in operations.", LogType.INFO );
 			}
 
-			if ( SuspendedList.Any() )
+			if ( TaskList.Any() )
 			{
-				Logger.Log( ID, "Dispatching Suspended actions", LogType.INFO );
+				Logger.Log( ID, "Dispatching suspended tasks", LogType.INFO );
 
-				while ( SuspendedList.TryPop( out Action s ) )
-				{
-					await CoreUIInstance.Dispatcher.RunAsync( CoreDispatcherPriority.Normal, new DispatchedHandler( s ) );
-				}
+				while ( TaskList.TryPop( out StackedTask s ) )
+					RunTask( s );
 			}
 
-			try
-			{
-				await CoreUIInstance.Dispatcher.RunAsync( CoreDispatcherPriority.Normal, new DispatchedHandler( p ) );
-			}
-			catch ( Exception e )
-			{
-				Logger.Log( ID, "Action Dispatched an Error", LogType.SYSTEM );
-				Logger.Log( ID, e.Message, LogType.ERROR );
-			}
+			return true;
 		}
 
 		private static void SSLog( string Mesg )
 		{
-			if ( SuspendedList.Any() ) return;
+			if ( TaskList.Any() ) return;
 			Logger.Log( ID, Mesg, LogType.INFO );
 		}
 	}
