@@ -32,7 +32,6 @@ namespace Net.Astropenguin.UI.Icons
 	public class IconPlay : IconBase { public IconPlay() { DefaultStyleKey = typeof( IconPlay ); } }
 	public class IconSave : IconBase { public IconSave() { DefaultStyleKey = typeof( IconSave ); } }
 	public class IconSearch : IconBase { public IconSearch() { DefaultStyleKey = typeof( IconSearch ); } }
-	public class IconSpider : IconBase { public IconSpider() { DefaultStyleKey = typeof( IconSpider ); } }
 	public class IconSteps : IconBase { public IconSteps() { DefaultStyleKey = typeof( IconSteps ); } }
 	public class IconAtomic : IconBase { public IconAtomic() { DefaultStyleKey = typeof( IconAtomic ); } }
 	public class IconEEye : IconBase { public IconEEye() { DefaultStyleKey = typeof( IconEEye ); } }
