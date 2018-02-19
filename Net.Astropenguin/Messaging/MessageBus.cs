@@ -8,14 +8,66 @@ using System.Reflection;
 
 namespace Net.Astropenguin.Messaging
 {
+	public delegate void MessageEvent( Message Mesg );
+
+	public class Messenger
+	{
+		private struct MRef
+		{
+			public int HKey;
+			public MethodInfo Method;
+		}
+
+		private ConcurrentDictionary<MRef, WeakReference<object>> Handlers;
+
+		public Messenger()
+		{
+			Handlers = new ConcurrentDictionary<MRef, WeakReference<object>>();
+		}
+
+		public void AddHandler( object Target, MessageEvent Handler )
+		{
+			MRef Ref = new MRef() { Method = Handler.GetMethodInfo(), HKey = Target.GetHashCode() };
+			Handlers[ Ref ] = new WeakReference<object>( Target );
+		}
+
+		public void RemoveHandler( object Target, MessageEvent Handler )
+		{
+			int HKey = Target.GetHashCode();
+			MethodInfo HInfo = Handler.GetMethodInfo();
+			MRef Ref = Handlers.Keys.FirstOrDefault( x => x.Method == HInfo && x.HKey == HKey );
+
+			if ( !Ref.Equals( default( MRef ) ) )
+			{
+				Handlers.TryRemove( Ref, out WeakReference<object> NOP );
+			}
+		}
+
+		public void Deliver( Message Mesg )
+		{
+			foreach ( MRef Ref in Handlers.Keys.ToArray() )
+			{
+				if ( Handlers.TryGetValue( Ref, out WeakReference<object> WeakEvent ) )
+				{
+					if ( WeakEvent.TryGetTarget( out object Target ) )
+					{
+						Ref.Method.Invoke( Target, new object[] { Mesg } );
+					}
+					else
+					{
+						Handlers.TryRemove( Ref, out WeakReference<object> NOP );
+					}
+				}
+			}
+		}
+	}
+
 	public class MessageBus
 	{
-		public delegate void MessageEvent( Message Mesg );
-
-		private static _Messenger Messenger = new _Messenger();
+		private static Messenger Messenger = new Messenger();
 
 		public static void Subscribe( object target, MessageEvent e ) => Messenger.AddHandler( target, e );
-		public static void Unsubscribe( object target, MessageEvent e ) => Messenger.RemoveHandler( e );
+		public static void Unsubscribe( object target, MessageEvent e ) => Messenger.RemoveHandler( target, e );
 
 		public static void SendUI( Type Id, string Content, object Payload = null )
 		{
@@ -36,44 +88,6 @@ namespace Net.Astropenguin.Messaging
 		{
 			Task.Run( () => Messenger.Deliver( Mesg ) );
 		}
-
-		private class _Messenger
-		{
-			public ConcurrentDictionary<MethodInfo, WeakReference<object>> Handlers;
-
-			public _Messenger()
-			{
-				Handlers = new ConcurrentDictionary<MethodInfo, WeakReference<object>>();
-			}
-
-			public void AddHandler( object Target, MessageEvent Handler )
-			{
-				Handlers[ Handler.GetMethodInfo() ] = new WeakReference<object>( Target );
-			}
-
-			public void RemoveHandler( MessageEvent Handler )
-			{
-				Handlers.TryRemove( Handler.GetMethodInfo(), out WeakReference<object> NOP );
-			}
-
-			public void Deliver( Message Mesg )
-			{
-				foreach ( MethodInfo Handler in Handlers.Keys.ToArray() )
-				{
-					if ( Handlers.TryGetValue( Handler, out WeakReference<object> WeakEvent ) )
-					{
-						if ( WeakEvent.TryGetTarget( out object Target ) )
-						{
-							Handler.Invoke( Target, new object[] { Mesg } );
-						}
-						else
-						{
-							Handlers.TryRemove( Handler, out WeakReference<object> NOP );
-						}
-					}
-				}
-			}
-		}
-
 	}
+
 }
