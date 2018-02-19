@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Windows.Foundation;
 using Windows.System;
 using Windows.UI.Core;
-using Windows.Foundation;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Controls;
 
 namespace Net.Astropenguin.Controls
 {
@@ -27,6 +29,11 @@ namespace Net.Astropenguin.Controls
 
 		public event TypedEventHandler<object,KeyEventArgs> KeyDown;
 
+		private static readonly Type[] SpecialElement = new Type[]
+		{
+			typeof( TextBox ), typeof( RichEditBox ), typeof( PasswordBox )
+		};
+
 		private Dictionary<string, HashSet<Action<KeyCombinationEventArgs>>> RegisteredCombinations;
 		private int SequenceIndex = 0;
 
@@ -49,6 +56,9 @@ namespace Net.Astropenguin.Controls
 
 		private void RootFrame_KeyDown( CoreWindow sender, KeyEventArgs e )
 		{
+			object o = FocusManager.GetFocusedElement();
+			if ( o != null && SpecialElement.Contains( o.GetType() ) ) return;
+
 			KeyDown?.Invoke( sender, e );
 
 			PressedKeys.Add( e.VirtualKey );
