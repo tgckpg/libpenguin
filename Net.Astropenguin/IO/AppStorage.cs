@@ -149,14 +149,19 @@ namespace Net.Astropenguin.IO
 
 		public void PurgeContents( string Dir, bool DeleteRoot )
 		{
+			if ( !UserStorage.DirectoryExists( Dir ) )
+				return;
+
 			foreach ( string file in UserStorage.GetFileNames( Dir ) )
 			{
 				UserStorage.DeleteFile( Dir + file );
 			}
+
 			foreach ( string d in UserStorage.GetDirectoryNames( Dir ) )
 			{
 				PurgeContents( Dir + d + "/", true );
 			}
+
 			if ( DeleteRoot )
 				UserStorage.DeleteDirectory( Dir );
 		}
