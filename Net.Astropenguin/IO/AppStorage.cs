@@ -76,13 +76,13 @@ namespace Net.Astropenguin.IO
 			return null;
 		}
 
-		public static async Task<IStorageFile> OpenFileAsync( string Types )
+		public static async Task<IStorageFile> OpenFileAsync( string FileExt )
 		{
 			try
 			{
 				FileOpenPicker fpick = new FileOpenPicker();
 				fpick.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
-				fpick.FileTypeFilter.Add( Types );
+				fpick.FileTypeFilter.Add( FileExt );
 
 				StorageFile file = await fpick.PickSingleFileAsync();
 
@@ -294,20 +294,8 @@ namespace Net.Astropenguin.IO
 			}
 		}
 
-		public void CreateDirectory( string Name )
-		{
-			UserStorage.CreateDirectory( Name );
-		}
-
-		public bool DirExist( string Name )
-		{
-			return UserStorage.DirectoryExists( Name );
-		}
-
-		public void MoveDir( string From, string To )
-		{
-			UserStorage.MoveDirectory( From, To );
-		}
+		public void CreateDirectory( string Name ) => UserStorage.CreateDirectory( Name );
+		public bool DirExist( string Name ) => UserStorage.DirectoryExists( Name );
 
 		public string[] ListDirs( string List )
 		{
@@ -439,7 +427,7 @@ namespace Net.Astropenguin.IO
 			return false;
 		}
 
-		public bool createDirs( string dir )
+		public bool CreateDirs( string dir )
 		{
 			if ( DirExist( dir ) ) return true;
 
