@@ -68,7 +68,7 @@ namespace Net.Astropenguin.IO
 
 				return folder;
 			}
-			catch( Exception ex )
+			catch ( Exception ex )
 			{
 				Logger.Log( ID, ex.Message, LogType.ERROR );
 			}
@@ -76,13 +76,15 @@ namespace Net.Astropenguin.IO
 			return null;
 		}
 
-		public static async Task<IStorageFile> OpenFileAsync( string FileExt )
+		public static Task<IStorageFile> OpenFileAsync( string FileExt ) => OpenFileAsync( new string[] { FileExt } );
+
+		public static async Task<IStorageFile> OpenFileAsync( IEnumerable<string> FileExts )
 		{
 			try
 			{
 				FileOpenPicker fpick = new FileOpenPicker();
 				fpick.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
-				fpick.FileTypeFilter.Add( FileExt );
+				foreach ( string ext in FileExts ) fpick.FileTypeFilter.Add( ext );
 
 				StorageFile file = await fpick.PickSingleFileAsync();
 
