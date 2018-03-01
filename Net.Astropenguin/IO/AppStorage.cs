@@ -296,6 +296,29 @@ namespace Net.Astropenguin.IO
 			}
 		}
 
+		public async Task<Tuple<int, int, ulong>> Stat( string folder )
+		{
+			ulong size = 0;
+			int nFiles = 0;
+			int nDirs = 0;
+
+			foreach ( string FName in UserStorage.GetFileNames( folder ) )
+			{
+				size += await FileSize( folder + FName );
+				nFiles++;
+			}
+
+			foreach( string DName in UserStorage.GetDirectoryNames( folder ) )
+			{
+				Tuple<int, int, ulong> _stat = await Stat( folder + DName + "/" );
+				nFiles += _stat.Item2;
+				size += _stat.Item3;
+				nDirs += _stat.Item1 + 1;
+			}
+
+			return new Tuple<int, int, ulong>( nDirs, nFiles, size );
+		}
+
 		public void CreateDirectory( string Name ) => UserStorage.CreateDirectory( Name );
 		public bool DirExist( string Name ) => UserStorage.DirectoryExists( Name );
 
