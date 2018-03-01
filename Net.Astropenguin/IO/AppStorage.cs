@@ -393,12 +393,21 @@ namespace Net.Astropenguin.IO
 			return false;
 		}
 
-		public long FileSize( string fileName )
+		public async Task<ulong> FileSize( string Path )
 		{
-			IsolatedStorageFileStream file = UserStorage.OpenFile( fileName, FileMode.Open );
-			long size = file.Length;
-			file.Dispose();
-			return size;
+			StorageFolder SD = ApplicationData.Current.LocalFolder;
+			string[] Segs = Path.Split( '/' );
+			IEnumerator<string> Senu = Segs.Take( Segs.Length - 1 ).GetEnumerator();
+
+			while( Senu.MoveNext() )
+			{
+				SD = await SD.GetFolderAsync( Senu.Current );
+			}
+
+			StorageFile SF = await SD.GetFileAsync( Segs.Last() );
+			BasicProperties BS = await SF.GetBasicPropertiesAsync();
+
+			return BS.Size;
 		}
 
 		virtual public bool WriteString( string fileName, string Content )
