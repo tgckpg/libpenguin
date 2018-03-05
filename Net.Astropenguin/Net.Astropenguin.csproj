@@ -103,6 +103,7 @@
     <Compile Include="DataModel\ObservableHashSet.cs" />
     <Compile Include="DataModel\Observables.cs" />
     <Compile Include="Helpers\Popups.cs" />
+    <Compile Include="Helpers\AsyncLocks.cs" />
     <Compile Include="Helpers\VisualTree.cs" />
     <Compile Include="Helpers\Worker.cs" />
     <Compile Include="IO\XKey.cs" />

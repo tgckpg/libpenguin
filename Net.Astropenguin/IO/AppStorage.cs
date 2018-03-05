@@ -490,7 +490,7 @@ namespace Net.Astropenguin.IO
 			{
 				Logger.Log(
 					ID
-					, string.Format( "WriteByte@{0}: {1}", fileName, ex.Message )
+					, string.Format( "WriteByte@{0}: {1}, {2}", fileName, ex.Message, ex.InnerException?.Message )
 					, LogType.ERROR
 				);
 				return false;
