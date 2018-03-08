@@ -156,7 +156,12 @@ namespace Net.Astropenguin.IO
 
 			foreach ( string file in UserStorage.GetFileNames( Dir ) )
 			{
-				UserStorage.DeleteFile( Dir + file );
+				try
+				{
+					UserStorage.DeleteFile( Dir + file );
+				}
+				// There will be exception when files are being used, ignore this
+				catch ( IsolatedStorageException ) { }
 			}
 
 			foreach ( string d in UserStorage.GetDirectoryNames( Dir ) )
@@ -165,7 +170,13 @@ namespace Net.Astropenguin.IO
 			}
 
 			if ( DeleteRoot )
-				UserStorage.DeleteDirectory( Dir );
+			{
+				try
+				{
+					UserStorage.DeleteDirectory( Dir );
+				}
+				catch ( IsolatedStorageException ) { }
+			}
 		}
 
 		public bool DeleteFile( string Location )
