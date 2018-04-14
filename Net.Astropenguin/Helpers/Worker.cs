@@ -55,7 +55,7 @@ namespace Net.Astropenguin.Helpers
 			if ( !BgWorker.IsBusy )
 			{
 				BgWorker.RunWorkerAsync();
-				Logger.Log( ID, "Worker Started: " + Name, LogType.INFO );
+				Logger.Log( ID, "Worker Started: " + Name, LogType.DEBUG );
 			}
 		}
 
