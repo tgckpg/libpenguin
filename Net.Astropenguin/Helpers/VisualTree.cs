@@ -5,14 +5,14 @@ namespace Net.Astropenguin.Helpers
 {
 	public class VisualTree
 	{
-		public static T At<T>( UIElement p, uint l )
+		public static T At_0<T>( UIElement p, uint l )
 		{
 			if ( VisualTreeHelper.GetChildrenCount( p ) > 0 )
 			{
 				DependencyObject k = VisualTreeHelper.GetChild( p, 0 );
 
 				if ( k is UIElement && l > 0 )
-					return At<T>( ( UIElement ) k, l - 1 );
+					return At_0<T>( ( UIElement ) k, l - 1 );
 
 				if ( k is T )
 				{
@@ -33,7 +33,7 @@ namespace Net.Astropenguin.Helpers
 				}
 			}
 
-			if( p is T )
+			if ( p is T )
 			{
 				return ( T ) ( object ) p;
 			}
@@ -44,9 +44,13 @@ namespace Net.Astropenguin.Helpers
 
 	public static class UIElementExt
 	{
-		public static T ChildAt<T>( this UIElement e, uint l )
+		/// <summary>
+		/// Drill down the first element n + 1 times
+		/// i.e. P(4) e[0][0][0][0][0]
+		/// </summary>
+		public static T Child_0<T>( this UIElement e, uint n )
 		{
-			return VisualTree.At<T>( e, l );
+			return VisualTree.At_0<T>( e, n );
 		}
 
 		public static T ChildAt<T>( this UIElement e, params uint[] l )

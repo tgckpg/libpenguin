@@ -49,13 +49,32 @@ namespace Net.Astropenguin.Helpers
 			}
 		}
 
+		public async void DelayQueue( Action Work )
+		{
+			TaskQueue.Enqueue( Work );
+
+			await Task.Delay( 1000 );
+
+			lock ( BgWorker )
+			{
+				if ( TaskQueue.Any() && !BgWorker.IsBusy )
+				{
+					BgWorker.RunWorkerAsync();
+					Logger.Log( ID, "Worker Started: " + Name, LogType.DEBUG );
+				}
+			}
+		}
+
 		public void Queue( Action Work )
 		{
 			TaskQueue.Enqueue( Work );
-			if ( !BgWorker.IsBusy )
+			lock ( BgWorker )
 			{
-				BgWorker.RunWorkerAsync();
-				Logger.Log( ID, "Worker Started: " + Name, LogType.DEBUG );
+				if ( TaskQueue.Any() && !BgWorker.IsBusy )
+				{
+					BgWorker.RunWorkerAsync();
+					Logger.Log( ID, "Worker Started: " + Name, LogType.DEBUG );
+				}
 			}
 		}
 
