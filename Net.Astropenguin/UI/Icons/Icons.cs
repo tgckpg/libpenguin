@@ -41,22 +41,4 @@ namespace Net.Astropenguin.UI.Icons
 	public class IconParallel : IconBase { public IconParallel() { DefaultStyleKey = typeof( IconParallel ); } }
 
 	public class IconTestTube : IconBase { public IconTestTube() { DefaultStyleKey = typeof( IconTestTube ); } }
-
-	public sealed class IconBing : PathIcon
-	{
-		protected override void OnApplyTemplate()
-		{
-			base.OnApplyTemplate();
-			Path P = this.ChildAt<Path>( 0, 0 );
-			P.SetBinding(
-				Path.DataProperty
-				, new Binding() { Source = "M 0,0 L 3.97,1.39 3.97,15.36 9.56,12.14 6.82,10.85 5.09,6.55 13.89,9.64 13.89,14.14 3.97,19.87 0,17.66 Z" }
-			);
-			P.VerticalAlignment = VerticalAlignment.Center;
-			P.HorizontalAlignment = HorizontalAlignment.Center;
-
-			P.Width = 14;
-			P.Height = 20;
-		}
-	}
 }
