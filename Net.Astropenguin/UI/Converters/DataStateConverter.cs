@@ -9,7 +9,7 @@ namespace Net.Astropenguin.UI.Converters
 	{
 		override public object Convert( object value, Type targetType, object parameter, string language )
 		{
-			return DataBool( value, parameter != null ) ? ControlState.Reovia : ControlState.Foreatii;
+			return DataBool( value, parameter != null ) ? ControlState.Active : ControlState.Closed;
 		}
 	}
 }
