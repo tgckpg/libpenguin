@@ -9,6 +9,8 @@ namespace Net.Astropenguin.Loaders
 	{
 		protected static Dictionary<string, ResourceLoader> BgResCont = new Dictionary<string, ResourceLoader>();
 
+		protected StringResources() { }
+
 		public static StringResources Load( params string[] Views )
 		{
 			StringResources ResBg = new StringResources();
