@@ -68,7 +68,7 @@ namespace Net.Astropenguin.IO
 
 				return folder;
 			}
-			catch( Exception ex )
+			catch ( Exception ex )
 			{
 				Logger.Log( ID, ex.Message, LogType.ERROR );
 			}
@@ -76,13 +76,15 @@ namespace Net.Astropenguin.IO
 			return null;
 		}
 
-		public static async Task<IStorageFile> OpenFileAsync( string Types )
+		public static Task<IStorageFile> OpenFileAsync( string FileExt ) => OpenFileAsync( new string[] { FileExt } );
+
+		public static async Task<IStorageFile> OpenFileAsync( IEnumerable<string> FileExts )
 		{
 			try
 			{
 				FileOpenPicker fpick = new FileOpenPicker();
 				fpick.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
-				fpick.FileTypeFilter.Add( Types );
+				foreach ( string ext in FileExts ) fpick.FileTypeFilter.Add( ext );
 
 				StorageFile file = await fpick.PickSingleFileAsync();
 
@@ -149,16 +151,32 @@ namespace Net.Astropenguin.IO
 
 		public void PurgeContents( string Dir, bool DeleteRoot )
 		{
+			if ( !UserStorage.DirectoryExists( Dir ) )
+				return;
+
 			foreach ( string file in UserStorage.GetFileNames( Dir ) )
 			{
-				UserStorage.DeleteFile( Dir + file );
+				try
+				{
+					UserStorage.DeleteFile( Dir + file );
+				}
+				// There will be exception when files are being used, ignore this
+				catch ( IsolatedStorageException ) { }
 			}
+
 			foreach ( string d in UserStorage.GetDirectoryNames( Dir ) )
 			{
 				PurgeContents( Dir + d + "/", true );
 			}
+
 			if ( DeleteRoot )
-				UserStorage.DeleteDirectory( Dir );
+			{
+				try
+				{
+					UserStorage.DeleteDirectory( Dir );
+				}
+				catch ( IsolatedStorageException ) { }
+			}
 		}
 
 		public bool DeleteFile( string Location )
@@ -289,20 +307,31 @@ namespace Net.Astropenguin.IO
 			}
 		}
 
-		public void CreateDirectory( string Name )
+		public async Task<Tuple<int, int, ulong>> Stat( string folder )
 		{
-			UserStorage.CreateDirectory( Name );
+			ulong size = 0;
+			int nFiles = 0;
+			int nDirs = 0;
+
+			foreach ( string FName in UserStorage.GetFileNames( folder ) )
+			{
+				size += await FileSize( folder + FName );
+				nFiles++;
+			}
+
+			foreach( string DName in UserStorage.GetDirectoryNames( folder ) )
+			{
+				Tuple<int, int, ulong> _stat = await Stat( folder + DName + "/" );
+				nFiles += _stat.Item2;
+				size += _stat.Item3;
+				nDirs += _stat.Item1 + 1;
+			}
+
+			return new Tuple<int, int, ulong>( nDirs, nFiles, size );
 		}
 
-		public bool DirExist( string Name )
-		{
-			return UserStorage.DirectoryExists( Name );
-		}
-
-		public void MoveDir( string From, string To )
-		{
-			UserStorage.MoveDirectory( From, To );
-		}
+		public void CreateDirectory( string Name ) => UserStorage.CreateDirectory( Name );
+		public bool DirExist( string Name ) => UserStorage.DirectoryExists( Name );
 
 		public string[] ListDirs( string List )
 		{
@@ -398,12 +427,21 @@ namespace Net.Astropenguin.IO
 			return false;
 		}
 
-		public long FileSize( string fileName )
+		public async Task<ulong> FileSize( string Path )
 		{
-			IsolatedStorageFileStream file = UserStorage.OpenFile( fileName, FileMode.Open );
-			long size = file.Length;
-			file.Dispose();
-			return size;
+			StorageFolder SD = ApplicationData.Current.LocalFolder;
+			string[] Segs = Path.Split( '/' );
+			IEnumerator<string> Senu = Segs.Take( Segs.Length - 1 ).GetEnumerator();
+
+			while( Senu.MoveNext() )
+			{
+				SD = await SD.GetFolderAsync( Senu.Current );
+			}
+
+			StorageFile SF = await SD.GetFileAsync( Segs.Last() );
+			BasicProperties BS = await SF.GetBasicPropertiesAsync();
+
+			return BS.Size;
 		}
 
 		virtual public bool WriteString( string fileName, string Content )
@@ -434,7 +472,7 @@ namespace Net.Astropenguin.IO
 			return false;
 		}
 
-		public bool createDirs( string dir )
+		public bool CreateDirs( string dir )
 		{
 			if ( DirExist( dir ) ) return true;
 
@@ -463,7 +501,7 @@ namespace Net.Astropenguin.IO
 			{
 				Logger.Log(
 					ID
-					, string.Format( "WriteByte@{0}: {1}", fileName, ex.Message )
+					, string.Format( "WriteByte@{0}: {1}, {2}", fileName, ex.Message, ex.InnerException?.Message )
 					, LogType.ERROR
 				);
 				return false;

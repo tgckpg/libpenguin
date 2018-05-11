@@ -43,6 +43,12 @@ namespace Net.Astropenguin.Logging
 
 		public static void Log( string id, string str, LogType p )
 		{
+#if DEBUG
+			if( p == LogType.ERROR )
+			{
+				Debugger.Break();
+			}
+#endif
 			VSLog( str, p );
 			if ( WLogHandler != null )
 			{

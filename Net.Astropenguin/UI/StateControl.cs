@@ -5,16 +5,15 @@ using Windows.UI.Xaml.Markup;
 
 namespace Net.Astropenguin.UI
 {
-	public enum ControlState { Foreatii, Reovia, Seonium }
+	public enum ControlState { Closed, Active }
 
-	[TemplateVisualState( Name = "Foreatii", GroupName = "ControlStates" )]
-	[TemplateVisualState( Name = "Reovia", GroupName = "ControlStates" )]
-	[TemplateVisualState( Name = "Seonium", GroupName = "ControlStates" )]
+	[TemplateVisualState( Name = "Closed", GroupName = "ControlStates" )]
+	[TemplateVisualState( Name = "Active", GroupName = "ControlStates" )]
 	[ContentProperty( Name = "ControlContext" )]
 	public class StateControl : Control
 	{
 		public static readonly DependencyProperty ControlContextProperty = DependencyProperty.Register( "ControlContext", typeof( object ), typeof( StateControl ), new PropertyMetadata( null ) );
-		public static readonly DependencyProperty StateProperty = DependencyProperty.Register( "State", typeof( ControlState ), typeof( StateControl ), new PropertyMetadata( ControlState.Foreatii, StateChanged ) );
+		public static readonly DependencyProperty StateProperty = DependencyProperty.Register( "State", typeof( ControlState ), typeof( StateControl ), new PropertyMetadata( ControlState.Closed, StateChanged ) );
 
 		public event TypedEventHandler<object, ControlState> OnStateChanged;
 
@@ -39,16 +38,12 @@ namespace Net.Astropenguin.UI
 		{
 			switch ( State )
 			{
-				case ControlState.Foreatii:
-					VisualStateManager.GoToState( this, "Foreatii", useTransitions );
+				case ControlState.Closed:
+					VisualStateManager.GoToState( this, "Closed", useTransitions );
 					break;
 
-				case ControlState.Reovia:
-					VisualStateManager.GoToState( this, "Reovia", useTransitions );
-					break;
-
-				case ControlState.Seonium:
-					VisualStateManager.GoToState( this, "Seonium", useTransitions );
+				case ControlState.Active:
+					VisualStateManager.GoToState( this, "Active", useTransitions );
 					break;
 			}
 		}
@@ -59,14 +54,14 @@ namespace Net.Astropenguin.UI
 			DefaultStyleKey = typeof( StateControl );
 		}
 
-		private void OnForeatii( object sender, object e )
+		private void OnClosed( object sender, object e )
 		{
-			OnStateChanged?.Invoke( this, ControlState.Foreatii );
+			OnStateChanged?.Invoke( this, ControlState.Closed );
 		}
 
-		private void OnReovia( object sender, object e )
+		private void OnActive( object sender, object e )
 		{
-			OnStateChanged?.Invoke( this, ControlState.Reovia );
+			OnStateChanged?.Invoke( this, ControlState.Active );
 		}
 
 		protected override void OnApplyTemplate()
@@ -78,11 +73,11 @@ namespace Net.Astropenguin.UI
 			{
 				switch( VST.GetValue( NameProperty ).ToString() )
 				{
-					case "ReoviaToForeatii":
-						VST.Storyboard.Completed += OnForeatii;
+					case "ActiveToClosed":
+						VST.Storyboard.Completed += OnClosed;
 						break;
-					case "ForeatiiToReovia":
-						VST.Storyboard.Completed += OnReovia;
+					case "ClosedToActive":
+						VST.Storyboard.Completed += OnActive;
 						break;
 				}
 

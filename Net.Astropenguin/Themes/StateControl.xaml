@@ -1,5 +1,5 @@
 <ResourceDictionary
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:p="using:Net.Astropenguin.UI"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -16,8 +16,8 @@
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="ControlStates">
                                 <VisualStateGroup.Transitions>
-                                    <VisualTransition x:Name="ForeatiiToReovia" 
-                                                          From="Foreatii" To="Reovia"
+                                    <VisualTransition x:Name="ClosedToActive"
+                                                          From="Closed" To="Active"
                                                           GeneratedDuration="0:0:0.5">
                                         <Storyboard>
                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="ControlContext">
@@ -34,8 +34,8 @@
                                             </ObjectAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualTransition>
-                                    <VisualTransition x:Name="ReoviaToForeatii" 
-                                                          From="Reovia" To="Foreatii"
+                                    <VisualTransition x:Name="ActiveToClosed"
+                                                          From="Active" To="Closed"
                                                           GeneratedDuration="0:0:0.5">
                                         <Storyboard>
                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="ControlContext">
@@ -54,7 +54,7 @@
                                     </VisualTransition>
                                 </VisualStateGroup.Transitions>
                                 <VisualStateGroup.States>
-                                    <VisualState x:Name="Reovia">
+                                    <VisualState x:Name="Active">
                                         <Storyboard>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ControlContext" Storyboard.TargetProperty="(FrameworkElement.Visibility)">
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="Visible" />
@@ -67,7 +67,7 @@
                                                              Duration="0" To="1" />
                                         </Storyboard>
                                     </VisualState>
-                                    <VisualState x:Name="Foreatii">
+                                    <VisualState x:Name="Closed">
                                         <Storyboard>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ControlContext" Storyboard.TargetProperty="(FrameworkElement.Visibility)">
                                                 <DiscreteObjectKeyFrame KeyTime="1" Value="Collapsed" />

@@ -19,28 +19,10 @@ namespace Net.Astropenguin.Loaders
 		}
 	}
 
-	public class DThreadUpdateArgs : DThreadArgs
-	{
-		public string Desc { get; private set; }
-		public DThreadUpdateArgs( string SaveLocation, Guid id, string desc )
-			: base( SaveLocation, id )
-		{
-			Desc = desc;
-		}
-	}
-
 	public class DTheradCompleteArgs : DThreadArgs
 	{
 		public DTheradCompleteArgs( string SaveLocation, Guid id )
 			: base( SaveLocation, id )
-		{
-		}
-	}
-
-	public class DCycleCompleteArgs : EventArgs 
-	{
-		public DCycleCompleteArgs()
-			: base()
 		{
 		}
 	}
@@ -111,19 +93,10 @@ namespace Net.Astropenguin.Loaders
 		}
 	}
 
-	public class DResponseSavedEventArgs : EventArgs
-	{
-		public string SaveLocation { get; private set; }
-		public DResponseSavedEventArgs( string SLocation )
-		{
-			SaveLocation = SLocation;
-		}
-	}
-
 	public class DThreadProgressArgs : DThreadArgs
 	{
-		public long BytesReceived { get; private set; }
-		public long BytesTotal { get; private set; }
+		public ulong BytesReceived { get; private set; }
+		public ulong BytesTotal { get; private set; }
 		public int Percentage
 		{
 			get
@@ -131,7 +104,7 @@ namespace Net.Astropenguin.Loaders
 				return Convert.ToInt32( ( Convert.ToDouble( BytesReceived ) / Convert.ToDouble( BytesTotal ) * 100 ) );
 			}
 		}
-		public DThreadProgressArgs( string SaveLocation, long TotalBytesReceived, long TotalBytesToReceive, Guid id )
+		public DThreadProgressArgs( string SaveLocation, ulong TotalBytesReceived, ulong TotalBytesToReceive, Guid id )
 			: base( SaveLocation, id )
 		{
 			BytesReceived = TotalBytesReceived;

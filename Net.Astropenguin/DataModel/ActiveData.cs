@@ -8,7 +8,8 @@ namespace Net.Astropenguin.DataModel
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
 
-		protected void NotifyChanged( params string[] Names )
+		protected void NotifyChanged( params string[] Names ) => _NotifyChanged( this, Names );
+		protected void _NotifyChanged( object sender, params string[] Names )
 		{
 			if ( Worker.BackgroundOnly ) return;
 
@@ -18,7 +19,7 @@ namespace Net.Astropenguin.DataModel
 				// PropertyChanged may be null after event call
 				foreach ( string Name in Names )
 				{
-					PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( Name ) );
+					PropertyChanged?.Invoke( sender, new PropertyChangedEventArgs( Name ) );
 				}
 			} );
 		}

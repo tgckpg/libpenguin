@@ -1,105 +1,170 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic;
+using Windows.UI.Core;
 
 using Net.Astropenguin.Logging;
-using Windows.UI.Core;
 
 namespace Net.Astropenguin.Helpers
 {
 	public class Worker
 	{
 		public static readonly string ID = typeof( Worker ).Name;
-		static BackgroundWorker bw;
+
+		private BackgroundWorker BgWorker;
+		private ConcurrentQueue<Action> TaskQueue;
+		private string Name;
+
+		public Worker( string Name )
+		{
+			this.Name = Name;
+
+			TaskQueue = new ConcurrentQueue<Action>();
+			BgWorker = new BackgroundWorker();
+			BgWorker.WorkerSupportsCancellation = true;
+			BgWorker.DoWork += DoWork;
+			BgWorker.RunWorkerCompleted += WorkCompleted;
+		}
+
+		private void DoWork( object sender, DoWorkEventArgs e )
+		{
+			int i = 0;
+			while ( TaskQueue.TryDequeue( out Action Work ) )
+			{
+				Work();
+				i++;
+			}
+			e.Result = i;
+		}
+
+		private void WorkCompleted( object sender, RunWorkerCompletedEventArgs e )
+		{
+			Logger.Log( ID, string.Format( "Worker Completed ({0}): {1}, {2}. {3}", Name, e.Cancelled ? "Cancelled" : "Done", e.Result, e.Error ), LogType.DEBUG );
+			if ( TaskQueue.Any() )
+			{
+				if ( !BgWorker.IsBusy )
+					BgWorker.RunWorkerAsync();
+			}
+		}
+
+		public async void DelayQueue( Action Work )
+		{
+			TaskQueue.Enqueue( Work );
+
+			await Task.Delay( 1000 );
+
+			lock ( BgWorker )
+			{
+				if ( TaskQueue.Any() && !BgWorker.IsBusy )
+				{
+					BgWorker.RunWorkerAsync();
+					Logger.Log( ID, "Worker Started: " + Name, LogType.DEBUG );
+				}
+			}
+		}
+
+		public void Queue( Action Work )
+		{
+			TaskQueue.Enqueue( Work );
+			lock ( BgWorker )
+			{
+				if ( TaskQueue.Any() && !BgWorker.IsBusy )
+				{
+					BgWorker.RunWorkerAsync();
+					Logger.Log( ID, "Worker Started: " + Name, LogType.DEBUG );
+				}
+			}
+		}
+
+		public void Cancel()
+		{
+			if ( BgWorker.WorkerSupportsCancellation )
+			{
+				BgWorker.CancelAsync();
+			}
+		}
+
+		private static volatile Worker Instance;
+
+		public static void Register( Action Work )
+		{
+			if ( Instance == null )
+			{
+				Instance = new Worker( "Global" );
+			}
+
+			Instance.Queue( Work );
+		}
+
+		struct StackedTask
+		{
+			public TaskCompletionSource<bool> TCS;
+			public Func<Task> Work;
+			public Action WorkSync;
+		}
 
 		private static CoreWindow CoreUIInstance = null;
-		private static Stack<Action> SuspendedList = new Stack<Action>();
-
-		static Action[] ActionList;
-		const int l = 256;
-		static int i = 0;
-
+		private static ConcurrentStack<StackedTask> TaskList = new ConcurrentStack<StackedTask>();
 		public static bool BackgroundOnly { get; internal set; }
 
-		public static void Initialize()
-		{
-			ActionList = new Action[ l ];
-			bw = new BackgroundWorker();
-			bw.WorkerSupportsCancellation = true;
-			bw.DoWork += async ( sender, e ) =>
-			{
-				Logger.Log( ID, "Work Cycle Started", LogType.INFO );
-				// Global background working cycle
-				while ( -1 < ( i = GetNextWorkIndex() ) )
-				{
-					ActionList[ i ]();
-					ActionList[ i ] = null;
-					// Each cycle rest for 200ms
-					await Task.Delay( TimeSpan.FromMilliseconds( 200 ) );
-				}
-				Logger.Log( ID, "Work Cycle Complete", LogType.INFO );
-			};
-			bw.RunWorkerCompleted += Bw_RunWorkerCompleted;
-		}
+		[System.Diagnostics.CodeAnalysis.SuppressMessage( "Await.Warning", "CS4014:Await.Warning" )]
+		public static void UIInvoke( Action p ) => RunUIAsync( p );
 
-		private static void Bw_RunWorkerCompleted( object sender, RunWorkerCompletedEventArgs e )
+		public static async Task RunUIAsync( Action p )
 		{
-			Logger.Log( ID, string.Format( "Completed ({0}): {1}, {2}", e.Cancelled ? "Canceled" : "Done", e.Error, e.Result ), LogType.DEBUG );
-		}
-
-		public static int GetNextWorkIndex()
-		{
-			for ( i = 0; i < l; i++ )
+			if ( !CanCoreUI() )
 			{
-				if ( ActionList[ i ] != null )
-					return i;
+				StackedTask s = new StackedTask() { TCS = new TaskCompletionSource<bool>(), WorkSync = p };
+				TaskList.Push( s );
+				await s.TCS.Task;
+				return;
 			}
-			return -1;
-		}
 
-		public static void ReisterBackgroundWork( Action Work )
-		{
-			Logger.Log( ID, "Registering Work", LogType.INFO );
-			RegisterAction( Work );
-			if ( !bw.IsBusy )
+			try
 			{
-				Logger.Log( ID, "Worker idle, fire working signal.", LogType.INFO );
-				bw.RunWorkerAsync();
+				await CoreUIInstance.Dispatcher.RunAsync( CoreDispatcherPriority.Normal, new DispatchedHandler( p ) );
+			}
+			catch ( Exception e )
+			{
+				Logger.Log( ID, "Action Dispatched an Error", LogType.SYSTEM );
+				Logger.Log( ID, e.Message, LogType.ERROR );
 			}
 		}
 
-		private static bool RegisterAction( Action Work )
+		public static async Task RunUITaskAsync( Func<Task> p )
 		{
-			for ( int j = 0; j < l; j++ )
-			{
-				if ( ActionList[ j ] == null )
-				{
-					ActionList[ j ] = Work;
-					return true;
-				}
-			}
-			return false;
-		}
+			StackedTask K = new StackedTask() { TCS = new TaskCompletionSource<bool>(), Work = p };
 
-		public static void TerminateBackgroundWork()
-		{
-			if ( bw.WorkerSupportsCancellation )
+			if( !CanCoreUI() )
 			{
-				Logger.Log( ID, "Work Cycle Canceled", LogType.INFO );
-				ActionList = new Action[ l ];
-				bw.CancelAsync();
+				TaskList.Push( K );
+				await K.TCS.Task;
+				return;
 			}
+
+			RunTask( K );
+			await K.TCS.Task;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage( "Await.Warning", "CS4014:Await.Warning" )]
-		public static void UIInvoke( Action p )
+		private static void RunTask( StackedTask s )
 		{
-			RunUIAsync( p );
+			CoreUIInstance.Dispatcher.RunAsync( CoreDispatcherPriority.Normal, new DispatchedHandler( async () =>
+			{
+				s.WorkSync?.Invoke();
+
+				if ( s.Work != null )
+				{
+					await s.Work();
+				}
+
+				s.TCS.SetResult( true );
+			} ) );
 		}
 
-		public static async Task RunUIAsync( Action p )
+		private static bool CanCoreUI()
 		{
 			if ( CoreUIInstance == null )
 			{
@@ -117,40 +182,27 @@ namespace Net.Astropenguin.Helpers
 				if ( CoreUIInstance == null )
 				{
 					SSLog( "Cannot get a CoreWindow. Suspending this action" );
-					SuspendedList.Push( p );
-					Logger.Log( ID, string.Format( "Now we have {0} suspended actions", SuspendedList.Count ), LogType.INFO );
-					return;
+					Logger.Log( ID, string.Format( "Now we have {0} suspended actions", TaskList.Count ), LogType.INFO );
+					return false;
 				}
 
 				Logger.Log( ID, "Hurray, got the CoreWindow. Let's resume in operations.", LogType.INFO );
 			}
 
-			if ( 0 < SuspendedList.Count )
+			if ( TaskList.Any() )
 			{
-				Logger.Log( ID, "Dispatching Suspended actions", LogType.INFO );
+				Logger.Log( ID, "Dispatching suspended tasks", LogType.INFO );
 
-				foreach ( Action s in SuspendedList )
-				{
-					await CoreUIInstance.Dispatcher.RunAsync( CoreDispatcherPriority.Normal, new DispatchedHandler( s ) );
-				}
-
-				SuspendedList.Clear();
+				while ( TaskList.TryPop( out StackedTask s ) )
+					RunTask( s );
 			}
 
-			try
-			{
-				await CoreUIInstance.Dispatcher.RunAsync( CoreDispatcherPriority.Normal, new DispatchedHandler( p ) );
-			}
-			catch ( Exception e )
-			{
-				Logger.Log( ID, "Action Dispatched an Error", LogType.SYSTEM );
-				Logger.Log( ID, e.Message, LogType.ERROR );
-			}
+			return true;
 		}
 
 		private static void SSLog( string Mesg )
 		{
-			if ( SuspendedList.Any() ) return;
+			if ( TaskList.Any() ) return;
 			Logger.Log( ID, Mesg, LogType.INFO );
 		}
 	}

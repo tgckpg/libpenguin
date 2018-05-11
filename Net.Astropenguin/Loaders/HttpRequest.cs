@@ -176,7 +176,7 @@ namespace Net.Astropenguin.Loaders
 			}
 		}
 
-		private void RequestException( Exception ex )
+		virtual protected void RequestException( Exception ex )
 		{
 			string RefUrl = 0 < PostData.Length
 				? Encoding.UTF8.GetString( PostData, 0, PostData.Length )
@@ -185,7 +185,7 @@ namespace Net.Astropenguin.Loaders
 			RequestComplete( new DRequestCompletedEventArgs( RefUrl, ex ) );
 		}
 
-		private async void GetResponseCallback( HttpResponseMessage Response )
+		virtual protected async void GetResponseCallback( HttpResponseMessage Response )
 		{
 			string RefUrl = 0 < PostData.Length
 				// Mostly PostData
@@ -197,37 +197,53 @@ namespace Net.Astropenguin.Loaders
 			{
 				StatusCode = Response.StatusCode;
 
-				if ( DRequestCompleted != null )
+				byte[] rBytes;
+
+				using ( Stream ResponseStream = await Response.Content.ReadAsStreamAsync() )
 				{
-					byte[] rBytes;
-
-					using ( Stream ResponseStream = await Response.Content.ReadAsStreamAsync() )
-					{
-						ReadResponse( ResponseStream, out rBytes );
-					}
-
-					CookieCollection CC = ClientHandler.CookieContainer.GetCookies( ReqUri );
-					DRequestCompletedEventArgs RArgs = new DRequestCompletedEventArgs( Response, CC, RefUrl, rBytes );
-					RequestComplete( RArgs );
+					ReadResponse( ResponseStream, out rBytes );
 				}
 
-				// Close HttpWebResponse
-				Response.Dispose();
+				CookieCollection CC = ClientHandler.CookieContainer.GetCookies( ReqUri );
+
+				switch ( StatusCode )
+				{
+					case HttpStatusCode.Created:
+					case HttpStatusCode.Accepted:
+					case HttpStatusCode.NonAuthoritativeInformation:
+					case HttpStatusCode.NoContent:
+					case HttpStatusCode.ResetContent:
+					case HttpStatusCode.PartialContent:
+					case HttpStatusCode.OK:
+						DRequestCompletedEventArgs RArgs = new DRequestCompletedEventArgs( Response, CC, RefUrl, rBytes );
+						RequestComplete( RArgs );
+						break;
+					default:
+						throw new Exception( "Bad response status: " + StatusCode );
+				}
 			}
 			catch ( Exception ex )
 			{
 				RequestComplete( new DRequestCompletedEventArgs( RefUrl, ex ) );
 			}
+			finally
+			{
+				// Close HttpWebResponse
+				Response.Dispose();
+			}
 		}
 
 		private void RequestComplete( DRequestCompletedEventArgs Args )
 		{
-			// Raise event in the Main UI thread
-			if ( EN_UITHREAD ) Worker.UIInvoke( () => DRequestCompleted( Args ) );
-			else DRequestCompleted( Args );
+			if ( DRequestCompleted != null )
+			{
+				// Raise event in the Main UI thread
+				if ( EN_UITHREAD ) Worker.UIInvoke( () => DRequestCompleted( Args ) );
+				else Worker.Register( () => DRequestCompleted( Args ) );
+			}
 		}
 
-		private void ReadResponse( Stream s, out byte[] rBytes )
+		protected void ReadResponse( Stream s, out byte[] rBytes )
 		{
 			// Read stream in to byte
 			byte[] buffer = new byte[ 16 * 1024 ];

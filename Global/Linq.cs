@@ -22,9 +22,56 @@ namespace Net.Astropenguin.Linq
 			return Translated;
 		}
 
+		public static T[] Where<T>( this IEnumerable<T> Source, Func<int, T, bool> Translator )
+		{
+			int i = 0; int l = Source.Count();
+
+			List<T> Translated = new List<T>();
+			foreach ( T Item in Source )
+			{
+				if ( Translator( i++, Item ) )
+				{
+					Translated.Add( Item );
+				}
+			}
+
+			return Translated.ToArray();
+		}
+
+		public static TTarget[] Remap<TSource, TTarget>( this IEnumerable<TSource> Source, Func<TSource, int, TTarget> Translator )
+		{
+			int i = 0; int l = Source.Count();
+
+			TTarget[] Translated = new TTarget[ l ];
+			foreach ( TSource Item in Source )
+			{
+				Translated[ i ] = Translator( Item, i );
+				i++;
+			}
+
+			return Translated;
+		}
+
 		public static void ExecEach<T>( this IEnumerable<T> Items, Action<T> A )
 		{
 			foreach ( T Item in Items ) A( Item );
+		}
+
+		public static void ExecEach<T>( this IEnumerable<T> Items, Action<T, int> A )
+		{
+			int i = 0;
+			foreach ( T Item in Items ) A( Item, i++ );
+		}
+
+		public static async Task ExecEach<T>( this IEnumerable<T> Items, Func<T, Task> A )
+		{
+			foreach ( T Item in Items ) await A( Item );
+		}
+
+		public static async Task ExecEach<T>( this IEnumerable<T> Items, Func<T, int, Task> A )
+		{
+			int i = 0;
+			foreach ( T Item in Items ) await A( Item, i++ );
 		}
 
 		public static void Filter<TSource>( this IList<TSource> source, Func<TSource, bool> keySelector )
