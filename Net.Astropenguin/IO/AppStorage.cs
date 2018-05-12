@@ -427,6 +427,22 @@ namespace Net.Astropenguin.IO
 			return false;
 		}
 
+		public async Task<uint> LinesCount( string Path )
+		{
+			uint c = 0;
+			await Task.Run( () =>
+			{
+				using ( Stream s = GetStream( Path ) )
+				{
+					byte[] buff = new byte[ 65535 ];
+					s.Read( buff, 0, 65535 );
+					c += ( uint ) buff.Where( x => x == 0xA ).Count();
+				}
+			} );
+
+			return c;
+		}
+
 		public async Task<ulong> FileSize( string Path )
 		{
 			StorageFolder SD = ApplicationData.Current.LocalFolder;
@@ -435,6 +451,7 @@ namespace Net.Astropenguin.IO
 
 			while( Senu.MoveNext() )
 			{
+				if ( Senu.Current == "." ) continue;
 				SD = await SD.GetFolderAsync( Senu.Current );
 			}
 
