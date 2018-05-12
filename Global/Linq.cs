@@ -52,6 +52,13 @@ namespace Net.Astropenguin.Linq
 			return Translated;
 		}
 
+		public static TProject[] Remap<TSource, TProject>( this TSource Target, int i, int l, Func<TSource, int, TProject> Project )
+		{
+			TProject[] Result = new TProject[ l ];
+			for ( ; i < l; i++ ) Result[ i ] = Project( Target, i );
+			return Result;
+		}
+
 		public static void ExecEach<T>( this IEnumerable<T> Items, Action<T> A )
 		{
 			foreach ( T Item in Items ) A( Item );
