@@ -366,7 +366,7 @@ namespace Net.Astropenguin.IO
 				DirStack = await DirStack.GetFolderAsync( Folders[ i ] );
 			}
 
-			return await DirStack.CreateFileAsync( Folders[ l ] );
+			return await DirStack.CreateFileAsync( Folders[ l ], CreationCollisionOption.OpenIfExists );
 		}
 
 		public async Task<IStorageFolder> CreateDirFromISOStorage( string Location )
