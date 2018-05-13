@@ -11,13 +11,8 @@ namespace Net.Astropenguin.Logging
 	{
 		public static readonly string ID = typeof( NetLog ).Name;
 
-		#if DEBUG
-		public static bool Enabled = true;
-		public static string RemoteIP = "10.10.0.118";
-		#else
 		public static bool Enabled = false;
 		public static string RemoteIP = "255.255.255.255";
-		#endif
 		public static bool Ended { get; private set; }
 
 		private static Socket soc;
