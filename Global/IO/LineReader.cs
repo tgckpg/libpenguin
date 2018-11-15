@@ -7,33 +7,44 @@ using System.Threading.Tasks;
 
 namespace Net.Astropenguin.IO
 {
-	public class LineReader : StreamReader 
+	public class LineReader : StreamReader
 	{
-		public LineReader( Stream stream )
-			:base( stream )
-		{
-		}
+		public long LinePos { get; private set; } = 0;
 
-		private long _linePos = 0;
-		public long LinePos { get { return _linePos; } }
+		private bool _r;
+
+		public LineReader( Stream stream ) : base( stream ) { }
 
 		public void SeekLine( long i )
 		{
-			while( !EndOfStream )
+			while ( !EndOfStream )
 			{
-				if( LinePos == i ) break;
-				ReadLine();
+				if ( LinePos == i ) break;
+				base.ReadLine();
+				LinePos++;
 			}
 		}
 
 		public override string ReadLine()
 		{
-			string Line = base.ReadLine();
-			_linePos++;
-
-			return Line;
+			try
+			{
+				_r = true;
+				return base.ReadLine();
+			}
+			catch( Exception ex )
+			{
+				_r = false;
+				throw ex;
+			}
+			finally
+			{
+				if ( _r )
+				{
+					LinePos++;
+				}
+			}
 		}
 
 	}
-
 }

@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel;
+using System.Runtime.Serialization;
 
 namespace Net.Astropenguin.DataModel
 {
 	using Helpers;
 
+	[DataContract]
 	public class ActiveData : INotifyPropertyChanged
 	{
 		public event PropertyChangedEventHandler PropertyChanged;

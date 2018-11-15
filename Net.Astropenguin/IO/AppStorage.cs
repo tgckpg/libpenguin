@@ -343,10 +343,10 @@ namespace Net.Astropenguin.IO
 			return UserStorage.GetFileNames( Dir );
 		}
 
-		public Stream GetStream( string fileName )
+		public Stream GetStream( string fileName, FileAccess Mode = FileAccess.Read )
 		{
 			// Open the file
-			IsolatedStorageFileStream isfsr = UserStorage.OpenFile( fileName, FileMode.Open, FileAccess.Read );
+			IsolatedStorageFileStream isfsr = UserStorage.OpenFile( fileName, FileMode.OpenOrCreate, Mode );
 			return isfsr;
 		}
 
