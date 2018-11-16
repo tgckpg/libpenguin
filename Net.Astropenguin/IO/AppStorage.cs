@@ -33,6 +33,28 @@ namespace Net.Astropenguin.IO
 			return await ApplicationData.Current.TemporaryFolder.CreateFileAsync( FileName, CreationCollisionOption.GenerateUniqueName );
 		}
 
+		public static async Task<IStorageFile> GetTemp( string Root, string FileName, bool AutoCreate = false )
+		{
+			IStorageFolder ISD = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync( Root, CreationCollisionOption.OpenIfExists );
+			try
+			{
+				return await ISD.GetFileAsync( FileName );
+			}
+			catch ( FileNotFoundException )
+			{
+				if( AutoCreate )
+				{
+					return await ISD.CreateFileAsync( FileName, CreationCollisionOption.OpenIfExists );
+				}
+			}
+			catch( Exception ex )
+			{
+				Logger.Log( ID, ex.Message, LogType.WARNING );
+			}
+
+			return null;
+		}
+
 		public static async Task<IStorageFile> StaticTemp( IStorageFile SrcFile )
 		{
 			int FileHash = SrcFile.Path.GetHashCode();
