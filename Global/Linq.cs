@@ -59,6 +59,64 @@ namespace Net.Astropenguin.Linq
 			return Result;
 		}
 
+		public static void AggExec<T>( this IEnumerable<T> Items, Action<T, T, byte> Agg )
+		{
+			IEnumerator<T> E = Items.GetEnumerator();
+
+			T T1, T2;
+
+			if ( E.MoveNext() )
+			{
+				T1 = E.Current;
+				Agg( default( T ), T1, 0 );
+			}
+			else
+			{
+				return;
+			}
+
+			while ( E.MoveNext() )
+			{
+				T2 = E.Current;
+				Agg( T1, T2, 1 );
+				T1 = T2;
+			}
+
+			Agg( T1, default( T ), 2 );
+		}
+
+		public static bool AggAny<T>( this IEnumerable<T> Items, Func<T, T, byte, bool> Agg )
+		{
+			IEnumerator<T> E = Items.GetEnumerator();
+
+			T T1, T2;
+
+			if ( E.MoveNext() )
+			{
+				T1 = E.Current;
+				if( Agg( default( T ), T1, 0 ) )
+				{
+					return true;
+				}
+			}
+			else
+			{
+				return false;
+			}
+
+			while ( E.MoveNext() )
+			{
+				T2 = E.Current;
+				if( Agg( T1, T2, 1 ) )
+				{
+					return true;
+				}
+				T1 = T2;
+			}
+
+			return Agg( T1, default( T ), 2 );
+		}
+
 		public static void ExecEach<T>( this IEnumerable<T> Items, Action<T> A )
 		{
 			foreach ( T Item in Items ) A( Item );

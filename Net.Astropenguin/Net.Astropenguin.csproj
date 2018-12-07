@@ -106,6 +106,7 @@
     <Compile Include="Helpers\AsyncLocks.cs" />
     <Compile Include="Helpers\VisualTree.cs" />
     <Compile Include="Helpers\Worker.cs" />
+    <Compile Include="IO\StreamExt.cs" />
     <Compile Include="IO\XKey.cs" />
     <Compile Include="IO\XParameter.cs" />
     <Compile Include="IO\XRegistry.cs" />
@@ -165,7 +166,7 @@
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>libpenguin.pfx</AssemblyOriginatorKeyFile>

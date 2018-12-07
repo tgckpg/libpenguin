@@ -12,15 +12,16 @@ namespace Net.Astropenguin.Loaders
 	using IO;
 	using Logging;
 
-	class StorageFileStreamer : ILoader<string>
+	public class StorageFileStreamer : ILoader<string>
 	{
 		public static readonly string ID = typeof( StorageFileStreamer ).Name;
 
-		private StorageFile File;
+		private IStorageFile File;
 
 		public Action<IList<string>> Connector { get; set; }
 		public int CurrentPage { get; set; }
 		public bool PageEnded { get; set; }
+		public bool PadSpace { get; set; } = true;
 
 		private long CurrentPos = 0;
 
@@ -29,7 +30,7 @@ namespace Net.Astropenguin.Loaders
 			return await OpenRead( ( ulong ) CurrentPos, count );
 		}
 
-		public StorageFileStreamer( StorageFile SF )
+		public StorageFileStreamer( IStorageFile SF )
 		{
 			File = SF;
 		}
@@ -45,13 +46,16 @@ namespace Net.Astropenguin.Loaders
 				using ( LineReader ms = new LineReader( s.AsStreamForRead() ) )
 				{
 					ms.SeekLine( CurrentPos );
-					for( int i = 0; i < lines; i ++ )
+					for ( int i = 0; i < lines; i++ )
 					{
 						if ( ms.EndOfStream ) break;
 						string line = ms.ReadLine();
 
 						// This is needed for ListView igoring empty lines
-						if ( string.IsNullOrEmpty( line ) ) line = " ";
+						if ( PadSpace && string.IsNullOrEmpty( line ) )
+						{
+							line = " ";
+						}
 
 						p.Add( line );
 					}
@@ -60,12 +64,13 @@ namespace Net.Astropenguin.Loaders
 					CurrentPos = ms.LinePos;
 				}
 			}
-			catch( Exception ex )
+			catch ( Exception ex )
 			{
 				Logger.Log( ID, ex.Message, LogType.ERROR );
 			}
 
 			return p;
 		}
+
 	}
 }
