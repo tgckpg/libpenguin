@@ -23,6 +23,11 @@ namespace Net.Astropenguin.Controls
 		}
 	}
 
+	public interface IKeyboardControl
+	{
+		KeyboardControl KeyboardControl { get; }
+	}
+
 	public class KeyboardControl
 	{
 		public static readonly string ID = typeof( KeyboardControl ).Name;
