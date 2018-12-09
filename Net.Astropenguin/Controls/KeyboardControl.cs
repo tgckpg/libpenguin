@@ -15,11 +15,13 @@ namespace Net.Astropenguin.Controls
 	public class KeyCombinationEventArgs: EventArgs
 	{
 		public bool Handled = false;
+		public object Target { get; private set; }
 		public VirtualKey[] Combinations { get; private set; }
 
-		public KeyCombinationEventArgs( VirtualKey[] C )
+		public KeyCombinationEventArgs( VirtualKey[] C, object Target )
 		{
 			Combinations = C;
+			this.Target = Target;
 		}
 	}
 
@@ -95,7 +97,7 @@ namespace Net.Astropenguin.Controls
 				return;
 			}
 
-			KeyCombinationEventArgs d = new KeyCombinationEventArgs( Keys.ToArray() );
+			KeyCombinationEventArgs d = new KeyCombinationEventArgs( Keys.ToArray(), o );
 			foreach( Action<KeyCombinationEventArgs> P in RegisteredCombinations[ KeyCombo ].Reverse() )
 			{
 				P( d );
