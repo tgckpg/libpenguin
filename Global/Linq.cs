@@ -22,6 +22,19 @@ namespace Net.Astropenguin.Linq
 			return Translated;
 		}
 
+		public static async Task<TTarget[]> Remap<TSource, TTarget>( this IEnumerable<TSource> Source, Func<TSource, Task<TTarget>> Translator )
+		{
+			int i = 0; int l = Source.Count();
+
+			TTarget[] Translated = new TTarget[ l ];
+			foreach ( TSource Item in Source )
+			{
+				Translated[ i++ ] = await Translator( Item );
+			}
+
+			return Translated;
+		}
+
 		public static T[] Where<T>( this IEnumerable<T> Source, Func<int, T, bool> Translator )
 		{
 			int i = 0; int l = Source.Count();
@@ -195,22 +208,63 @@ namespace Net.Astropenguin.Linq
 			}
 		}
 
-		public static T[] Flattern<T>( this IEnumerable<T> SourceList, Func<T,IEnumerable<T>> Children )
+		/// <summary>
+		/// Breakdown the T into smaller components of T with a series of breakers
+		/// </summary>
+		public static T[] Breakdown<T>( this IEnumerable<T> SourceList, params Func<T, IEnumerable<T>>[] Breakers )
 		{
-			if ( SourceList.Count() == 0 ) return new T[ 0 ];
+			if ( SourceList.Count() == 0 )
+				return new T[ 0 ];
+
+			List<T> BrokenDown = new List<T>();
+			Breakdown( BrokenDown, SourceList, Breakers );
+			return BrokenDown.ToArray();
+		}
+
+		private static void Breakdown<T>( IList<T> Container, IEnumerable<T> SourceList, IEnumerable<Func<T, IEnumerable<T>>> Breakers )
+		{
+			if ( SourceList == null )
+				return;
+
+			Func<T, IEnumerable<T>> Breaker = Breakers.FirstOrDefault();
+			if( Breaker == null )
+			{
+				foreach ( T Item in SourceList )
+					Container.Add( Item );
+			}
+			else
+			{
+				foreach ( T Item in SourceList )
+				{
+					Breakdown( Container, Breaker( Item ), Breakers.Skip( 1 ) );
+				}
+			}
+		}
+
+		public static T[] Flattern<T>( this IEnumerable<T> SourceList, Func<T, IEnumerable<T>> Children, int Depth = 0 )
+		{
+			if ( SourceList.Count() == 0 )
+				return new T[ 0 ];
 
 			List<T> Flatterned = new List<T>();
-
-			foreach( T Item in SourceList )
-			{
-				Flatterned.Add( Item );
-				IEnumerable<T> ListChildren = Children( Item );
-
-				if( ListChildren != null )
-					Flatterned.AddRange( ListChildren.Flattern( Children ) );
-			}
-
+			Flattern( Flatterned, SourceList, Children, 0, Depth );
 			return Flatterned.ToArray();
 		}
+
+		private static void Flattern<T>( IList<T> Container, IEnumerable<T> SourceList, Func<T, IEnumerable<T>> Children, int Level, int Depth )
+		{
+			if ( SourceList == null )
+				return;
+
+			foreach ( T Item in SourceList )
+			{
+				Container.Add( Item );
+				if ( Depth == 0 || Level < Depth )
+				{
+					Flattern( Container, Children( Item ), Children, Level + 1, Depth );
+				}
+			}
+		}
+
 	}
 }
