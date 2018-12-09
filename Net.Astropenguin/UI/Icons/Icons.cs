@@ -6,10 +6,6 @@ using Windows.UI.Xaml.Shapes;
 
 namespace Net.Astropenguin.UI.Icons
 {
-	using Helpers;
-
-	public class IconNavigateArrow : DirectionalIcon { public IconNavigateArrow() { DefaultStyleKey = typeof( IconNavigateArrow ); } }
-	public class IconLogin : DirectionalIcon { public IconLogin() { DefaultStyleKey = typeof( IconLogin ); } }
 	public class IconLogout : DirectionalIcon { public IconLogout() { DefaultStyleKey = typeof( IconLogout ); } }
 	public class IconTOC : DirectionalIcon { public IconTOC() { DefaultStyleKey = typeof( IconTOC ); } }
 	public class IconKey : DirectionalIcon { public IconKey() { DefaultStyleKey = typeof( IconKey ); } }
@@ -27,18 +23,4 @@ namespace Net.Astropenguin.UI.Icons
 
 	public class IconUseInertia : IconBase { public IconUseInertia() { DefaultStyleKey = typeof( IconUseInertia ); } }
 	public class IconNoInertia : IconBase { public IconNoInertia() { DefaultStyleKey = typeof( IconNoInertia ); } }
-
-	public class IconInfo : IconBase { public IconInfo() { DefaultStyleKey = typeof( IconInfo ); } }
-	public class IconPlay : IconBase { public IconPlay() { DefaultStyleKey = typeof( IconPlay ); } }
-	public class IconSave : IconBase { public IconSave() { DefaultStyleKey = typeof( IconSave ); } }
-	public class IconSearch : IconBase { public IconSearch() { DefaultStyleKey = typeof( IconSearch ); } }
-	public class IconSteps : IconBase { public IconSteps() { DefaultStyleKey = typeof( IconSteps ); } }
-	public class IconAtomic : IconBase { public IconAtomic() { DefaultStyleKey = typeof( IconAtomic ); } }
-	public class IconEEye : IconBase { public IconEEye() { DefaultStyleKey = typeof( IconEEye ); } }
-	public class IconScript : IconBase { public IconScript() { DefaultStyleKey = typeof( IconScript ); } }
-
-	public class IconSerial : IconBase { public IconSerial() { DefaultStyleKey = typeof( IconSerial ); } }
-	public class IconParallel : IconBase { public IconParallel() { DefaultStyleKey = typeof( IconParallel ); } }
-
-	public class IconTestTube : IconBase { public IconTestTube() { DefaultStyleKey = typeof( IconTestTube ); } }
 }
