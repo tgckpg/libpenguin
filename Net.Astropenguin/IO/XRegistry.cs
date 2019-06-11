@@ -19,6 +19,12 @@ namespace Net.Astropenguin.IO
 
 		public string Location { get; set; }
 
+		/// <summary>
+		/// Alias to XRegistry( Xml, null, false )
+		/// </summary>
+		/// <param name="Xml"></param>
+		public XRegistry( string Xml ) : this( Xml, null, false ) { }
+
 		public XRegistry( string Xml, string Location, bool ReadFromLocation = true )
 			: base(
 				 ( ReadFromLocation && AStorage.FileExists( Location ) )

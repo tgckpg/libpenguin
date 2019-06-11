@@ -41,13 +41,16 @@ namespace Net.Astropenguin.Logging
 			}
 		}
 
-		public static void Log( string id, string str, LogType p )
+#if DEBUG
+        private static bool SkipForward = false;
+#endif
+        public static void Log( string id, string str, LogType p )
 		{
 #if DEBUG
-			if( p == LogType.ERROR )
-			{
-				Debugger.Break();
-			}
+			if( !SkipForward && p == LogType.ERROR )
+            {
+                Debugger.Break();
+            }
 #endif
 			VSLog( str, p );
 			if ( WLogHandler != null )

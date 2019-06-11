@@ -56,6 +56,8 @@ namespace Net.Astropenguin.IO
 			this.Id = ID;
 		}
 
+		new public static XParameter Parse( string text ) => new XParameter( XElement.Parse( text ) );
+
 		public string GetValue( string key ) { return this.GetXValue( key ); }
 		public void SetValue( XKey key ) { this.SetXValue( key ); }
 		public void SetValue( params XKey[] keys ) { this.SetXValue( keys ); }
